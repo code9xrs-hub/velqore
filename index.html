@@ -14,11 +14,43 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23E50914' rx='12'/%3E%3Ctext x='32' y='44' font-family='Arial, sans-serif' font-size='40' font-weight='900' fill='white' text-anchor='middle'%3EV%3C/text%3E%3C/svg%3E">
     <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' fill='%23E50914' rx='36'/%3E%3Ctext x='96' y='132' font-family='Arial, sans-serif' font-size='120' font-weight='900' fill='white' text-anchor='middle'%3EV%3C/text%3E%3C/svg%3E">
 
-    <!-- ===== MANIFEST ===== -->
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlZlbHFvcmUiLAogICJzaG9ydF9uYW1lIjogIlZlbHFvcmUiLAogICJkZXNjcmlwdGlvbiI6ICJVbmxpbWl0ZWQgTW92aWVzICYgU2VyaWVzIFN0cmVhbWluZyIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjRTA5MTE0IiwKICAidGhlbWVfY29sb3IiOiAiI0UwOTExNCIsCiAgIm9yaWVudGF0aW9uIjogInBvcnRyYWl0IiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sLCUzQ3N2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxOTIgMTkyJyUzRSUzQ3JlY3Qgd2lkdGg9JzE5MicgaGVpZ2h0PScxOTInIGZpbGw9JyUyM0U1MDkxNCcgcng9JzM2Jy8lM0UlM0N0ZXh0IHg9Jzk2JyB5PScxMzInIGZvbnQtZmFtaWx5PSdBcmlhbCwgc2Fucy1zZXJpZicgZm9udC1zaXplPScxMjAnIGZvbnQtd2VpZ2h0PSc5MDAnIGZpbGw9J3doaXRlJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyUzRVYlM0MvdGV4dCUzRSUzQy9zdmclM0UiLAogICAgICAic2l6ZXMiOiAiMTkyeDE5MiIsCiAgICAgICJ0eXBlIjogImltYWdlL3N2Zyt4bWwiLAogICAgICAicHVycG9zZSI6ICJhbnkgbWFzayBhbnlsYW5kIgogICAgfQogIF0KfQ==">
+    <!-- ===== MANIFEST (dynamic inline) ===== -->
+    <script>
+        // Build manifest dynamically with proper icon sizes for PWA
+        (function() {
+            const manifest = {
+                "name": "Velqore",
+                "short_name": "Velqore",
+                "description": "Unlimited Movies & Series Streaming",
+                "start_url": ".",
+                "display": "standalone",
+                "background_color": "#E50914",
+                "theme_color": "#E50914",
+                "orientation": "portrait",
+                "categories": ["entertainment", "video"],
+                "icons": [{
+                    "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' fill='%23E50914' rx='36'/%3E%3Ctext x='96' y='132' font-family='Arial, sans-serif' font-size='120' font-weight='900' fill='white' text-anchor='middle'%3EV%3C/text%3E%3C/svg%3E",
+                    "sizes": "192x192",
+                    "type": "image/svg+xml",
+                    "purpose": "any maskable"
+                }, {
+                    "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23E50914' rx='96'/%3E%3Ctext x='256' y='352' font-family='Arial, sans-serif' font-size='320' font-weight='900' fill='white' text-anchor='middle'%3EV%3C/text%3E%3C/svg%3E",
+                    "sizes": "512x512",
+                    "type": "image/svg+xml",
+                    "purpose": "any maskable"
+                }]
+            };
+            const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('link');
+            link.rel = 'manifest';
+            link.href = url;
+            document.head.appendChild(link);
+        })();
+    </script>
 
     <!-- ===== MATERIAL 3 ICONS ===== -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
@@ -62,7 +94,8 @@
             --glass-bg: rgba(20, 20, 20, 0.75);
             --glass-border: rgba(255, 255, 255, 0.08);
             --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
-            --icon-size: 24px;
+            --icon-size: 32px;
+            /* increased from 24px to 32px – medium bigger */
         }
 
         body[data-theme="dark"] {
@@ -339,7 +372,7 @@
         }
         .form-group input {
             width: 100%;
-            padding: 14px 16px 14px 44px;
+            padding: 14px 16px 14px 48px;
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 10px;
@@ -3461,7 +3494,8 @@
             password = document.getElementById('loginPassword').value,
             btn = document.getElementById('loginBtn');
         btn.disabled = true;
-        btn.innerHTML = '<span class="material-symbols-outlined" style="animation:spin 0.8s linear infinite;">sync</span>';
+        btn.innerHTML =
+        '<span class="material-symbols-outlined" style="animation:spin 0.8s linear infinite;">sync</span>';
         db.ref(`registered_users/${email.replace(/\./g, ',')}`).once('value', snap => {
             const ud = snap.val();
             if (!ud || ud.password !== password) {
@@ -3485,7 +3519,8 @@
             password = document.getElementById('signupPassword').value,
             btn = document.getElementById('signupBtn');
         btn.disabled = true;
-        btn.innerHTML = '<span class="material-symbols-outlined" style="animation:spin 0.8s linear infinite;">sync</span>';
+        btn.innerHTML =
+        '<span class="material-symbols-outlined" style="animation:spin 0.8s linear infinite;">sync</span>';
         db.ref(`registered_users/${email.replace(/\./g, ',')}`).once('value', snap => {
             if (snap.exists()) {
                 document.getElementById('authErrorText').textContent = 'Email already registered.';
@@ -4010,12 +4045,26 @@
     // ============================================================
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-            navigator.serviceWorker.register('sw.js')
+            // Register service worker from the same directory
+            navigator.serviceWorker.register('sw.js', { scope: './' })
                 .then(function(registration) {
                     console.log('ServiceWorker registered:', registration.scope);
                 })
                 .catch(function(error) {
                     console.log('ServiceWorker registration failed:', error);
+                    // Fallback: register a minimal service worker from a blob
+                    try {
+                        const swCode = `
+                            self.addEventListener('fetch', function(e) {
+                                e.respondWith(fetch(e.request).catch(() => new Response('Offline', {status: 503})));
+                            });
+                        `;
+                        const blob = new Blob([swCode], { type: 'application/javascript' });
+                        const url = URL.createObjectURL(blob);
+                        navigator.serviceWorker.register(url, { scope: './' })
+                            .then(() => console.log('Fallback SW registered'))
+                            .catch(() => console.log('Fallback SW failed'));
+                    } catch (e) { /* ignore */ }
                 });
         });
     }
