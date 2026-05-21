@@ -1,0 +1,3824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Velqore - Watch Movies & Web Series</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        * {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        :root {
+            --netflix-red: #E50914;
+            --netflix-red-dark: #B81D24;
+            --netflix-red-glow: rgba(229, 9, 20, 0.5);
+            --netflix-black: #000000;
+            --netflix-dark: #141414;
+            --netflix-gray-1: #181818;
+            --netflix-gray-2: #2F2F2F;
+            --netflix-gray-3: #404040;
+            --netflix-gray-4: #564D4D;
+            --text-primary: #FFFFFF;
+            --text-secondary: #E5E5E5;
+            --text-muted: #808080;
+            --match-green: #46D369;
+            --accent-blue: #0080FF;
+            --accent-purple: #8B5CF6;
+            --accent-orange: #F59E0B;
+            --glass-bg: rgba(20, 20, 20, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+        }
+
+        body[data-theme="dark"] {
+            --netflix-dark: #141414;
+            --netflix-gray-1: #181818;
+            --text-primary: #FFFFFF;
+        }
+        body[data-theme="midnight"] {
+            --netflix-dark: #0a0e27;
+            --netflix-gray-1: #131b3d;
+            --netflix-red: #6366F1;
+            --netflix-red-glow: rgba(99, 102, 241, 0.5);
+            --glass-bg: rgba(10, 14, 39, 0.8);
+        }
+        body[data-theme="amoled"] {
+            --netflix-dark: #000000;
+            --netflix-gray-1: #0a0a0a;
+            --netflix-gray-2: #1a1a1a;
+            --glass-bg: rgba(0, 0, 0, 0.85);
+        }
+        body[data-theme="crimson"] {
+            --netflix-dark: #1a0606;
+            --netflix-gray-1: #2a0a0a;
+            --netflix-red: #FF1744;
+            --glass-bg: rgba(26, 6, 6, 0.8);
+        }
+
+        html {
+            background: #000;
+        }
+        body {
+            background: var(--netflix-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
+            transition: background 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        body[data-font-size="small"] {
+            font-size: 13px;
+        }
+        body[data-font-size="medium"] {
+            font-size: 14px;
+        }
+        body[data-font-size="large"] {
+            font-size: 16px;
+        }
+
+        /* ===== FIXED POSITION CONTAINERS ===== */
+        .auth-screen,
+        .loading-screen,
+        .header,
+        .details-page,
+        .search-page,
+        .profile-page,
+        .content-page,
+        .floating-player,
+        .nav-bar,
+        .settings-page,
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 480px;
+            will-change: transform, opacity;
+        }
+        .header {
+            bottom: auto;
+            height: 64px;
+            z-index: 100;
+        }
+        .nav-bar {
+            top: auto;
+            height: 60px;
+            z-index: 150;
+        }
+
+        /* ===== PAGE TRANSITIONS ===== */
+        .details-page,
+        .content-page,
+        .settings-page {
+            transform: translateX(100vw);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 190;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background: var(--netflix-dark);
+        }
+        .details-page.active,
+        .content-page.active,
+        .settings-page.active {
+            transform: translateX(0);
+        }
+
+        .search-page {
+            transform: translateY(-100vh);
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 190;
+            overflow-y: auto;
+            background: var(--netflix-dark);
+        }
+        .search-page.active {
+            transform: translateY(0);
+        }
+
+        .profile-page {
+            transform: translateY(100vh);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 190;
+            overflow-y: auto;
+            background: var(--netflix-dark);
+        }
+        .profile-page.active {
+            transform: translateY(0);
+        }
+
+        /* ===== FLOATING PLAYER ===== */
+        .floating-player {
+            background: #000;
+            z-index: 300;
+            display: none;
+            flex-direction: column;
+        }
+        .floating-player.active {
+            display: flex;
+        }
+        .player-wrapper {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #embedFrame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #000;
+            /* Removed sandbox attribute — player server does not allow it */
+            allow: "autoplay; fullscreen; encrypted-media; picture-in-picture";
+            loading: "lazy";
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .player-loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-top-color: var(--netflix-red);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            z-index: 5;
+            display: none;
+        }
+        .player-loader.show {
+            display: block;
+        }
+        @keyframes spin {
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        /* ===== AUTH SCREEN ===== */
+        .auth-screen {
+            background: var(--netflix-black);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .auth-screen::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at top, rgba(229, 9, 20, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom, rgba(229, 9, 20, 0.1) 0%, transparent 50%);
+        }
+        .auth-screen.hidden {
+            display: none;
+        }
+        .auth-container {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 12px;
+            padding: 40px 28px;
+            position: relative;
+            z-index: 2;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            max-width: 380px;
+        }
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .auth-logo .logo-icon {
+            font-size: 64px;
+            font-weight: 900;
+            color: var(--netflix-red);
+            text-shadow: 0 0 60px var(--netflix-red-glow);
+            letter-spacing: -4px;
+            animation: float 4s ease-in-out infinite;
+        }
+        .auth-logo h1 {
+            font-size: 26px;
+            font-weight: 700;
+            margin-top: 6px;
+            color: white;
+        }
+        .auth-logo p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 24px;
+            background: rgba(51, 51, 51, 0.4);
+            border-radius: 8px;
+            padding: 4px;
+        }
+        .auth-tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .auth-tab.active {
+            background: var(--netflix-red);
+            color: white;
+        }
+        .auth-form {
+            display: none;
+            animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .auth-form.active {
+            display: block;
+        }
+        .form-group {
+            margin-bottom: 16px;
+            position: relative;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px 14px 44px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            font-size: 15px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .form-group input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.12);
+            border-color: var(--netflix-red);
+            box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.2);
+        }
+        .form-group input::placeholder {
+            color: var(--text-muted);
+        }
+        .input-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+        .toggle-password {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .toggle-password:hover {
+            color: var(--text-secondary);
+        }
+        .auth-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--netflix-red);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            margin-top: 8px;
+        }
+        .auth-btn:active {
+            transform: scale(0.97);
+            background: #f40612;
+        }
+        .auth-error {
+            background: rgba(232, 124, 3, 0.2);
+            border: 1px solid #e87c03;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-bottom: 16px;
+            font-size: 13px;
+            color: #ffb74d;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+        .auth-error.show {
+            display: flex;
+        }
+        .auth-footer {
+            text-align: center;
+            margin-top: 24px;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+        .guest-link {
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        .guest-link:hover {
+            color: var(--netflix-red);
+        }
+
+        /* ===== LOADING SCREEN ===== */
+        .loading-screen {
+            background: var(--netflix-black);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .netflix-logo {
+            font-size: 90px;
+            font-weight: 900;
+            color: var(--netflix-red);
+            text-shadow: 0 0 80px var(--netflix-red-glow);
+            animation: logoPulse 1.5s ease-in-out infinite;
+            letter-spacing: -6px;
+        }
+        @keyframes logoPulse {
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.08);
+                opacity: 0.85;
+            }
+        }
+        .loading-bar {
+            margin-top: 30px;
+            width: 200px;
+            height: 3px;
+            background: var(--netflix-gray-3);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+        .loading-bar::after {
+            content: '';
+            position: absolute;
+            height: 100%;
+            width: 40%;
+            background: linear-gradient(90deg, transparent, var(--netflix-red), transparent);
+            animation: loadingMove 1.2s ease-in-out infinite;
+        }
+        @keyframes loadingMove {
+            0% {
+                left: -40%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.6) 60%, transparent 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .header.scrolled {
+            background: var(--netflix-black);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .logo-n {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--netflix-red);
+            letter-spacing: -3px;
+            cursor: pointer;
+            text-shadow: 0 0 20px var(--netflix-red-glow);
+        }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .header-action-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 4px;
+            position: relative;
+            transition: transform 0.2s, color 0.2s;
+        }
+        .header-action-btn:active {
+            transform: scale(0.9);
+        }
+        .header-action-btn:hover {
+            color: var(--netflix-red);
+        }
+        .notification-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 8px;
+            height: 8px;
+            background: var(--netflix-red);
+            border-radius: 50%;
+            border: 1px solid var(--netflix-black);
+        }
+        .profile-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 6px;
+            background: linear-gradient(135deg, var(--netflix-red), var(--netflix-red-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            color: white;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 12px rgba(229, 9, 20, 0.3);
+        }
+        .profile-btn:active {
+            transform: scale(0.9);
+        }
+
+        /* ===== HERO BANNER — GLASS BOX STYLE ===== */
+        .hero-banner {
+            position: relative;
+            width: 92%;
+            margin: 16px auto 20px;
+            height: 62vh;
+            min-height: 420px;
+            max-height: 580px;
+            overflow: hidden;
+            border-radius: 24px;
+            background: var(--netflix-gray-1);
+            box-shadow: var(--glass-shadow);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(229, 9, 20, 0.08) 0%, transparent 60%);
+            z-index: 1;
+            pointer-events: none;
+            border-radius: 24px;
+        }
+
+        .hero-bg-img {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            border-radius: 24px;
+            overflow: hidden;
+        }
+        .hero-bg-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .hero-banner:hover .hero-bg-img img {
+            transform: scale(1.04);
+        }
+
+        .hero-gradient-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 30%;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, transparent 100%);
+            z-index: 1;
+            border-radius: 24px 24px 0 0;
+        }
+        .hero-gradient-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 65%;
+            background: linear-gradient(to top, var(--netflix-dark) 0%, rgba(20, 20, 20, 0.4) 40%, transparent 100%);
+            z-index: 1;
+            border-radius: 0 0 24px 24px;
+        }
+        .hero-gradient-side {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, transparent 50%);
+            z-index: 1;
+            border-radius: 24px;
+        }
+
+        /* Glass inner glow */
+        .hero-banner::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            border-radius: 22px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .top-tags {
+            position: absolute;
+            top: 14px;
+            left: 0;
+            right: 0;
+            z-index: 3;
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            padding: 0 16px;
+        }
+        .top-tag {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 6px 16px;
+            border-radius: 20px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .top-tag:active {
+            transform: scale(0.95);
+        }
+        .top-tag:hover {
+            background: rgba(229, 9, 20, 0.3);
+            border-color: var(--netflix-red);
+        }
+
+        .hero-content {
+            position: absolute;
+            bottom: 14px;
+            left: 0;
+            right: 0;
+            z-index: 3;
+            padding: 0 16px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        .hero-title-text {
+            font-size: 30px;
+            font-weight: 900;
+            line-height: 1.1;
+            text-shadow: 0 4px 24px rgba(0, 0, 0, 0.9);
+            letter-spacing: -1px;
+            color: white;
+            max-width: 90%;
+        }
+
+        .hero-tags-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 500;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+        }
+        .hero-tag-dot {
+            width: 3px;
+            height: 3px;
+            background: var(--netflix-red);
+            border-radius: 50%;
+        }
+
+        .hero-buttons-row {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+            max-width: 300px;
+            margin-top: 2px;
+        }
+        .btn-hero-play {
+            flex: 1;
+            background: white;
+            color: black;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-hero-play:active {
+            transform: scale(0.96);
+            background: rgba(255, 255, 255, 0.85);
+        }
+        .btn-hero-info {
+            flex: 1;
+            background: rgba(109, 109, 110, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-hero-info:active {
+            transform: scale(0.96);
+            background: rgba(109, 109, 110, 0.3);
+        }
+
+        .slider-dots {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            margin-top: 4px;
+        }
+        .slider-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+        }
+        .slider-dot.active {
+            background: white;
+            width: 18px;
+            border-radius: 3px;
+        }
+
+        /* ===== CATEGORY PILLS ===== */
+        .category-pills {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 8px 16px 12px;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+        .category-pill {
+            flex-shrink: 0;
+            padding: 6px 16px;
+            border-radius: 20px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            scroll-snap-align: start;
+        }
+        .category-pill:active {
+            transform: scale(0.93);
+        }
+        .category-pill.active {
+            background: white;
+            color: black;
+            border-color: white;
+            font-weight: 700;
+            box-shadow: 0 4px 16px rgba(255, 255, 255, 0.15);
+        }
+
+        /* ===== CONTENT SECTIONS ===== */
+        .category-section {
+            padding: 6px 0 16px;
+            animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            margin-bottom: 10px;
+        }
+        .category-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: white;
+        }
+        .view-all {
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .view-all:active {
+            color: white;
+        }
+
+        .poster-scroll {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 0 16px 8px;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+        .poster-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        .poster-card {
+            flex: 0 0 auto;
+            width: 105px;
+            aspect-ratio: 2/3;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            background: var(--netflix-gray-1);
+            scroll-snap-align: start;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .poster-card:active {
+            transform: scale(0.94);
+        }
+        .poster-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .poster-card .poster-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .poster-card:hover .poster-overlay {
+            opacity: 1;
+        }
+        .poster-card .poster-title-overlay {
+            position: absolute;
+            bottom: 6px;
+            left: 8px;
+            right: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+            opacity: 0;
+            transition: opacity 0.3s;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .poster-card:hover .poster-title-overlay {
+            opacity: 1;
+        }
+
+        .top10-scroll {
+            display: flex;
+            gap: 0;
+            overflow-x: auto;
+            padding: 0 16px 8px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .top10-card {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: flex-end;
+            margin-right: -12px;
+        }
+        .top10-number {
+            font-size: 110px;
+            font-weight: 900;
+            line-height: 0.8;
+            color: var(--netflix-dark);
+            -webkit-text-stroke: 3px #555;
+            font-family: 'Poppins';
+            margin-right: -18px;
+            user-select: none;
+            z-index: 1;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        .top10-card .poster-card {
+            width: 105px;
+            z-index: 2;
+        }
+
+        .poster-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            padding: 0 16px 20px;
+        }
+        .poster-grid .poster-card {
+            width: 100%;
+            aspect-ratio: 2/3;
+        }
+
+        /* ===== DETAILS PAGE ===== */
+        .details-page {
+            background: var(--netflix-dark);
+            z-index: 200;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        .details-header {
+            position: relative;
+            width: 100%;
+            height: 50vh;
+            min-height: 320px;
+            overflow: hidden;
+            background: var(--netflix-gray-1);
+        }
+        .details-header img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .details-header-gradient {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, var(--netflix-dark) 0%, transparent 50%),
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, transparent 25%);
+        }
+        .details-play-overlay {
+            position: absolute;
+            bottom: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            z-index: 3;
+        }
+        .details-play-overlay i {
+            width: 56px;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.95);
+            color: black;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .details-play-overlay:active i {
+            transform: scale(0.9);
+        }
+        .details-play-overlay span {
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.7);
+            border: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 210;
+            cursor: pointer;
+            font-size: 16px;
+            backdrop-filter: blur(8px);
+            transition: transform 0.2s, background 0.2s;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+        }
+        .back-btn:active {
+            transform: scale(0.9);
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        .details-content {
+            position: relative;
+            padding: 0 16px 100px;
+            z-index: 10;
+            margin-top: -50px;
+        }
+        .details-main-title {
+            font-size: 26px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 10px;
+            color: white;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .details-meta-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .match-score {
+            color: var(--match-green);
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .age-rating {
+            border: 1px solid var(--text-muted);
+            padding: 0 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .hd-badge {
+            border: 1px solid var(--text-muted);
+            padding: 0 5px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .details-action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .btn-full-play {
+            width: 100%;
+            background: white;
+            color: black;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 700;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s;
+        }
+        .btn-full-play:active {
+            transform: scale(0.97);
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        .details-storyline {
+            font-size: 14px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 12px;
+        }
+        .details-cast-text {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .details-cast-text strong {
+            color: var(--text-secondary);
+        }
+
+        .interaction-row {
+            display: flex;
+            gap: 32px;
+            margin-bottom: 24px;
+            padding: 0 4px;
+        }
+        .interaction-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-secondary);
+            font-size: 11px;
+            cursor: pointer;
+            transition: color 0.2s, transform 0.2s;
+        }
+        .interaction-item i {
+            font-size: 22px;
+        }
+        .interaction-item:active {
+            transform: scale(0.9);
+        }
+        .interaction-item.active {
+            color: white;
+        }
+        .interaction-item:hover {
+            color: white;
+        }
+
+        .section-title {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: white;
+        }
+
+        .season-selector-wrapper {
+            background: var(--netflix-gray-2);
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 14px;
+            margin-bottom: 14px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .season-selector {
+            background: transparent;
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            outline: none;
+            appearance: none;
+            padding-right: 8px;
+            cursor: pointer;
+        }
+        .season-selector option {
+            background: var(--netflix-gray-2);
+        }
+
+        .episode-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .episode-item:active {
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .episode-number {
+            font-size: 16px;
+            color: var(--text-muted);
+            font-weight: 500;
+            min-width: 18px;
+            padding-top: 24px;
+        }
+        .episode-thumbnail {
+            flex-shrink: 0;
+            width: 110px;
+            height: 64px;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+            background: var(--netflix-gray-1);
+        }
+        .episode-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .episode-thumbnail .play-icon {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .episode-item:hover .episode-thumbnail .play-icon {
+            opacity: 1;
+        }
+        .episode-thumbnail .play-icon i {
+            color: white;
+            font-size: 20px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+        }
+        .episode-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .episode-info-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+            align-items: center;
+        }
+        .episode-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: white;
+        }
+        .episode-duration {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .episode-description {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-top: 4px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .similar-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        .similar-grid-card {
+            background: var(--netflix-gray-1);
+            border-radius: 6px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .similar-grid-card:active {
+            transform: scale(0.96);
+        }
+        .similar-grid-card .sim-poster {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            background: var(--netflix-gray-2);
+        }
+        .similar-grid-card .sim-info {
+            padding: 8px;
+        }
+        .similar-grid-card .sim-title {
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: white;
+        }
+        .similar-grid-card .sim-desc {
+            font-size: 10px;
+            color: var(--text-muted);
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* ===== CONTENT PAGES ===== */
+        .content-page-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 16px 12px;
+            position: sticky;
+            top: 0;
+            background: var(--netflix-dark);
+            z-index: 2;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .content-back-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            padding: 4px;
+        }
+        .content-back-btn:active {
+            transform: scale(0.85);
+        }
+
+        /* ===== SEARCH PAGE ===== */
+        .search-page-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            position: sticky;
+            top: 0;
+            background: var(--netflix-dark);
+            z-index: 2;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .search-back-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            padding: 4px;
+        }
+        .search-back-btn:active {
+            transform: scale(0.85);
+        }
+        .search-page-input {
+            flex: 1;
+            padding: 12px 16px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.25s;
+        }
+        .search-page-input:focus {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: var(--netflix-red);
+            box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.15);
+        }
+        .search-page-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* ===== PROFILE PAGE ===== */
+        .profile-banner {
+            background: linear-gradient(135deg, var(--netflix-red) 0%, var(--netflix-red-dark) 100%);
+            padding: 28px 20px 20px;
+            margin: 0 16px 20px;
+            border-radius: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+        .profile-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+        }
+        .profile-banner::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+            z-index: 2;
+        }
+        .profile-avatar-big {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            border: 3px solid rgba(255, 255, 255, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 800;
+            backdrop-filter: blur(10px);
+            color: white;
+            flex-shrink: 0;
+        }
+        .profile-info-text h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 2px;
+            color: white;
+        }
+        .profile-info-text p {
+            font-size: 13px;
+            opacity: 0.85;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 12px;
+            margin: 0 16px 20px;
+        }
+        .profile-stat-card {
+            flex: 1;
+            background: var(--netflix-gray-1);
+            border-radius: 10px;
+            padding: 14px 8px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .profile-stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--netflix-red);
+        }
+        .profile-stat-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        .menu-section-title {
+            font-size: 11px;
+            color: var(--text-muted);
+            padding: 16px 16px 8px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+        }
+
+        .settings-section {
+            background: var(--netflix-gray-1);
+            margin: 0 16px 14px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .settings-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            cursor: pointer;
+            transition: background 0.25s;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .settings-row:last-child {
+            border-bottom: none;
+        }
+        .settings-row:active {
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .settings-row-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex: 1;
+            min-width: 0;
+        }
+        .settings-row-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: white;
+        }
+        .settings-row-subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        .settings-row-value {
+            color: var(--text-muted);
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .chevron-right {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .menu-icon-wrap {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--netflix-gray-2);
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .menu-icon-wrap.red {
+            background: rgba(229, 9, 20, 0.15);
+            color: var(--netflix-red);
+        }
+        .menu-icon-wrap.blue {
+            background: rgba(0, 128, 255, 0.15);
+            color: var(--accent-blue);
+        }
+        .menu-icon-wrap.purple {
+            background: rgba(139, 92, 246, 0.15);
+            color: var(--accent-purple);
+        }
+        .menu-icon-wrap.orange {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--accent-orange);
+        }
+        .menu-icon-wrap.green {
+            background: rgba(70, 211, 105, 0.15);
+            color: var(--match-green);
+        }
+
+        /* ===== SETTINGS PAGE ===== */
+        .settings-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 16px 12px;
+            position: sticky;
+            top: 0;
+            background: var(--netflix-dark);
+            z-index: 2;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .settings-back-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            padding: 4px;
+        }
+        .settings-back-btn:active {
+            transform: scale(0.85);
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background: var(--netflix-gray-3);
+            transition: 0.3s;
+            border-radius: 24px;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 50%;
+        }
+        input:checked+.toggle-slider {
+            background: var(--netflix-red);
+        }
+        input:checked+.toggle-slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Theme Picker */
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            padding: 16px;
+        }
+        .theme-option {
+            aspect-ratio: 1;
+            border-radius: 12px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+            text-align: center;
+            padding: 4px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+        .theme-option.active {
+            border-color: white;
+            transform: scale(1.05);
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
+        }
+        .theme-dark {
+            background: linear-gradient(135deg, #141414, #000);
+        }
+        .theme-midnight {
+            background: linear-gradient(135deg, #0a0e27, #6366F1);
+        }
+        .theme-amoled {
+            background: #000;
+            border: 1px solid #333;
+        }
+        .theme-crimson {
+            background: linear-gradient(135deg, #1a0606, #FF1744);
+        }
+
+        /* Quality Selector */
+        .quality-options {
+            padding: 4px 0;
+        }
+        .quality-option {
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .quality-option:active {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .quality-option .quality-label {
+            font-size: 14px;
+            color: white;
+        }
+        .quality-option .quality-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        .quality-option i {
+            color: var(--netflix-red);
+            opacity: 0;
+        }
+        .quality-option.active i {
+            opacity: 1;
+        }
+
+        /* Avatar Picker */
+        .avatar-picker-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            padding: 16px;
+        }
+        .avatar-option {
+            aspect-ratio: 1;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 800;
+            color: white;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .avatar-option.active {
+            border-color: white;
+            transform: scale(1.05);
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 500;
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.25s;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-content {
+            background: var(--netflix-gray-1);
+            border-radius: 20px 20px 0 0;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: slideUpSpring 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.1) forwards;
+        }
+        .modal-header {
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            position: sticky;
+            top: 0;
+            background: var(--netflix-gray-1);
+            z-index: 2;
+        }
+        .modal-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+        }
+        .modal-close {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 4px;
+            transition: transform 0.2s;
+        }
+        .modal-close:active {
+            transform: scale(0.85);
+        }
+        .modal-body {
+            padding: 8px 0;
+        }
+        .modal-handle {
+            width: 40px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            margin: 10px auto 0;
+        }
+
+        /* About Card */
+        .about-card {
+            background: linear-gradient(135deg, var(--netflix-red) 0%, var(--netflix-red-dark) 100%);
+            margin: 0 16px 14px;
+            border-radius: 14px;
+            padding: 28px 20px;
+            text-align: center;
+            color: white;
+        }
+        .about-card .logo-big {
+            font-size: 56px;
+            font-weight: 900;
+            letter-spacing: -4px;
+            line-height: 1;
+            margin-bottom: 6px;
+            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+        .about-card .app-version {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: 6px;
+        }
+
+        /* ===== NAVIGATION ===== */
+        .nav-bar {
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 0 4px;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            padding: 6px 12px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s;
+            position: relative;
+        }
+        .nav-item.active {
+            color: white;
+        }
+        .nav-item:active {
+            transform: scale(0.9);
+        }
+        .nav-item i {
+            font-size: 20px;
+        }
+        .nav-item span {
+            font-size: 10px;
+            font-weight: 500;
+        }
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 3px;
+            background: var(--netflix-red);
+            border-radius: 0 0 3px 3px;
+        }
+
+        /* ===== TOAST ===== */
+        #toastContainer {
+            position: fixed;
+            bottom: 80px;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            max-width: 480px;
+            z-index: 400;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            pointer-events: none;
+            padding: 0 20px;
+        }
+        .toast {
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            max-width: 100%;
+            pointer-events: auto;
+        }
+        .toast.success {
+            background: var(--match-green);
+            color: black;
+        }
+        .toast.error {
+            background: var(--netflix-red);
+            color: white;
+        }
+        .toast.info {
+            background: rgba(255, 255, 255, 0.95);
+            color: black;
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            grid-column: 1/-1;
+        }
+        .empty-state i {
+            font-size: 48px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+        .empty-state h3 {
+            font-size: 18px;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: white;
+        }
+        .empty-state p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes slideUpSpring {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+        @keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 420px) {
+            .hero-banner {
+                height: 56vh;
+                min-height: 360px;
+            }
+            .hero-title-text {
+                font-size: 26px;
+            }
+            .details-main-title {
+                font-size: 22px;
+            }
+            .poster-card {
+                width: 90px;
+            }
+            .top10-card .poster-card {
+                width: 90px;
+            }
+            .top10-number {
+                font-size: 100px;
+                margin-right: -16px;
+            }
+            .profile-stats {
+                gap: 8px;
+            }
+            .profile-stat-card {
+                padding: 10px 4px;
+            }
+            .profile-stat-value {
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .hero-banner {
+                height: 50vh;
+                min-height: 300px;
+            }
+            .hero-title-text {
+                font-size: 22px;
+            }
+            .poster-card {
+                width: 80px;
+            }
+            .top10-card .poster-card {
+                width: 80px;
+            }
+            .top10-number {
+                font-size: 80px;
+                margin-right: -12px;
+            }
+            .details-main-title {
+                font-size: 20px;
+            }
+            .episode-thumbnail {
+                width: 90px;
+                height: 54px;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark" data-font-size="medium">
+
+    <!-- ===== AUTH SCREEN ===== -->
+    <div class="auth-screen" id="authScreen">
+        <div class="auth-container">
+            <div class="auth-logo">
+                <div class="logo-icon">V</div>
+                <h1>Velqore</h1>
+                <p>Unlimited Movies & Series</p>
+            </div>
+            <div class="auth-tabs">
+                <div class="auth-tab active" onclick="switchAuthTab('login')">Sign In</div>
+                <div class="auth-tab" onclick="switchAuthTab('signup')">Sign Up</div>
+            </div>
+            <div class="auth-error" id="authError">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="authErrorText"></span>
+            </div>
+
+            <form class="auth-form active" id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <input type="email" id="loginEmail" placeholder="Email address" required autocomplete="email">
+                    <i class="fas fa-envelope input-icon"></i>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="loginPassword" placeholder="Password" required>
+                    <i class="fas fa-lock input-icon"></i>
+                    <i class="fas fa-eye toggle-password" onclick="togglePassword('loginPassword', this)"></i>
+                </div>
+                <button type="submit" class="auth-btn" id="loginBtn">Sign In</button>
+            </form>
+
+            <form class="auth-form" id="signupForm" onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <input type="text" id="signupName" placeholder="Full name" required>
+                    <i class="fas fa-user input-icon"></i>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="signupEmail" placeholder="Email address" required>
+                    <i class="fas fa-envelope input-icon"></i>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="signupPassword" placeholder="Password (min 6 chars)" required minlength="6">
+                    <i class="fas fa-lock input-icon"></i>
+                    <i class="fas fa-eye toggle-password" onclick="togglePassword('signupPassword', this)"></i>
+                </div>
+                <button type="submit" class="auth-btn" id="signupBtn">Create Account</button>
+            </form>
+            <div class="auth-footer">
+                Or continue as <span class="guest-link" onclick="continueAsGuest()">Guest</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== LOADING SCREEN ===== -->
+    <div class="loading-screen hidden" id="loadingScreen">
+        <div class="netflix-logo">V</div>
+        <div class="loading-bar"></div>
+    </div>
+
+    <!-- ===== MAIN APP ===== -->
+    <div class="main-app" id="mainApp">
+
+        <!-- HEADER -->
+        <header class="header" id="header">
+            <div class="logo-n" onclick="navigateTo('home')">V</div>
+            <div class="header-actions">
+                <button class="header-action-btn" onclick="openSearchPage()"><i class="fas fa-search"></i></button>
+                <button class="header-action-btn" onclick="showToast('No new notifications', 'info')"><i class="fas fa-bell"></i><span class="notification-badge"></span></button>
+                <button class="profile-btn" onclick="openProfile()" id="profileBtnMain"><span id="profileInitial">G</span></button>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main id="mainContent">
+
+            <!-- HERO BANNER — GLASS BOX -->
+            <div class="hero-banner" id="heroBanner">
+                <div class="hero-bg-img"><img src="" id="heroBg" alt=""></div>
+                <div class="hero-gradient-top"></div>
+                <div class="hero-gradient-side"></div>
+                <div class="hero-gradient-bottom"></div>
+
+                <div class="top-tags">
+                    <button class="top-tag" onclick="navigateTo('webseries')">TV Shows</button>
+                    <button class="top-tag" onclick="navigateTo('movies')">Movies</button>
+                    <button class="top-tag" onclick="document.querySelector('.category-pills').scrollIntoView({behavior:'smooth'})">Categories</button>
+                </div>
+
+                <div class="hero-content">
+                    <div class="hero-title-text" id="heroTitleLarge">Loading...</div>
+                    <div class="hero-tags-row" id="heroMeta"></div>
+                    <div class="hero-buttons-row">
+                        <button class="btn-hero-play" onclick="playHeroContent()"><i class="fas fa-play"></i> Play</button>
+                        <button class="btn-hero-info" onclick="openHeroDetails()"><i class="fas fa-info-circle"></i> Info</button>
+                    </div>
+                    <div class="slider-dots" id="sliderDots"></div>
+                </div>
+            </div>
+
+            <!-- CATEGORY PILLS -->
+            <div class="category-pills" id="categoryPills">
+                <div class="category-pill active" data-category="all">All</div>
+            </div>
+
+            <!-- CONTENT SECTIONS -->
+            <div id="contentSections"></div>
+
+        </main>
+
+        <!-- ===== CONTENT PAGES ===== -->
+
+        <!-- WEB SERIES PAGE -->
+        <div class="content-page" id="webseriesPage">
+            <div class="content-page-header">
+                <button class="content-back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i></button>
+                <h2 class="category-title">TV Shows</h2>
+            </div>
+            <div class="poster-grid" id="allWebseriesGrid"></div>
+        </div>
+
+        <!-- MOVIES PAGE -->
+        <div class="content-page" id="moviesPage">
+            <div class="content-page-header">
+                <button class="content-back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i></button>
+                <h2 class="category-title">Movies</h2>
+            </div>
+            <div class="poster-grid" id="allMoviesGrid"></div>
+        </div>
+
+        <!-- WATCHLIST PAGE -->
+        <div class="content-page" id="watchlistPage">
+            <div class="content-page-header">
+                <button class="content-back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i></button>
+                <h2 class="category-title">My List</h2>
+            </div>
+            <div class="poster-grid" id="watchlistGrid"></div>
+        </div>
+
+        <!-- HISTORY PAGE -->
+        <div class="content-page" id="historyPage">
+            <div class="content-page-header">
+                <button class="content-back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i></button>
+                <h2 class="category-title">Watch History</h2>
+            </div>
+            <div class="poster-grid" id="historyGrid"></div>
+        </div>
+
+        <!-- SEARCH PAGE -->
+        <div class="search-page" id="searchPage">
+            <div class="search-page-header">
+                <button class="search-back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i></button>
+                <input type="text" class="search-page-input" placeholder="Search for movies, TV shows..." id="searchPageInput" oninput="performSearch(this.value)">
+            </div>
+            <div class="poster-grid" id="searchResults">
+                <div class="empty-state">
+                    <i class="fas fa-search"></i>
+                    <h3>Find your next favorite</h3>
+                    <p>Search for shows, movies, genres, and more.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROFILE PAGE -->
+        <div class="profile-page" id="profilePage">
+            <div class="profile-banner">
+                <div class="profile-header">
+                    <div class="profile-avatar-big" id="profileAvatar">G</div>
+                    <div class="profile-info-text">
+                        <h2 id="profileName">Guest User</h2>
+                        <p id="profileEmail">guest@velqore.com</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-stats">
+                <div class="profile-stat-card">
+                    <div class="profile-stat-value" id="statWatched">0</div>
+                    <div class="profile-stat-label">Watched</div>
+                </div>
+                <div class="profile-stat-card">
+                    <div class="profile-stat-value" id="statMyList">0</div>
+                    <div class="profile-stat-label">My List</div>
+                </div>
+                <div class="profile-stat-card">
+                    <div class="profile-stat-value" id="statHours">0h</div>
+                    <div class="profile-stat-label">Watched Time</div>
+                </div>
+            </div>
+
+            <div class="menu-section-title">Library</div>
+            <div class="settings-section">
+                <div class="settings-row" onclick="openMyList()">
+                    <div class="settings-row-left">
+                        <div class="menu-icon-wrap red"><i class="fas fa-check"></i></div>
+                        <div>
+                            <div class="settings-row-title">My List</div>
+                            <div class="settings-row-subtitle">Your saved titles</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+                <div class="settings-row" onclick="openWatchHistory()">
+                    <div class="settings-row-left">
+                        <div class="menu-icon-wrap blue"><i class="fas fa-history"></i></div>
+                        <div>
+                            <div class="settings-row-title">Watch History</div>
+                            <div class="settings-row-subtitle">Recently watched</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+            </div>
+
+            <div class="menu-section-title">Preferences</div>
+            <div class="settings-section">
+                <div class="settings-row" onclick="openSettings()">
+                    <div class="settings-row-left">
+                        <div class="menu-icon-wrap orange"><i class="fas fa-cog"></i></div>
+                        <div>
+                            <div class="settings-row-title">Settings</div>
+                            <div class="settings-row-subtitle">App preferences & more</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+                <div class="settings-row" onclick="openModal('languageModal')">
+                    <div class="settings-row-left">
+                        <div class="menu-icon-wrap green"><i class="fas fa-globe"></i></div>
+                        <div>
+                            <div class="settings-row-title">Language</div>
+                            <div class="settings-row-subtitle" id="languageDisplay">English</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+                <div class="settings-row" onclick="openModal('notificationModal')">
+                    <div class="settings-row-left">
+                        <div class="menu-icon-wrap red"><i class="fas fa-bell"></i></div>
+                        <div>
+                            <div class="settings-row-title">Notifications</div>
+                            <div class="settings-row-subtitle">Manage alerts</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+            </div>
+
+            <div class="menu-section-title">Account</div>
+            <div class="settings-section">
+                <div class="settings-row" onclick="openModal('editProfileModal')">
+                    <div class="settings-row-left">
+                        <div class="menu-icon-wrap blue"><i class="fas fa-user-edit"></i></div>
+                        <div>
+                            <div class="settings-row-title">Edit Profile</div>
+                            <div class="settings-row-subtitle">Update your info</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+                <div class="settings-row" onclick="openModal('privacyModal')">
+                    <div class="settings-row-left">
+                        <div class="menu-icon-wrap purple"><i class="fas fa-shield-alt"></i></div>
+                        <div>
+                            <div class="settings-row-title">Privacy & Security</div>
+                            <div class="settings-row-subtitle">Manage your data</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+                <div class="settings-row" onclick="openModal('helpModal')">
+                    <div class="settings-row-left">
+                        <div class="menu-icon-wrap green"><i class="fas fa-question-circle"></i></div>
+                        <div>
+                            <div class="settings-row-title">Help & Support</div>
+                            <div class="settings-row-subtitle">FAQs and contact</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+                <div class="settings-row" onclick="openModal('aboutModal')">
+                    <div class="settings-row-left">
+                        <div class="menu-icon-wrap orange"><i class="fas fa-info-circle"></i></div>
+                        <div>
+                            <div class="settings-row-title">About Velqore</div>
+                            <div class="settings-row-subtitle">Version 2.0.0</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+                <div class="settings-row" id="logoutBtn" onclick="handleLogout()" style="color:var(--netflix-red);">
+                    <div class="settings-row-left">
+                        <div class="menu-icon-wrap red"><i class="fas fa-sign-out-alt"></i></div>
+                        <div>
+                            <div class="settings-row-title">Sign Out</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align:center; padding:20px; font-size:11px; color:var(--text-muted);">
+                <p>Velqore v2.0.0</p>
+                <p style="margin-top:4px;">Made with ❤️ for entertainment</p>
+            </div>
+        </div>
+
+        <!-- ===== SETTINGS PAGE ===== -->
+        <div class="settings-page" id="settingsPage">
+            <div class="settings-header">
+                <button class="settings-back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i></button>
+                <h2 class="category-title">Settings</h2>
+            </div>
+
+            <div class="menu-section-title">Appearance</div>
+            <div class="settings-section">
+                <div class="settings-row" onclick="openModal('themeModal')">
+                    <div class="settings-row-left">
+                        <div class="menu-icon-wrap purple"><i class="fas fa-palette"></i></div>
+                        <div>
+                            <div class="settings-row-title">Theme</div>
+                            <div class="settings-row-subtitle" id="themeDisplay">Netflix Dark</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+                <div class="settings-row" onclick="openModal('fontSizeModal')">
+                    <div class="settings-row-left">
+                        <div class="menu-icon-wrap orange"><i class="fas fa-text-height"></i></div>
+                        <div>
+                            <div class="settings-row-title">Font Size</div>
+                            <div class="settings-row-subtitle" id="fontSizeDisplay">Medium</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+            </div>
+
+            <div class="menu-section-title">Playback</div>
+            <div class="settings-section">
+                <div class="settings-row" onclick="openModal('qualityModal')">
+                    <div class="settings-row-left">
+                        <div class="menu-icon-wrap red"><i class="fas fa-tv"></i></div>
+                        <div>
+                            <div class="settings-row-title">Video Quality</div>
+                            <div class="settings-row-subtitle" id="qualityDisplay">Auto (Recommended)</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+                <div class="settings-row">
+                    <div class="settings-row-left">
+                        <div class="menu-icon-wrap green"><i class="fas fa-play-circle"></i></div>
+                        <div>
+                            <div class="settings-row-title">Autoplay Next Episode</div>
+                            <div class="settings-row-subtitle">Auto-play next episodes</div>
+                        </div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="toggleAutoplay" checked onchange="toggleSetting('autoplay', this.checked)">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="settings-row">
+                    <div class="settings-row-left">
+                        <div class="menu-icon-wrap purple"><i class="fas fa-image"></i></div>
+                        <div>
+                            <div class="settings-row-title">Autoplay Previews</div>
+                            <div class="settings-row-subtitle">Preview trailers while browsing</div>
+                        </div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="togglePreviews" onchange="toggleSetting('previews', this.checked)">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="settings-row" onclick="openModal('subtitleModal')">
+                    <div class="settings-row-left">
+                        <div class="menu-icon-wrap orange"><i class="fas fa-closed-captioning"></i></div>
+                        <div>
+                            <div class="settings-row-title">Subtitles</div>
+                            <div class="settings-row-subtitle" id="subtitleDisplay">Off</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+            </div>
+
+            <div class="menu-section-title">Data & Privacy</div>
+            <div class="settings-section">
+                <div class="settings-row">
+                    <div class="settings-row-left">
+                        <div class="menu-icon-wrap blue"><i class="fas fa-mobile-alt"></i></div>
+                        <div>
+                            <div class="settings-row-title">Data Saver</div>
+                            <div class="settings-row-subtitle">Reduce data usage</div>
+                        </div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="toggleDataSaver" onchange="toggleSetting('dataSaver', this.checked)">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="settings-row">
+                    <div class="settings-row-left">
+                        <div class="menu-icon-wrap purple"><i class="fas fa-user-shield"></i></div>
+                        <div>
+                            <div class="settings-row-title">Personalized Recommendations</div>
+                            <div class="settings-row-subtitle">Based on your activity</div>
+                        </div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="togglePersonalized" checked onchange="toggleSetting('personalized', this.checked)">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="settings-row" onclick="confirmClearHistory()">
+                    <div class="settings-row-left">
+                        <div class="menu-icon-wrap red"><i class="fas fa-trash"></i></div>
+                        <div>
+                            <div class="settings-row-title">Clear Watch History</div>
+                            <div class="settings-row-subtitle">Remove all viewing data</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+                <div class="settings-row" onclick="exportUserData()">
+                    <div class="settings-row-left">
+                        <div class="menu-icon-wrap green"><i class="fas fa-file-export"></i></div>
+                        <div>
+                            <div class="settings-row-title">Export My Data</div>
+                            <div class="settings-row-subtitle">Download a copy</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+            </div>
+
+            <div class="menu-section-title">Parental Controls</div>
+            <div class="settings-section">
+                <div class="settings-row" onclick="openModal('parentalModal')">
+                    <div class="settings-row-left">
+                        <div class="menu-icon-wrap orange"><i class="fas fa-child"></i></div>
+                        <div>
+                            <div class="settings-row-title">Kids Mode</div>
+                            <div class="settings-row-subtitle" id="kidsModeDisplay">Disabled</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+                <div class="settings-row" onclick="openModal('maturityModal')">
+                    <div class="settings-row-left">
+                        <div class="menu-icon-wrap red"><i class="fas fa-lock"></i></div>
+                        <div>
+                            <div class="settings-row-title">Maturity Rating</div>
+                            <div class="settings-row-subtitle" id="maturityDisplay">All Ages</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+            </div>
+
+            <div style="height:40px;"></div>
+        </div>
+
+        <!-- ===== DETAILS PAGE ===== -->
+        <div class="details-page" id="detailsPage">
+            <div class="details-header" id="detailsHeader">
+                <img src="" alt="" id="detailsHeaderImg">
+                <div class="details-header-gradient"></div>
+                <div class="details-play-overlay" onclick="playContent(currentContent)">
+                    <i class="fas fa-play"></i>
+                    <span>Play</span>
+                </div>
+            </div>
+            <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i></button>
+            <div class="details-content" id="detailsContent"></div>
+        </div>
+
+        <!-- ===== EMBED PLAYER ===== -->
+        <div class="floating-player" id="floatingPlayer">
+            <div class="player-wrapper" id="playerWrapper">
+                <iframe id="embedFrame"
+                allowfullscreen
+                allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+                loading="lazy"
+                -webkit-tap-highlight-color="transparent">
+            </iframe>
+            <div class="player-loader" id="playerLoader"></div>
+        </div>
+    </div>
+
+    <!-- ===== MODALS ===== -->
+
+    <!-- Theme Modal -->
+    <div class="modal-overlay" id="themeModal" onclick="if(event.target===this)closeModal('themeModal')">
+        <div class="modal-content">
+            <div class="modal-handle"></div>
+            <div class="modal-header">
+                <h3 class="modal-title">Choose Theme</h3>
+                <button class="modal-close" onclick="closeModal('themeModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="theme-grid">
+                <div class="theme-option theme-dark active" data-theme="dark" onclick="setTheme('dark', 'Netflix Dark')">Netflix Dark</div>
+                <div class="theme-option theme-midnight" data-theme="midnight" onclick="setTheme('midnight', 'Midnight Blue')">Midnight</div>
+                <div class="theme-option theme-amoled" data-theme="amoled" onclick="setTheme('amoled', 'AMOLED Black')">AMOLED</div>
+                <div class="theme-option theme-crimson" data-theme="crimson" onclick="setTheme('crimson', 'Crimson Red')">Crimson</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Font Size Modal -->
+    <div class="modal-overlay" id="fontSizeModal" onclick="if(event.target===this)closeModal('fontSizeModal')">
+        <div class="modal-content">
+            <div class="modal-handle"></div>
+            <div class="modal-header">
+                <h3 class="modal-title">Font Size</h3>
+                <button class="modal-close" onclick="closeModal('fontSizeModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="quality-options">
+                <div class="quality-option" onclick="setFontSize('small', 'Small')">
+                    <div>
+                        <div class="quality-label">Small</div>
+                        <div class="quality-meta">Compact text</div>
+                    </div>
+                    <i class="fas fa-check"></i>
+                </div>
+                <div class="quality-option active" onclick="setFontSize('medium', 'Medium')">
+                    <div>
+                        <div class="quality-label">Medium</div>
+                        <div class="quality-meta">Default</div>
+                    </div>
+                    <i class="fas fa-check"></i>
+                </div>
+                <div class="quality-option" onclick="setFontSize('large', 'Large')">
+                    <div>
+                        <div class="quality-label">Large</div>
+                        <div class="quality-meta">Easier to read</div>
+                    </div>
+                    <i class="fas fa-check"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quality Modal -->
+    <div class="modal-overlay" id="qualityModal" onclick="if(event.target===this)closeModal('qualityModal')">
+        <div class="modal-content">
+            <div class="modal-handle"></div>
+            <div class="modal-header">
+                <h3 class="modal-title">Video Quality</h3>
+                <button class="modal-close" onclick="closeModal('qualityModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="quality-options">
+                <div class="quality-option active" onclick="setQuality('auto', 'Auto (Recommended)')">
+                    <div>
+                        <div class="quality-label">Auto</div>
+                        <div class="quality-meta">Adjusts to your connection</div>
+                    </div>
+                    <i class="fas fa-check"></i>
+                </div>
+                <div class="quality-option" onclick="setQuality('4k', '4K Ultra HD')">
+                    <div>
+                        <div class="quality-label">4K Ultra HD</div>
+                        <div class="quality-meta">Best quality • High data usage</div>
+                    </div>
+                    <i class="fas fa-check"></i>
+                </div>
+                <div class="quality-option" onclick="setQuality('1080p', 'Full HD (1080p)')">
+                    <div>
+                        <div class="quality-label">Full HD (1080p)</div>
+                        <div class="quality-meta">High quality</div>
+                    </div>
+                    <i class="fas fa-check"></i>
+                </div>
+                <div class="quality-option" onclick="setQuality('720p', 'HD (720p)')">
+                    <div>
+                        <div class="quality-label">HD (720p)</div>
+                        <div class="quality-meta">Standard quality</div>
+                    </div>
+                    <i class="fas fa-check"></i>
+                </div>
+                <div class="quality-option" onclick="setQuality('480p', 'SD (480p)')">
+                    <div>
+                        <div class="quality-label">SD (480p)</div>
+                        <div class="quality-meta">Low data usage</div>
+                    </div>
+                    <i class="fas fa-check"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Language Modal -->
+    <div class="modal-overlay" id="languageModal" onclick="if(event.target===this)closeModal('languageModal')">
+        <div class="modal-content">
+            <div class="modal-handle"></div>
+            <div class="modal-header">
+                <h3 class="modal-title">Language</h3>
+                <button class="modal-close" onclick="closeModal('languageModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="quality-options">
+                <div class="quality-option active" onclick="setLanguage('English')"><div class="quality-label">🇺🇸 English</div><i class="fas fa-check"></i></div>
+                <div class="quality-option" onclick="setLanguage('Spanish')"><div class="quality-label">🇪🇸 Español</div><i class="fas fa-check"></i></div>
+                <div class="quality-option" onclick="setLanguage('Hindi')"><div class="quality-label">🇮🇳 हिन्दी</div><i class="fas fa-check"></i></div>
+                <div class="quality-option" onclick="setLanguage('French')"><div class="quality-label">🇫🇷 Français</div><i class="fas fa-check"></i></div>
+                <div class="quality-option" onclick="setLanguage('German')"><div class="quality-label">🇩🇪 Deutsch</div><i class="fas fa-check"></i></div>
+                <div class="quality-option" onclick="setLanguage('Japanese')"><div class="quality-label">🇯🇵 日本語</div><i class="fas fa-check"></i></div>
+                <div class="quality-option" onclick="setLanguage('Korean')"><div class="quality-label">🇰🇷 한국어</div><i class="fas fa-check"></i></div>
+                <div class="quality-option" onclick="setLanguage('Chinese')"><div class="quality-label">🇨🇳 中文</div><i class="fas fa-check"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subtitle Modal -->
+    <div class="modal-overlay" id="subtitleModal" onclick="if(event.target===this)closeModal('subtitleModal')">
+        <div class="modal-content">
+            <div class="modal-handle"></div>
+            <div class="modal-header">
+                <h3 class="modal-title">Subtitles</h3>
+                <button class="modal-close" onclick="closeModal('subtitleModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="quality-options">
+                <div class="quality-option active" onclick="setSubtitle('Off')"><div class="quality-label">Off</div><i class="fas fa-check"></i></div>
+                <div class="quality-option" onclick="setSubtitle('English')"><div class="quality-label">English</div><i class="fas fa-check"></i></div>
+                <div class="quality-option" onclick="setSubtitle('Spanish')"><div class="quality-label">Spanish</div><i class="fas fa-check"></i></div>
+                <div class="quality-option" onclick="setSubtitle('Hindi')"><div class="quality-label">Hindi</div><i class="fas fa-check"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Modal -->
+    <div class="modal-overlay" id="notificationModal" onclick="if(event.target===this)closeModal('notificationModal')">
+        <div class="modal-content">
+            <div class="modal-handle"></div>
+            <div class="modal-header">
+                <h3 class="modal-title">Notifications</h3>
+                <button class="modal-close" onclick="closeModal('notificationModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div style="padding: 8px 0;">
+                <div class="settings-row">
+                    <div class="settings-row-left">
+                        <div>
+                            <div class="settings-row-title">New Releases</div>
+                            <div class="settings-row-subtitle">Get notified about new content</div>
+                        </div>
+                    </div>
+                    <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+                </div>
+                <div class="settings-row">
+                    <div class="settings-row-left">
+                        <div>
+                            <div class="settings-row-title">Recommendations</div>
+                            <div class="settings-row-subtitle">Personalized suggestions</div>
+                        </div>
+                    </div>
+                    <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+                </div>
+                <div class="settings-row">
+                    <div class="settings-row-left">
+                        <div>
+                            <div class="settings-row-title">Trending Now</div>
+                            <div class="settings-row-subtitle">Popular shows alerts</div>
+                        </div>
+                    </div>
+                    <label class="toggle-switch"><input type="checkbox"><span class="toggle-slider"></span></label>
+                </div>
+                <div class="settings-row">
+                    <div class="settings-row-left">
+                        <div>
+                            <div class="settings-row-title">Reminder Alerts</div>
+                            <div class="settings-row-subtitle">Continue watching reminders</div>
+                        </div>
+                    </div>
+                    <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+                </div>
+                <div class="settings-row">
+                    <div class="settings-row-left">
+                        <div>
+                            <div class="settings-row-title">Sound</div>
+                            <div class="settings-row-subtitle">Notification sounds</div>
+                        </div>
+                    </div>
+                    <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal-overlay" id="editProfileModal" onclick="if(event.target===this)closeModal('editProfileModal')">
+        <div class="modal-content">
+            <div class="modal-handle"></div>
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Profile</h3>
+                <button class="modal-close" onclick="closeModal('editProfileModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div style="padding: 16px;">
+                <p style="font-size:12px; color:var(--text-muted); margin-bottom:10px; text-transform:uppercase; letter-spacing:1px;">Avatar</p>
+                <div class="avatar-picker-grid" id="avatarPickerGrid"></div>
+                <p style="font-size:12px; color:var(--text-muted); margin:16px 0 10px; text-transform:uppercase; letter-spacing:1px;">Display Name</p>
+                <input type="text" id="editProfileName" class="search-page-input" placeholder="Your name">
+                <button class="auth-btn" onclick="saveProfile()" style="margin-top:20px;">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Privacy Modal -->
+    <div class="modal-overlay" id="privacyModal" onclick="if(event.target===this)closeModal('privacyModal')">
+        <div class="modal-content">
+            <div class="modal-handle"></div>
+            <div class="modal-header">
+                <h3 class="modal-title">Privacy & Security</h3>
+                <button class="modal-close" onclick="closeModal('privacyModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div style="padding: 8px 0;">
+                <div class="settings-row">
+                    <div class="settings-row-left">
+                        <div>
+                            <div class="settings-row-title">Profile Visibility</div>
+                            <div class="settings-row-subtitle">Public profile</div>
+                        </div>
+                    </div>
+                    <label class="toggle-switch"><input type="checkbox"><span class="toggle-slider"></span></label>
+                </div>
+                <div class="settings-row">
+                    <div class="settings-row-left">
+                        <div>
+                            <div class="settings-row-title">Activity Status</div>
+                            <div class="settings-row-subtitle">Show when watching</div>
+                        </div>
+                    </div>
+                    <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+                </div>
+                <div class="settings-row">
+                    <div class="settings-row-left">
+                        <div>
+                            <div class="settings-row-title">Two-Factor Auth</div>
+                            <div class="settings-row-subtitle">Extra account security</div>
+                        </div>
+                    </div>
+                    <label class="toggle-switch"><input type="checkbox"><span class="toggle-slider"></span></label>
+                </div>
+                <div class="settings-row" onclick="showToast('Password reset email sent', 'success'); closeModal('privacyModal');">
+                    <div class="settings-row-left">
+                        <div>
+                            <div class="settings-row-title">Change Password</div>
+                            <div class="settings-row-subtitle">Update your password</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+                <div class="settings-row" onclick="confirmDeleteAccount()" style="color:var(--netflix-red);">
+                    <div class="settings-row-left">
+                        <div>
+                            <div class="settings-row-title">Delete Account</div>
+                            <div class="settings-row-subtitle">Permanently delete</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Parental Modal -->
+    <div class="modal-overlay" id="parentalModal" onclick="if(event.target===this)closeModal('parentalModal')">
+        <div class="modal-content">
+            <div class="modal-handle"></div>
+            <div class="modal-header">
+                <h3 class="modal-title">Kids Mode</h3>
+                <button class="modal-close" onclick="closeModal('parentalModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div style="padding: 16px;">
+                <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Enable Kids Mode to restrict content to family-friendly titles only.</p>
+                <div class="settings-row" style="border:none;">
+                    <div class="settings-row-left">
+                        <div>
+                            <div class="settings-row-title">Enable Kids Mode</div>
+                        </div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="toggleKidsMode" onchange="toggleKidsMode(this.checked)">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Maturity Modal -->
+    <div class="modal-overlay" id="maturityModal" onclick="if(event.target===this)closeModal('maturityModal')">
+        <div class="modal-content">
+            <div class="modal-handle"></div>
+            <div class="modal-header">
+                <h3 class="modal-title">Maturity Rating</h3>
+                <button class="modal-close" onclick="closeModal('maturityModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="quality-options">
+                <div class="quality-option active" onclick="setMaturity('All Ages')"><div class="quality-label">All Ages</div><i class="fas fa-check"></i></div>
+                <div class="quality-option" onclick="setMaturity('7+')"><div class="quality-label">7+</div><i class="fas fa-check"></i></div>
+                <div class="quality-option" onclick="setMaturity('13+')"><div class="quality-label">13+</div><i class="fas fa-check"></i></div>
+                <div class="quality-option" onclick="setMaturity('16+')"><div class="quality-label">16+</div><i class="fas fa-check"></i></div>
+                <div class="quality-option" onclick="setMaturity('18+')"><div class="quality-label">18+ (Mature)</div><i class="fas fa-check"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div class="modal-overlay" id="helpModal" onclick="if(event.target===this)closeModal('helpModal')">
+        <div class="modal-content">
+            <div class="modal-handle"></div>
+            <div class="modal-header">
+                <h3 class="modal-title">Help & Support</h3>
+                <button class="modal-close" onclick="closeModal('helpModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div style="padding: 8px 0;">
+                <div class="settings-row" onclick="showToast('Opening FAQ...', 'info')">
+                    <div class="settings-row-left">
+                        <div class="menu-icon-wrap blue"><i class="fas fa-question"></i></div>
+                        <div>
+                            <div class="settings-row-title">FAQ</div>
+                            <div class="settings-row-subtitle">Frequently asked questions</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+                <div class="settings-row" onclick="showToast('Opening live chat...', 'info')">
+                    <div class="settings-row-left">
+                        <div class="menu-icon-wrap green"><i class="fas fa-comments"></i></div>
+                        <div>
+                            <div class="settings-row-title">Live Chat</div>
+                            <div class="settings-row-subtitle">Chat with support</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+                <div class="settings-row" onclick="window.location.href='mailto:support@velqore.com'">
+                    <div class="settings-row-left">
+                        <div class="menu-icon-wrap orange"><i class="fas fa-envelope"></i></div>
+                        <div>
+                            <div class="settings-row-title">Email Support</div>
+                            <div class="settings-row-subtitle">support@velqore.com</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+                <div class="settings-row" onclick="showToast('Report submitted', 'success')">
+                    <div class="settings-row-left">
+                        <div class="menu-icon-wrap red"><i class="fas fa-bug"></i></div>
+                        <div>
+                            <div class="settings-row-title">Report a Problem</div>
+                            <div class="settings-row-subtitle">Found a bug?</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+                <div class="settings-row" onclick="showToast('Thanks for your feedback!', 'success')">
+                    <div class="settings-row-left">
+                        <div class="menu-icon-wrap purple"><i class="fas fa-star"></i></div>
+                        <div>
+                            <div class="settings-row-title">Rate the App</div>
+                            <div class="settings-row-subtitle">Share your experience</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Modal -->
+    <div class="modal-overlay" id="aboutModal" onclick="if(event.target===this)closeModal('aboutModal')">
+        <div class="modal-content">
+            <div class="modal-handle"></div>
+            <div class="modal-header">
+                <h3 class="modal-title">About Velqore</h3>
+                <button class="modal-close" onclick="closeModal('aboutModal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="about-card">
+                <div class="logo-big">V</div>
+                <h2 style="font-size:24px; font-weight:800;">Velqore</h2>
+                <p style="font-size:13px; opacity:0.9; margin-top:8px;">Unlimited Movies & Series Streaming</p>
+                <div class="app-version">Version 2.0.0 • Build 2024</div>
+            </div>
+            <div style="padding: 8px 0 20px;">
+                <div class="settings-row" onclick="showToast('Opening Terms...', 'info')">
+                    <div class="settings-row-left">
+                        <div>
+                            <div class="settings-row-title">Terms of Service</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+                <div class="settings-row" onclick="showToast('Opening Privacy Policy...', 'info')">
+                    <div class="settings-row-left">
+                        <div>
+                            <div class="settings-row-title">Privacy Policy</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+                <div class="settings-row" onclick="showToast('Opening Licenses...', 'info')">
+                    <div class="settings-row-left">
+                        <div>
+                            <div class="settings-row-title">Open Source Licenses</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+                <div class="settings-row" onclick="checkForUpdates()">
+                    <div class="settings-row-left">
+                        <div>
+                            <div class="settings-row-title">Check for Updates</div>
+                            <div class="settings-row-subtitle">You're on the latest version</div>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== BOTTOM NAV ===== -->
+    <nav class="nav-bar" id="navBar">
+        <div class="nav-item active" onclick="navigateTo('home')" data-page="home">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </div>
+        <div class="nav-item" onclick="navigateTo('webseries')" data-page="webseries">
+            <i class="fas fa-tv"></i>
+            <span>TV Shows</span>
+        </div>
+        <div class="nav-item" onclick="navigateTo('movies')" data-page="movies">
+            <i class="fas fa-film"></i>
+            <span>Movies</span>
+        </div>
+        <div class="nav-item" onclick="navigateTo('profile')" data-page="profile">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </div>
+    </nav>
+
+</div>
+
+<!-- ===== TOAST CONTAINER ===== -->
+<div id="toastContainer"></div>
+
+<!-- ===== FIREBASE ===== -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js">
+</script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js">
+</script>
+
+<script>
+    // ============================================================
+    //  FIREBASE CONFIG
+    // ============================================================
+    const firebaseConfig = {
+        apiKey: "AIzaSyDh54l9HeQ-pbNddg1kpcNxb0ODxpBmHrA",
+        authDomain: "code9x-tools.firebaseapp.com",
+        databaseURL: "https://code9x-tools-default-rtdb.firebaseio.com",
+        projectId: "code9x-tools"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // ============================================================
+    //  GLOBALS
+    // ============================================================
+    let allWebseries = [],
+        allMovies = [],
+        allCategories = [];
+    let currentSlide = 0,
+        sliderInterval,
+        currentContent = null,
+        currentUser = null;
+    let navigationStack = ['home'],
+        isNavigating = false,
+        lastBackPress = 0,
+        searchTimeout;
+    let embedFrame;
+    // Store player state for recovery
+    let playerState = {
+        url: null,
+        title: null,
+        subtitle: null,
+        isActive: false
+    };
+
+    // ============================================================
+    //  SETTINGS
+    // ============================================================
+    function getSetting(key, defaultVal) {
+        const val = localStorage.getItem('velqore_setting_' + key);
+        return val !== null ? val : defaultVal;
+    }
+
+    function saveSetting(key, val) {
+        localStorage.setItem('velqore_setting_' + key, val);
+    }
+
+    function toggleSetting(key, val) {
+        saveSetting(key, val ? '1' : '0');
+        showToast('Setting updated', 'success');
+    }
+
+    function applySettings() {
+        const theme = getSetting('theme', 'dark');
+        document.body.setAttribute('data-theme', theme);
+        const fontSize = getSetting('fontSize', 'medium');
+        document.body.setAttribute('data-font-size', fontSize);
+
+        const themeLabels = { dark: 'Netflix Dark', midnight: 'Midnight Blue', amoled: 'AMOLED Black', crimson: 'Crimson Red' };
+        const themeDisplay = document.getElementById('themeDisplay');
+        if (themeDisplay) themeDisplay.textContent = themeLabels[theme] || 'Netflix Dark';
+
+        const fsDisplay = document.getElementById('fontSizeDisplay');
+        if (fsDisplay) fsDisplay.textContent = fontSize.charAt(0).toUpperCase() + fontSize.slice(1);
+
+        ['toggleAutoplay', 'togglePreviews', 'toggleDataSaver', 'togglePersonalized'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                const k = id.replace('toggle', '').toLowerCase();
+                const defaults = { autoplay: '1', previews: '0', datasaver: '0', personalized: '1' };
+                el.checked = getSetting(k, defaults[k]) === '1';
+            }
+        });
+
+        const quality = getSetting('quality', 'Auto (Recommended)');
+        const qd = document.getElementById('qualityDisplay');
+        if (qd) qd.textContent = quality;
+
+        const sb = document.getElementById('subtitleDisplay');
+        if (sb) sb.textContent = getSetting('subtitle', 'Off');
+
+        const lg = document.getElementById('languageDisplay');
+        if (lg) lg.textContent = getSetting('language', 'English');
+
+        const mt = document.getElementById('maturityDisplay');
+        if (mt) mt.textContent = getSetting('maturity', 'All Ages');
+
+        const km = document.getElementById('kidsModeDisplay');
+        if (km) km.textContent = getSetting('kidsMode', '0') === '1' ? 'Enabled' : 'Disabled';
+    }
+
+    function setTheme(theme, label) {
+        saveSetting('theme', theme);
+        document.body.setAttribute('data-theme', theme);
+        document.getElementById('themeDisplay').textContent = label;
+        document.querySelectorAll('.theme-option').forEach(t => t.classList.toggle('active', t.dataset.theme === theme));
+        closeModal('themeModal');
+        showToast('Theme updated to ' + label, 'success');
+    }
+
+    function setFontSize(size, label) {
+        saveSetting('fontSize', size);
+        document.body.setAttribute('data-font-size', size);
+        document.getElementById('fontSizeDisplay').textContent = label;
+        closeModal('fontSizeModal');
+        showToast('Font size: ' + label, 'success');
+    }
+
+    function setQuality(q, label) {
+        saveSetting('quality', label);
+        document.getElementById('qualityDisplay').textContent = label;
+        closeModal('qualityModal');
+        showToast('Quality set to ' + label, 'success');
+    }
+
+    function setLanguage(lang) {
+        saveSetting('language', lang);
+        document.getElementById('languageDisplay').textContent = lang;
+        closeModal('languageModal');
+        showToast('Language: ' + lang, 'success');
+    }
+
+    function setSubtitle(sub) {
+        saveSetting('subtitle', sub);
+        document.getElementById('subtitleDisplay').textContent = sub;
+        closeModal('subtitleModal');
+        showToast('Subtitles: ' + sub, 'success');
+    }
+
+    function setMaturity(m) {
+        saveSetting('maturity', m);
+        document.getElementById('maturityDisplay').textContent = m;
+        closeModal('maturityModal');
+        showToast('Maturity rating: ' + m, 'success');
+    }
+
+    function toggleKidsMode(on) {
+        saveSetting('kidsMode', on ? '1' : '0');
+        document.getElementById('kidsModeDisplay').textContent = on ? 'Enabled' : 'Disabled';
+        showToast('Kids Mode ' + (on ? 'enabled' : 'disabled'), 'success');
+    }
+
+    function openSettings() {
+        document.getElementById('settingsPage').classList.add('active');
+        navigationStack.push('settings');
+    }
+
+    function openModal(id) {
+        document.getElementById(id).classList.add('active');
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('active');
+    }
+
+    function confirmClearHistory() {
+        if (confirm('Clear all watch history? This cannot be undone.')) {
+            localStorage.removeItem('velqore_watchHistory');
+            updateProfileStats();
+            showToast('Watch history cleared', 'success');
+        }
+    }
+
+    function confirmDeleteAccount() {
+        if (confirm('Permanently delete your account? This cannot be undone.')) {
+            if (currentUser && !currentUser.isGuest) {
+                db.ref(`registered_users/${currentUser.id}`).remove();
+            }
+            localStorage.clear();
+            showToast('Account deleted', 'success');
+            setTimeout(() => location.reload(), 1500);
+        }
+    }
+
+    function exportUserData() {
+        const data = {
+            profile: currentUser,
+            watchHistory: getWatchHistory(),
+            myList: getMyList(),
+            settings: Object.keys(localStorage).filter(k => k.startsWith('velqore_setting_')).reduce((a, k) => ({ ...a,
+                [k.replace('velqore_setting_', '')]: localStorage.getItem(k) }), {})
+        };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `velqore-data-${Date.now()}.json`;
+        a.click();
+        showToast('Data exported!', 'success');
+    }
+
+    function saveProfile() {
+        const newName = document.getElementById('editProfileName').value.trim();
+        if (!newName) return showToast('Name cannot be empty', 'error');
+        currentUser.name = newName;
+        localStorage.setItem('velqore_user', JSON.stringify(currentUser));
+        if (!currentUser.isGuest) {
+            db.ref(`registered_users/${currentUser.id}/name`).set(newName);
+        }
+        document.getElementById('profileName').textContent = newName;
+        document.getElementById('profileInitial').textContent = newName[0].toUpperCase();
+        document.getElementById('profileAvatar').textContent = newName[0].toUpperCase();
+        closeModal('editProfileModal');
+        showToast('Profile updated!', 'success');
+    }
+
+    function renderAvatarPicker() {
+        const colors = ['#E50914', '#0080FF', '#8B5CF6', '#F59E0B', '#46D369', '#FF1744', '#00BCD4', '#FF6F00'];
+        const grid = document.getElementById('avatarPickerGrid');
+        if (!grid || !currentUser) return;
+        const initial = currentUser.name[0].toUpperCase();
+        grid.innerHTML = colors.map((c, i) =>
+            `<div class="avatar-option ${i === 0 ? 'active' : ''}" style="background:${c}" onclick="selectAvatar(this, '${c}')">${initial}</div>`
+        ).join('');
+        document.getElementById('editProfileName').value = currentUser.name;
+    }
+
+    function selectAvatar(el, color) {
+        document.querySelectorAll('.avatar-option').forEach(a => a.classList.remove('active'));
+        el.classList.add('active');
+    }
+
+    function updateProfileStats() {
+        const history = getWatchHistory();
+        const myList = getMyList();
+        const statW = document.getElementById('statWatched');
+        const statM = document.getElementById('statMyList');
+        const statH = document.getElementById('statHours');
+        if (statW) statW.textContent = history.length;
+        if (statM) statM.textContent = myList.length;
+        if (statH) statH.textContent = Math.floor(history.length * 0.75) + 'h';
+    }
+
+    // ============================================================
+    //  STORAGE
+    // ============================================================
+    function getMyList() { return JSON.parse(localStorage.getItem('velqore_myList') || '[]'); }
+
+    function saveMyList(l) { localStorage.setItem('velqore_myList', JSON.stringify(l)); }
+
+    function getWatchHistory() { return JSON.parse(localStorage.getItem('velqore_watchHistory') || '[]'); }
+
+    function saveWatchHistory(h) { localStorage.setItem('velqore_watchHistory', JSON.stringify(h)); }
+
+    function addToWatchHistory(item) {
+        if (!item) return;
+        let history = getWatchHistory().filter(h => h.id !== item.id);
+        history.unshift({ id: item.id, title: item.title, poster: item.poster, type: item.type || 'movie',
+            watchedAt: Date.now() });
+        saveWatchHistory(history.slice(0, 50));
+        updateProfileStats();
+    }
+
+    function toggleMyList(item) {
+        if (!currentUser) return showToast('Please login to add to watchlist', 'error');
+        let list = getMyList(),
+            idx = list.findIndex(l => l.id === item.id);
+        if (idx !== -1) {
+            list.splice(idx, 1);
+            showToast('Removed from My List', 'info');
+            updateMyListUI(item.id, false);
+        } else {
+            list.unshift({ id: item.id, title: item.title, poster: item.poster, type: item.type || 'movie',
+                addedAt: Date.now() });
+            showToast('Added to My List', 'success');
+            updateMyListUI(item.id, true);
+        }
+        saveMyList(list);
+        updateProfileStats();
+    }
+
+    function updateMyListUI(itemId, isInList) {
+        const detailsBtn = document.getElementById('interactionMyList');
+        if (detailsBtn && currentContent && currentContent.id === itemId) {
+            detailsBtn.classList.toggle('active', isInList);
+            detailsBtn.innerHTML = isInList ?
+                '<i class="fas fa-check"></i><span>My List</span>' :
+                '<i class="fas fa-plus"></i><span>My List</span>';
+        }
+    }
+
+    function isInMyList(itemId) { return getMyList().some(l => l.id === itemId); }
+
+    function openMyList() {
+        const list = getMyList();
+        navigateTo('watchlist');
+        document.getElementById('watchlistGrid').innerHTML = list.length === 0 ?
+            '<div class="empty-state"><i class="fas fa-check"></i><h3>Your list is empty</h3><p>Add titles to keep watching here.</p></div>' :
+            list.map(item => createPosterCard(item)).join('');
+    }
+
+    function openWatchHistory() {
+        const history = getWatchHistory();
+        navigateTo('history');
+        document.getElementById('historyGrid').innerHTML = history.length === 0 ?
+            '<div class="empty-state"><i class="fas fa-history"></i><h3>No watch history</h3><p>Start watching to see your history.</p></div>' :
+            history.map(item => createPosterCard(item)).join('');
+    }
+
+    // ============================================================
+    //  AUTH
+    // ============================================================
+    function switchAuthTab(tab) {
+        document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+        if (tab === 'login') {
+            document.querySelector('.auth-tab:first-child').classList.add('active');
+            document.getElementById('loginForm').classList.add('active');
+        } else {
+            document.querySelector('.auth-tab:last-child').classList.add('active');
+            document.getElementById('signupForm').classList.add('active');
+        }
+        document.getElementById('authError').classList.remove('show');
+    }
+
+    function togglePassword(id, icon) {
+        const input = document.getElementById(id);
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.replace('fa-eye', 'fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.replace('fa-eye-slash', 'fa-eye');
+        }
+    }
+
+    function handleLogin(e) {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value.trim(),
+            password = document.getElementById('loginPassword').value,
+            btn = document.getElementById('loginBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        db.ref(`registered_users/${email.replace(/\./g, ',')}`).once('value', snap => {
+            const ud = snap.val();
+            if (!ud || ud.password !== password) {
+                document.getElementById('authErrorText').textContent = !ud ? 'Account not found.' :
+                    'Incorrect password.';
+                document.getElementById('authError').classList.add('show');
+                btn.disabled = false;
+                btn.innerHTML = 'Sign In';
+                return;
+            }
+            currentUser = { id: email.replace(/\./g, ','), name: ud.name, email, isGuest: false };
+            localStorage.setItem('velqore_user', JSON.stringify(currentUser));
+            showLoadingAndStart();
+        });
+    }
+
+    function handleSignup(e) {
+        e.preventDefault();
+        const name = document.getElementById('signupName').value.trim(),
+            email = document.getElementById('signupEmail').value.trim(),
+            password = document.getElementById('signupPassword').value,
+            btn = document.getElementById('signupBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        db.ref(`registered_users/${email.replace(/\./g, ',')}`).once('value', snap => {
+            if (snap.exists()) {
+                document.getElementById('authErrorText').textContent = 'Email already registered.';
+                document.getElementById('authError').classList.add('show');
+                btn.disabled = false;
+                btn.innerHTML = 'Create Account';
+                return;
+            }
+            db.ref(`registered_users/${email.replace(/\./g, ',')}`).set({ name, email, password,
+                createdAt: Date.now() }).then(() => {
+                currentUser = { id: email.replace(/\./g, ','), name, email, isGuest: false };
+                localStorage.setItem('velqore_user', JSON.stringify(currentUser));
+                showLoadingAndStart();
+            });
+        });
+    }
+
+    function continueAsGuest() {
+        currentUser = { id: 'guest_' + Date.now(), name: 'Guest User', email: 'guest@velqore.com', isGuest: true };
+        localStorage.setItem('velqore_user', JSON.stringify(currentUser));
+        showLoadingAndStart();
+    }
+
+    function handleLogout() {
+        if (confirm('Are you sure you want to sign out?')) {
+            localStorage.removeItem('velqore_user');
+            currentUser = null;
+            location.reload();
+        }
+    }
+
+    function showLoadingAndStart() {
+        document.getElementById('authScreen').classList.add('hidden');
+        document.getElementById('loadingScreen').classList.remove('hidden');
+        setTimeout(() => {
+            document.getElementById('loadingScreen').classList.add('hidden');
+            if (currentUser) {
+                document.getElementById('profileInitial').textContent = currentUser.name[0].toUpperCase();
+                document.getElementById('profileAvatar').textContent = currentUser.name[0].toUpperCase();
+                document.getElementById('profileName').textContent = currentUser.name;
+                document.getElementById('profileEmail').textContent = currentUser.email;
+                document.getElementById('logoutBtn').querySelector('.settings-row-title').textContent = currentUser
+                    .isGuest ? 'Sign In' : 'Sign Out';
+            }
+            applySettings();
+            loadData();
+            initBackButtonHandler();
+            updateProfileStats();
+            renderAvatarPicker();
+        }, 1500);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const u = localStorage.getItem('velqore_user');
+        if (u) {
+            currentUser = JSON.parse(u);
+            showLoadingAndStart();
+        } else {
+            document.getElementById('authScreen').classList.remove('hidden');
+        }
+        window.addEventListener('scroll', () => {
+            const h = document.getElementById('header');
+            if (h) h.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Listen for page show to recover player state after back navigation
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                // User pressed back button to return to this page
+                recoverPlayerState();
+            }
+        });
+    });
+
+    // ============================================================
+    //  PLAYER STATE RECOVERY
+    // ============================================================
+    function storePlayerState(url, title, subtitle) {
+        playerState.url = url;
+        playerState.title = title || null;
+        playerState.subtitle = subtitle || null;
+        playerState.isActive = true;
+        // Also store in sessionStorage for recovery across page reloads
+        try {
+            sessionStorage.setItem('velqore_player_state', JSON.stringify(playerState));
+        } catch (e) { /* ignore */ }
+    }
+
+    function clearPlayerState() {
+        playerState.url = null;
+        playerState.title = null;
+        playerState.subtitle = null;
+        playerState.isActive = false;
+        try {
+            sessionStorage.removeItem('velqore_player_state');
+        } catch (e) { /* ignore */ }
+    }
+
+    function recoverPlayerState() {
+        // First try from memory
+        let state = playerState;
+        // If not active, try from sessionStorage
+        if (!state.isActive || !state.url) {
+            try {
+                const saved = sessionStorage.getItem('velqore_player_state');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    if (parsed && parsed.url) {
+                        state = parsed;
+                        playerState = parsed; // sync
+                    }
+                }
+            } catch (e) { /* ignore */ }
+        }
+
+        if (state && state.url && state.isActive) {
+            // Check if player is already active
+            const player = document.getElementById('floatingPlayer');
+            if (!player.classList.contains('active')) {
+                // Re-open the player with the stored URL
+                setupEmbedPlayer(state.url, state.title, state.subtitle);
+                showToast('Player recovered', 'info');
+            }
+        }
+    }
+
+    // ============================================================
+    //  NAVIGATION
+    // ============================================================
+    function initBackButtonHandler() {
+        history.pushState({ page: 'home' }, '', '');
+        window.addEventListener('popstate', () => {
+            if (isNavigating) return;
+            handleBackPress();
+            history.pushState({ page: 'current' }, '', '');
+        });
+    }
+
+    function handleBackPress() {
+        const openModalEl = document.querySelector('.modal-overlay.active');
+        if (openModalEl) { openModalEl.classList.remove('active'); return; }
+        if (document.getElementById('floatingPlayer').classList.contains('active')) return closePlayer();
+        if (document.getElementById('detailsPage').classList.contains('active')) return closeDetails();
+        if (document.getElementById('searchPage').classList.contains('active')) return closeSearchPage();
+        if (document.getElementById('settingsPage').classList.contains('active')) {
+            document.getElementById('settingsPage').classList.remove('active');
+            navigationStack.pop();
+            return;
+        }
+        if (navigationStack.length > 1) { navigateTo('home'); return; }
+        const now = Date.now();
+        if (now - lastBackPress < 2000) window.close();
+        else { lastBackPress = now;
+            showToast('Press back again to exit', 'info'); }
+    }
+
+    function goBack() { handleBackPress(); }
+
+    function navigateTo(p) {
+        isNavigating = true;
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.toggle('active', i.dataset.page === p));
+        document.querySelectorAll('.content-page, .profile-page, .search-page, .details-page, .settings-page').forEach(
+        e => e.classList.remove('active'));
+        if (p === 'webseries') document.getElementById('webseriesPage').classList.add('active');
+        else if (p === 'movies') document.getElementById('moviesPage').classList.add('active');
+        else if (p === 'profile') { document.getElementById('profilePage').classList.add('active');
+            updateProfileStats(); } else if (p === 'watchlist') document.getElementById('watchlistPage').classList.add(
+            'active');
+        else if (p === 'history') document.getElementById('historyPage').classList.add('active');
+        if (p !== 'home' && navigationStack[navigationStack.length - 1] !== p) navigationStack.push(p);
+        else if (p === 'home') navigationStack = ['home'];
+        setTimeout(() => isNavigating = false, 100);
+    }
+
+    function openProfile() { navigateTo('profile'); }
+
+    function openSearchPage() {
+        document.getElementById('searchPage').classList.add('active');
+        document.getElementById('searchPageInput').focus();
+        navigationStack.push('search');
+    }
+
+    function closeSearchPage() {
+        document.getElementById('searchPage').classList.remove('active');
+        navigationStack.pop();
+    }
+
+    function performSearch(q) {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            const r = document.getElementById('searchResults');
+            q = q.trim().toLowerCase();
+            if (!q) return r.innerHTML =
+                '<div class="empty-state"><i class="fas fa-search"></i><h3>Find your next favorite</h3><p>Search for shows, movies, genres, and more.</p></div>';
+            const res = [...allWebseries, ...allMovies].filter(i => i.title.toLowerCase().includes(q));
+            r.innerHTML = res.length ? res.map(i => createPosterCard(i)).join('') :
+                '<div class="empty-state"><h3>No results found</h3><p>Try a different search term.</p></div>';
+        }, 300);
+    }
+
+    // ============================================================
+    //  DATA LOADING
+    // ============================================================
+    function loadData() {
+        db.ref('categories').on('value', snap => {
+            allCategories = [];
+            const d = snap.val() || {};
+            Object.values(d).forEach(c => allCategories.push(c.name));
+            document.getElementById('categoryPills').innerHTML =
+                '<div class="category-pill active" data-category="all" onclick="filterByCategory(\'all\')">All</div>' +
+                allCategories.map(cat =>
+                    `<div class="category-pill" data-category="${cat}" onclick="filterByCategory('${cat}')">${cat}</div>`
+                    ).join('');
+        });
+        db.ref('webseries').on('value', snap => {
+            allWebseries = [];
+            const d = snap.val() || {};
+            Object.entries(d).forEach(([id, i]) => allWebseries.push({ id, ...i }));
+            renderContent();
+        });
+        db.ref('movies').on('value', snap => {
+            allMovies = [];
+            const d = snap.val() || {};
+            Object.entries(d).forEach(([id, i]) => allMovies.push({ id, ...i }));
+            renderContent();
+        });
+    }
+
+    function filterByCategory(cat) {
+        document.querySelectorAll('.category-pill').forEach(p => p.classList.toggle('active', p.dataset.category === cat));
+        renderContent(cat);
+    }
+
+    function renderContent(cat = 'all') {
+        renderHeroSlider();
+        const c = document.getElementById('contentSections');
+        c.innerHTML = '';
+        const history = getWatchHistory().slice(0, 10);
+        if (history.length > 0 && cat === 'all') {
+            c.innerHTML += createSection('Continue Watching', history.map(h => getContentById(h.id)).filter(Boolean));
+        }
+        let topItems = [...allWebseries, ...allMovies].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)).slice(0,
+        10);
+        if (topItems.length > 0 && cat === 'all') c.innerHTML += createTop10Section('Top 10 Today', topItems);
+        let w = cat === 'all' ? allWebseries : allWebseries.filter(s => s.category === cat);
+        if (w.length > 0) c.innerHTML += createSection('Trending TV Shows', w.slice(0, 10), 'webseries');
+        let m = cat === 'all' ? allMovies : allMovies.filter(s => s.category === cat);
+        if (m.length > 0) c.innerHTML += createSection('Blockbuster Movies', m.slice(0, 10), 'movies');
+        allCategories.forEach(ct => {
+            if (cat !== 'all' && cat !== ct) return;
+            const ctC = [...allWebseries.filter(s => s.category === ct), ...allMovies.filter(x => x.category ===
+                ct)];
+            if (ctC.length > 0) c.innerHTML += createSection(`${ct}`, ctC.slice(0, 10));
+        });
+        document.getElementById('allWebseriesGrid').innerHTML = allWebseries.map(i => createPosterCard(i)).join('');
+        document.getElementById('allMoviesGrid').innerHTML = allMovies.map(i => createPosterCard(i)).join('');
+    }
+
+    function renderHeroSlider() {
+        const all = [...allWebseries, ...allMovies].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)).slice(0, 5);
+        if (all.length === 0) return;
+        document.getElementById('sliderDots').innerHTML = all.map((_, i) =>
+            `<div class="slider-dot ${i===0?'active':''}" onclick="goToSlide(${i})"></div>`).join('');
+        window.heroContent = all;
+        updateHeroContent(all[0]);
+        clearInterval(sliderInterval);
+        if (all.length > 1) sliderInterval = setInterval(() => {
+            currentSlide = (currentSlide + 1) % all.length;
+            goToSlide(currentSlide);
+        }, 6000);
+    }
+
+    function goToSlide(i) {
+        document.querySelectorAll('.slider-dot').forEach((d, idx) => d.classList.toggle('active', idx === i));
+        currentSlide = i;
+        if (window.heroContent[i]) updateHeroContent(window.heroContent[i]);
+    }
+
+    function updateHeroContent(item) {
+        document.getElementById('heroTitleLarge').textContent = item.title;
+        const tags = item.category ? [item.category, item.year, item.type === 'webseries' ? 'Series' : 'Movie'].filter(
+            Boolean) : ['Trending'];
+        document.getElementById('heroMeta').innerHTML = tags.map((g, i) =>
+            `${i>0 ? '<span class="hero-tag-dot"></span>' : ''}<span>${g}</span>`).join('');
+        document.getElementById('heroBg').src = item.backdrop || item.poster;
+        window.currentHeroItem = item;
+    }
+
+    function playHeroContent() { if (window.currentHeroItem) playContent(window.currentHeroItem); }
+
+    function openHeroDetails() { if (window.currentHeroItem) openDetails(window.currentHeroItem, window.currentHeroItem
+            .type || (window.currentHeroItem.seasons ? 'webseries' : 'movie')); }
+
+    function createSection(title, items, typeUrl = null) {
+        return `<div class="category-section">
+                    <div class="category-header">
+                        <h3 class="category-title">${title}</h3>
+                        ${typeUrl ? `<span class="view-all" onclick="navigateTo('${typeUrl}')">See All <i class="fas fa-chevron-right" style="font-size:10px;"></i></span>` : ''}
+                    </div>
+                    <div class="poster-scroll">${items.map(x => createPosterCard(x)).join('')}</div>
+                </div>`;
+    }
+
+    function createTop10Section(title, items) {
+        return `<div class="category-section">
+                    <div class="category-header">
+                        <h3 class="category-title">${title}</h3>
+                    </div>
+                    <div class="top10-scroll">${items.map((x, idx) => `
+                        <div class="top10-card" onclick="openDetails(getContentById('${x.id}'), '${x.type || (x.seasons ? 'webseries' : 'movie')}')">
+                            <div class="top10-number">${idx+1}</div>
+                            <div class="poster-card"><img src="${x.poster}" loading="lazy" alt=""></div>
+                        </div>`).join('')}
+                    </div>
+                </div>`;
+    }
+
+    function createPosterCard(item) {
+        if (!item) return '';
+        return `<div class="poster-card" onclick="openDetails(getContentById('${item.id}'), '${item.type || (item.seasons ? 'webseries' : 'movie')}')">
+                    <img src="${item.poster}" loading="lazy" alt="Poster">
+                    <div class="poster-overlay"></div>
+                    <div class="poster-title-overlay">${item.title}</div>
+                </div>`;
+    }
+
+    function getContentById(id) { return allWebseries.find(w => w.id === id) || allMovies.find(m => m.id === id); }
+
+    // ============================================================
+    //  DETAILS
+    // ============================================================
+    function openDetails(item, type) {
+        if (!item) return;
+        currentContent = item;
+        document.getElementById('detailsHeaderImg').src = item.backdrop || item.poster;
+        const inList = isInMyList(item.id),
+            matchScore = Math.floor(Math.random() * 20) + 80;
+        let extraHtml = '';
+        if (type === 'webseries' && item.seasons) {
+            extraHtml += `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+                            <h3 class="section-title">Episodes</h3>
+                            <div class="season-selector-wrapper">
+                                <select class="season-selector" onchange="switchSeason('${item.id}', this.value)">
+                                    ${item.seasons.map((s,idx) => `<option value="${idx}">${s.name || 'Season ' + (idx+1)}</option>`).join('')}
+                                </select>
+                                <i class="fas fa-chevron-down" style="font-size: 11px;"></i>
+                            </div>
+                        </div>
+                        <div id="episodeListContainer">${renderEpisodeList(item, 0)}</div>`;
+        }
+        extraHtml +=
+            `<div style="margin-top:24px;"><h3 class="section-title">More Like This</h3><div class="similar-grid" id="similarContent"></div></div>`;
+        document.getElementById('detailsContent').innerHTML = `
+                    <h1 class="details-main-title">${item.title}</h1>
+                    <div class="details-meta-row">
+                        <span class="match-score">${matchScore}% Match</span>
+                        <span>${item.year || '2024'}</span>
+                        <span class="age-rating">${item.rating || '16+'}</span>
+                        <span>${type === 'webseries' ? (item.seasons ? item.seasons.length + ' Season' + (item.seasons.length>1?'s':'') : '1 Season') : (item.duration || '2h 10m')}</span>
+                        <span class="hd-badge">HD</span>
+                    </div>
+                    <div class="details-action-buttons">
+                        <button class="btn-full-play" onclick="playContent(currentContent)"><i class="fas fa-play"></i> Play</button>
+                    </div>
+                    <p class="details-storyline">${item.storyline || 'Explore this exciting title on Velqore.'}</p>
+                    <p class="details-cast-text"><strong>Cast:</strong> ${item.cast ? item.cast.slice(0,5).map(c => c.name).join(', ') : 'Various Artists'}</p>
+                    ${item.category ? `<p class="details-cast-text"><strong>Genres:</strong> ${item.category}</p>` : ''}
+                    <div class="interaction-row">
+                        <div class="interaction-item ${inList ? 'active' : ''}" id="interactionMyList" onclick="toggleMyList(currentContent)">
+                            <i class="fas fa-${inList ? 'check' : 'plus'}"></i>
+                            <span>My List</span>
+                        </div>
+                        <div class="interaction-item" onclick="showToast('Thanks for rating!', 'success')">
+                            <i class="far fa-thumbs-up"></i>
+                            <span>Rate</span>
+                        </div>
+                        <div class="interaction-item" onclick="showToast('Link copied!', 'info')">
+                            <i class="fas fa-paper-plane"></i>
+                            <span>Share</span>
+                        </div>
+                    </div>
+                    ${extraHtml}`;
+        document.getElementById('detailsPage').classList.add('active');
+        document.getElementById('detailsPage').scrollTop = 0;
+        navigationStack.push('details');
+        loadSimilarContent(item);
+    }
+
+    function renderEpisodeList(series, seasonIdx) {
+        const s = series.seasons[seasonIdx];
+        if (!s || !s.episodes) return '';
+        return s.episodes.map((ep, idx) => `
+                    <div class="episode-item" onclick="playEpisode('${series.id}', ${seasonIdx}, ${idx})">
+                        <div class="episode-number">${ep.episodeNumber || (idx+1)}</div>
+                        <div class="episode-thumbnail">
+                            <img src="${ep.thumbnail || series.backdrop || series.poster}" loading="lazy" alt="">
+                            <div class="play-icon"><i class="fas fa-play"></i></div>
+                        </div>
+                        <div class="episode-info">
+                            <div class="episode-info-header">
+                                <span class="episode-title">${ep.title || 'Episode '+(idx+1)}</span>
+                                <span class="episode-duration">${ep.duration || '45m'}</span>
+                            </div>
+                            <p class="episode-description">${ep.description || 'Watch now on Velqore.'}</p>
+                        </div>
+                    </div>`).join('');
+    }
+
+    function switchSeason(sid, sIdx) {
+        const series = getContentById(sid);
+        if (series) document.getElementById('episodeListContainer').innerHTML = renderEpisodeList(series, parseInt(sIdx));
+    }
+
+    function closeDetails() {
+        document.getElementById('detailsPage').classList.remove('active');
+        currentContent = null;
+        navigationStack.pop();
+    }
+
+    function loadSimilarContent(i) {
+        const c = document.getElementById('similarContent');
+        if (!c) return;
+        let sim = ((i.type === 'webseries' || i.seasons) ? allWebseries : allMovies).filter(x => x.id !== i.id && x
+            .category === i.category).slice(0, 9);
+        c.innerHTML = sim.length ? sim.map(s =>
+            `<div class="similar-grid-card" onclick="openDetails(getContentById('${s.id}'), '${s.type}')">
+                        <img src="${s.backdrop || s.poster}" class="sim-poster" loading="lazy" alt="">
+                        <div class="sim-info">
+                            <div class="sim-title">${s.title}</div>
+                            <div class="sim-desc">${s.storyline || ''}</div>
+                        </div>
+                    </div>`
+        ).join('') : '<p style="color:var(--text-muted); padding:10px;">No similar content</p>';
+    }
+
+    // ============================================================
+    //  EMBED PLAYER
+    // ============================================================
+    function playContent(item) {
+        if (!item) return;
+        addToWatchHistory(item);
+        if (item.type === 'webseries' || item.seasons) {
+            if (item.seasons?.[0]?.episodes?.[0]) {
+                const firstEp = item.seasons[0].episodes[0];
+                const url =
+                    `https://mirrorbox.dpdns.org/tv/${item.tmdbId}/${1}/${firstEp.episodeNumber || 1}`;
+                setupEmbedPlayer(url, item.title, `S1:E${firstEp.episodeNumber || 1} ${firstEp.title || ''}`);
+            } else showToast('No episodes available', 'error');
+        } else {
+            if (item.tmdbId) {
+                const url = `https://mirrorbox.dpdns.org/movie/${item.tmdbId}`;
+                setupEmbedPlayer(url, item.title, item.year || '');
+            } else if (item.trailer) {
+                const m = item.trailer.match(/(?:v=|\/)([^"&?\/\s]{11})/);
+                if (m) {
+                    const url = `https://www.youtube.com/embed/${m[1]}?autoplay=1&rel=0&modestbranding=1`;
+                    setupEmbedPlayer(url, item.title, 'Trailer');
+                } else showToast('Invalid video link', 'error');
+            } else showToast('Streaming link not available', 'error');
+        }
+    }
+
+    function playEpisode(sid, sIdx, eIdx) {
+        const i = getContentById(sid),
+            ep = i?.seasons[sIdx]?.episodes[eIdx];
+        if (ep) {
+            addToWatchHistory(i);
+            const url =
+                `https://mirrorbox.dpdns.org/tv/${i.tmdbId}/${sIdx+1}/${ep.episodeNumber || eIdx+1}`;
+            setupEmbedPlayer(url, i.title, `S${sIdx+1}:E${ep.episodeNumber || eIdx+1} ${ep.title || ''}`);
+        } else showToast('Episode data unavailable', 'error');
+    }
+
+    function setupEmbedPlayer(url, title, subtitle) {
+        const embedFrame = document.getElementById('embedFrame');
+        embedFrame.src = url;
+        document.getElementById('playerLoader').classList.add('show');
+        embedFrame.onload = function() {
+            document.getElementById('playerLoader').classList.remove('show');
+        };
+        document.getElementById('floatingPlayer').classList.add('active');
+        navigationStack.push('player');
+
+        // Store player state for recovery
+        storePlayerState(url, title, subtitle);
+
+        // Set player title and subtitle in the header (optional)
+        const titleEl = document.getElementById('playerTitle');
+        const subtitleEl = document.getElementById('playerSubtitle');
+        if (titleEl) titleEl.textContent = title || '';
+        if (subtitleEl) subtitleEl.textContent = subtitle || '';
+    }
+
+    function closePlayer() {
+        const embedFrame = document.getElementById('embedFrame');
+        embedFrame.src = '';
+        document.getElementById('floatingPlayer').classList.remove('active');
+        clearPlayerState();
+        navigationStack.pop();
+    }
+
+    // ============================================================
+    //  TOAST
+    // ============================================================
+    function showToast(m, t = 'info') {
+        const c = document.getElementById('toastContainer'),
+            ts = document.createElement('div');
+        ts.className = `toast ${t}`;
+        ts.textContent = m;
+        c.appendChild(ts);
+        setTimeout(() => ts.remove(), 3000);
+    }
+
+    function checkForUpdates() { showToast('You\'re on the latest version (2.0.0)', 'success'); }
+</script>
+</body>
+</html>
