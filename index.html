@@ -9,12 +9,22 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Velqore">
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+
+    <!-- ===== FAVICON (SVG data URI) ===== -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23E50914' rx='12'/%3E%3Ctext x='32' y='44' font-family='Arial, sans-serif' font-size='40' font-weight='900' fill='white' text-anchor='middle'%3EV%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' fill='%23E50914' rx='36'/%3E%3Ctext x='96' y='132' font-family='Arial, sans-serif' font-size='120' font-weight='900' fill='white' text-anchor='middle'%3EV%3C/text%3E%3C/svg%3E">
+
+    <!-- ===== MANIFEST (inline data URI) ===== -->
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlZlbHFvcmUiLAogICJzaG9ydF9uYW1lIjogIlZlbHFvcmUiLAogICJkZXNjcmlwdGlvbiI6ICJVbmxpbWl0ZWQgTW92aWVzICYgU2VyaWVzIFN0cmVhbWluZyIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjRTA5MTE0IiwKICAidGhlbWVfY29sb3IiOiAiI0UwOTExNCIsCiAgIm9yaWVudGF0aW9uIjogInBvcnRyYWl0IiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sLCUzQ3N2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxOTIgMTkyJyUzRSUzQ3JlY3Qgd2lkdGg9JzE5MicgaGVpZ2h0PScxOTInIGZpbGw9JyUyM0U1MDkxNCcgcng9JzM2Jy8lM0UlM0N0ZXh0IHg9Jzk2JyB5PScxMzInIGZvbnQtZmFtaWx5PSdBcmlhbCwgc2Fucy1zZXJpZicgZm9udC1zaXplPScxMjAnIGZvbnQtd2VpZ2h0PSc5MDAnIGZpbGw9J3doaXRlJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyUzRVYlM0MvdGV4dCUzRSUzQy9zdmclM0UiLAogICAgICAic2l6ZXMiOiAiMTkyeDE5MiIsCiAgICAgICJ0eXBlIjogImltYWdlL3N2Zyt4bWwiLAogICAgICAicHVycG9zZSI6ICJhbnkgbWFzayBhbnlsYW5kIgogICAgfQogIF0KfQ==">
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        * {
+        /* ===== RESET & BASE ===== */
+        *,
+        *::before,
+        *::after {
             font-family: 'Poppins', sans-serif;
             box-sizing: border-box;
             margin: 0;
@@ -248,15 +258,15 @@
         }
         .auth-container {
             width: 100%;
+            max-width: 380px;
             background: rgba(0, 0, 0, 0.8);
-            border-radius: 12px;
+            border-radius: 16px;
             padding: 40px 28px;
             position: relative;
             z-index: 2;
             animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            max-width: 380px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
         .auth-logo {
             text-align: center;
@@ -319,7 +329,7 @@
             padding: 14px 16px 14px 44px;
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
+            border-radius: 10px;
             color: white;
             font-size: 15px;
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -358,7 +368,7 @@
             padding: 14px;
             background: var(--netflix-red);
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             color: white;
             font-size: 16px;
             font-weight: 700;
@@ -516,7 +526,7 @@
         .profile-btn {
             width: 34px;
             height: 34px;
-            border-radius: 6px;
+            border-radius: 8px;
             background: linear-gradient(135deg, var(--netflix-red), var(--netflix-red-dark));
             display: flex;
             align-items: center;
@@ -702,7 +712,7 @@
             background: white;
             color: black;
             padding: 10px 16px;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: 700;
             font-size: 14px;
             display: flex;
@@ -724,7 +734,7 @@
             -webkit-backdrop-filter: blur(8px);
             color: white;
             padding: 10px 16px;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: 600;
             font-size: 14px;
             display: flex;
@@ -840,7 +850,7 @@
             flex: 0 0 auto;
             width: 105px;
             aspect-ratio: 2/3;
-            border-radius: 8px;
+            border-radius: 10px;
             overflow: hidden;
             position: relative;
             cursor: pointer;
@@ -1071,7 +1081,7 @@
             color: black;
             border: none;
             padding: 14px;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 15px;
             font-weight: 700;
             display: flex;
@@ -1140,7 +1150,7 @@
 
         .season-selector-wrapper {
             background: var(--netflix-gray-2);
-            border-radius: 6px;
+            border-radius: 8px;
             display: inline-flex;
             align-items: center;
             padding: 8px 14px;
@@ -1188,7 +1198,7 @@
             flex-shrink: 0;
             width: 110px;
             height: 64px;
-            border-radius: 6px;
+            border-radius: 8px;
             overflow: hidden;
             position: relative;
             background: var(--netflix-gray-1);
@@ -1253,7 +1263,7 @@
         }
         .similar-grid-card {
             background: var(--netflix-gray-1);
-            border-radius: 6px;
+            border-radius: 8px;
             overflow: hidden;
             cursor: pointer;
             transition: transform 0.2s;
@@ -1338,7 +1348,7 @@
         .search-page-input {
             flex: 1;
             padding: 12px 16px;
-            border-radius: 8px;
+            border-radius: 10px;
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.1);
             color: white;
@@ -1360,7 +1370,7 @@
             background: linear-gradient(135deg, var(--netflix-red) 0%, var(--netflix-red-dark) 100%);
             padding: 28px 20px 20px;
             margin: 0 16px 20px;
-            border-radius: 14px;
+            border-radius: 16px;
             position: relative;
             overflow: hidden;
         }
@@ -1426,7 +1436,7 @@
         .profile-stat-card {
             flex: 1;
             background: var(--netflix-gray-1);
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 14px 8px;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -1455,7 +1465,7 @@
         .settings-section {
             background: var(--netflix-gray-1);
             margin: 0 16px 14px;
-            border-radius: 12px;
+            border-radius: 14px;
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
@@ -1762,7 +1772,7 @@
         .about-card {
             background: linear-gradient(135deg, var(--netflix-red) 0%, var(--netflix-red-dark) 100%);
             margin: 0 16px 14px;
-            border-radius: 14px;
+            border-radius: 16px;
             padding: 28px 20px;
             text-align: center;
             color: white;
@@ -1844,7 +1854,7 @@
         }
         .toast {
             padding: 12px 20px;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 13px;
             font-weight: 500;
             margin-bottom: 8px;
@@ -2005,7 +2015,7 @@
             display: none;
             background: var(--netflix-gray-1);
             margin: 0 16px 14px;
-            border-radius: 12px;
+            border-radius: 14px;
             padding: 12px 16px;
             align-items: center;
             gap: 14px;
@@ -2022,7 +2032,7 @@
         .install-banner .install-icon {
             width: 44px;
             height: 44px;
-            border-radius: 10px;
+            border-radius: 12px;
             background: rgba(229, 9, 20, 0.15);
             color: var(--netflix-red);
             display: flex;
@@ -2050,7 +2060,7 @@
             border: none;
             color: white;
             padding: 8px 18px;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
@@ -3970,6 +3980,21 @@
     }
 
     function checkForUpdates() { showToast('You\'re on the latest version (2.0.0)', 'success'); }
+
+    // ============================================================
+    //  SERVICE WORKER REGISTRATION
+    // ============================================================
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('sw.js')
+                .then(function(registration) {
+                    console.log('ServiceWorker registered:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('ServiceWorker registration failed:', error);
+                });
+        });
+    }
 </script>
 </body>
 </html>
