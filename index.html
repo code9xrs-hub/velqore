@@ -17,10 +17,8 @@
     <!-- ===== MANIFEST ===== -->
     <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlZlbHFvcmUiLAogICJzaG9ydF9uYW1lIjogIlZlbHFvcmUiLAogICJkZXNjcmlwdGlvbiI6ICJVbmxpbWl0ZWQgTW92aWVzICYgU2VyaWVzIFN0cmVhbWluZyIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjRTA5MTE0IiwKICAidGhlbWVfY29sb3IiOiAiI0UwOTExNCIsCiAgIm9yaWVudGF0aW9uIjogInBvcnRyYWl0IiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sLCUzQ3N2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxOTIgMTkyJyUzRSUzQ3JlY3Qgd2lkdGg9JzE5MicgaGVpZ2h0PScxOTInIGZpbGw9JyUyM0U1MDkxNCcgcng9JzM2Jy8lM0UlM0N0ZXh0IHg9Jzk2JyB5PScxMzInIGZvbnQtZmFtaWx5PSdBcmlhbCwgc2Fucy1zZXJpZicgZm9udC1zaXplPScxMjAnIGZvbnQtd2VpZ2h0PSc5MDAnIGZpbGw9J3doaXRlJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyUzRVYlM0MvdGV4dCUzRSUzQy9zdmclM0UiLAogICAgICAic2l6ZXMiOiAiMTkyeDE5MiIsCiAgICAgICJ0eXBlIjogImltYWdlL3N2Zyt4bWwiLAogICAgICAicHVycG9zZSI6ICJhbnkgbWFzayBhbnlsYW5kIgogICAgfQogIF0KfQ==">
 
-    <!-- ===== FONTAWESOME (Fixed CDN) ===== -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Fallback inline icons if CDN fails -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+    <!-- ===== MATERIAL 3 ICONS ===== -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
@@ -64,6 +62,7 @@
             --glass-bg: rgba(20, 20, 20, 0.75);
             --glass-border: rgba(255, 255, 255, 0.08);
             --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            --icon-size: 24px;
         }
 
         body[data-theme="dark"] {
@@ -114,6 +113,16 @@
         }
         body[data-font-size="large"] {
             font-size: 16px;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: var(--icon-size);
+            line-height: 1;
+            vertical-align: middle;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
 
         /* ===== FIXED POSITION CONTAINERS ===== */
@@ -353,7 +362,7 @@
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-muted);
-            font-size: 16px;
+            font-size: var(--icon-size);
         }
         .toggle-password {
             position: absolute;
@@ -362,7 +371,7 @@
             transform: translateY(-50%);
             color: var(--text-muted);
             cursor: pointer;
-            font-size: 16px;
+            font-size: var(--icon-size);
         }
         .toggle-password:hover {
             color: var(--text-secondary);
@@ -505,11 +514,14 @@
             background: transparent;
             border: none;
             color: white;
-            font-size: 20px;
+            font-size: var(--icon-size);
             cursor: pointer;
             padding: 4px;
             position: relative;
             transition: transform 0.2s, color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .header-action-btn:active {
             transform: scale(0.9);
@@ -519,8 +531,8 @@
         }
         .notification-badge {
             position: absolute;
-            top: 0;
-            right: 0;
+            top: 2px;
+            right: 2px;
             width: 8px;
             height: 8px;
             background: var(--netflix-red);
@@ -620,7 +632,6 @@
             border-radius: 24px;
         }
 
-        /* Glass inner glow */
         .hero-banner::after {
             content: '';
             position: absolute;
@@ -980,7 +991,13 @@
             cursor: pointer;
             z-index: 3;
         }
-        .details-play-overlay i {
+        .details-play-overlay span {
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+        }
+        .details-play-overlay .play-circle {
             width: 56px;
             height: 56px;
             background: rgba(255, 255, 255, 0.95);
@@ -989,18 +1006,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 28px;
             box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
             transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .details-play-overlay:active i {
+        .details-play-overlay:active .play-circle {
             transform: scale(0.9);
-        }
-        .details-play-overlay span {
-            font-size: 12px;
-            font-weight: 600;
-            color: white;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
         }
 
         .back-btn {
@@ -1018,7 +1029,7 @@
             justify-content: center;
             z-index: 210;
             cursor: pointer;
-            font-size: 16px;
+            font-size: var(--icon-size);
             backdrop-filter: blur(8px);
             transition: transform 0.2s, background 0.2s;
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
@@ -1132,8 +1143,8 @@
             cursor: pointer;
             transition: color 0.2s, transform 0.2s;
         }
-        .interaction-item i {
-            font-size: 22px;
+        .interaction-item span {
+            font-size: 11px;
         }
         .interaction-item:active {
             transform: scale(0.9);
@@ -1225,7 +1236,7 @@
         .episode-item:hover .episode-thumbnail .play-icon {
             opacity: 1;
         }
-        .episode-thumbnail .play-icon i {
+        .episode-thumbnail .play-icon span {
             color: white;
             font-size: 20px;
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
@@ -1316,10 +1327,13 @@
             background: transparent;
             border: none;
             color: white;
-            font-size: 20px;
+            font-size: var(--icon-size);
             cursor: pointer;
             transition: transform 0.2s;
             padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .content-back-btn:active {
             transform: scale(0.85);
@@ -1341,10 +1355,13 @@
             background: transparent;
             border: none;
             color: white;
-            font-size: 20px;
+            font-size: var(--icon-size);
             cursor: pointer;
             transition: transform 0.2s;
             padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .search-back-btn:active {
             transform: scale(0.85);
@@ -1513,7 +1530,7 @@
             gap: 6px;
         }
         .chevron-right {
-            font-size: 14px;
+            font-size: var(--icon-size);
             color: var(--text-muted);
         }
 
@@ -1525,7 +1542,7 @@
             align-items: center;
             justify-content: center;
             background: var(--netflix-gray-2);
-            font-size: 16px;
+            font-size: var(--icon-size);
             flex-shrink: 0;
         }
         .menu-icon-wrap.red {
@@ -1565,10 +1582,13 @@
             background: transparent;
             border: none;
             color: white;
-            font-size: 20px;
+            font-size: var(--icon-size);
             cursor: pointer;
             transition: transform 0.2s;
             padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .settings-back-btn:active {
             transform: scale(0.85);
@@ -1678,11 +1698,11 @@
             color: var(--text-muted);
             margin-top: 2px;
         }
-        .quality-option i {
+        .quality-option span.material-symbols-outlined {
             color: var(--netflix-red);
             opacity: 0;
         }
-        .quality-option.active i {
+        .quality-option.active span.material-symbols-outlined {
             opacity: 1;
         }
 
@@ -1753,10 +1773,13 @@
             background: transparent;
             border: none;
             color: white;
-            font-size: 20px;
+            font-size: var(--icon-size);
             cursor: pointer;
             padding: 4px;
             transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .modal-close:active {
             transform: scale(0.85);
@@ -1822,9 +1845,6 @@
         .nav-item:active {
             transform: scale(0.9);
         }
-        .nav-item i {
-            font-size: 20px;
-        }
         .nav-item span {
             font-size: 10px;
             font-weight: 500;
@@ -1887,7 +1907,7 @@
             padding: 60px 20px;
             grid-column: 1/-1;
         }
-        .empty-state i {
+        .empty-state span.material-symbols-outlined {
             font-size: 48px;
             color: var(--text-muted);
             margin-bottom: 16px;
@@ -2042,7 +2062,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: var(--icon-size);
             flex-shrink: 0;
         }
         .install-banner .install-text {
@@ -2075,11 +2095,6 @@
             transform: scale(0.93);
             background: #f40612;
         }
-
-        /* ===== FALLBACK ICON DISPLAY ===== */
-        .fa-fallback {
-            display: none;
-        }
     </style>
 </head>
 <body data-theme="dark" data-font-size="medium">
@@ -2097,19 +2112,19 @@
                 <div class="auth-tab" onclick="switchAuthTab('signup')">Sign Up</div>
             </div>
             <div class="auth-error" id="authError">
-                <i class="fas fa-exclamation-circle"></i>
+                <span class="material-symbols-outlined">error</span>
                 <span id="authErrorText"></span>
             </div>
 
             <form class="auth-form active" id="loginForm" onsubmit="handleLogin(event)">
                 <div class="form-group">
                     <input type="email" id="loginEmail" placeholder="Email address" required autocomplete="email">
-                    <i class="fas fa-envelope input-icon"></i>
+                    <span class="material-symbols-outlined input-icon">mail</span>
                 </div>
                 <div class="form-group">
                     <input type="password" id="loginPassword" placeholder="Password" required>
-                    <i class="fas fa-lock input-icon"></i>
-                    <i class="fas fa-eye toggle-password" onclick="togglePassword('loginPassword', this)"></i>
+                    <span class="material-symbols-outlined input-icon">lock</span>
+                    <span class="material-symbols-outlined toggle-password" onclick="togglePassword('loginPassword', this)">visibility</span>
                 </div>
                 <button type="submit" class="auth-btn" id="loginBtn">Sign In</button>
             </form>
@@ -2117,16 +2132,16 @@
             <form class="auth-form" id="signupForm" onsubmit="handleSignup(event)">
                 <div class="form-group">
                     <input type="text" id="signupName" placeholder="Full name" required>
-                    <i class="fas fa-user input-icon"></i>
+                    <span class="material-symbols-outlined input-icon">person</span>
                 </div>
                 <div class="form-group">
                     <input type="email" id="signupEmail" placeholder="Email address" required>
-                    <i class="fas fa-envelope input-icon"></i>
+                    <span class="material-symbols-outlined input-icon">mail</span>
                 </div>
                 <div class="form-group">
                     <input type="password" id="signupPassword" placeholder="Password (min 6 chars)" required minlength="6">
-                    <i class="fas fa-lock input-icon"></i>
-                    <i class="fas fa-eye toggle-password" onclick="togglePassword('signupPassword', this)"></i>
+                    <span class="material-symbols-outlined input-icon">lock</span>
+                    <span class="material-symbols-outlined toggle-password" onclick="togglePassword('signupPassword', this)">visibility</span>
                 </div>
                 <button type="submit" class="auth-btn" id="signupBtn">Create Account</button>
             </form>
@@ -2149,8 +2164,8 @@
         <header class="header" id="header">
             <div class="logo-n" onclick="navigateTo('home')">V</div>
             <div class="header-actions">
-                <button class="header-action-btn" onclick="openSearchPage()"><i class="fas fa-search"></i></button>
-                <button class="header-action-btn" onclick="showToast('No new notifications', 'info')"><i class="fas fa-bell"></i><span class="notification-badge"></span></button>
+                <button class="header-action-btn" onclick="openSearchPage()"><span class="material-symbols-outlined">search</span></button>
+                <button class="header-action-btn" onclick="showToast('No new notifications', 'info')"><span class="material-symbols-outlined">notifications</span><span class="notification-badge"></span></button>
                 <button class="profile-btn" onclick="openProfile()" id="profileBtnMain"><span id="profileInitial">G</span></button>
             </div>
         </header>
@@ -2175,8 +2190,8 @@
                     <div class="hero-title-text" id="heroTitleLarge">Loading...</div>
                     <div class="hero-tags-row" id="heroMeta"></div>
                     <div class="hero-buttons-row">
-                        <button class="btn-hero-play" onclick="playHeroContent()"><i class="fas fa-play"></i> Play</button>
-                        <button class="btn-hero-info" onclick="openHeroDetails()"><i class="fas fa-info-circle"></i> Info</button>
+                        <button class="btn-hero-play" onclick="playHeroContent()"><span class="material-symbols-outlined filled">play_arrow</span> Play</button>
+                        <button class="btn-hero-info" onclick="openHeroDetails()"><span class="material-symbols-outlined">info</span> Info</button>
                     </div>
                     <div class="slider-dots" id="sliderDots"></div>
                 </div>
@@ -2197,7 +2212,7 @@
         <!-- WEB SERIES PAGE -->
         <div class="content-page" id="webseriesPage">
             <div class="content-page-header">
-                <button class="content-back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i></button>
+                <button class="content-back-btn" onclick="goBack()"><span class="material-symbols-outlined">arrow_back</span></button>
                 <h2 class="category-title">TV Shows</h2>
             </div>
             <div class="poster-grid" id="allWebseriesGrid"></div>
@@ -2206,7 +2221,7 @@
         <!-- MOVIES PAGE -->
         <div class="content-page" id="moviesPage">
             <div class="content-page-header">
-                <button class="content-back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i></button>
+                <button class="content-back-btn" onclick="goBack()"><span class="material-symbols-outlined">arrow_back</span></button>
                 <h2 class="category-title">Movies</h2>
             </div>
             <div class="poster-grid" id="allMoviesGrid"></div>
@@ -2215,7 +2230,7 @@
         <!-- WATCHLIST PAGE -->
         <div class="content-page" id="watchlistPage">
             <div class="content-page-header">
-                <button class="content-back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i></button>
+                <button class="content-back-btn" onclick="goBack()"><span class="material-symbols-outlined">arrow_back</span></button>
                 <h2 class="category-title">My List</h2>
             </div>
             <div class="poster-grid" id="watchlistGrid"></div>
@@ -2224,7 +2239,7 @@
         <!-- HISTORY PAGE -->
         <div class="content-page" id="historyPage">
             <div class="content-page-header">
-                <button class="content-back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i></button>
+                <button class="content-back-btn" onclick="goBack()"><span class="material-symbols-outlined">arrow_back</span></button>
                 <h2 class="category-title">Watch History</h2>
             </div>
             <div class="poster-grid" id="historyGrid"></div>
@@ -2233,12 +2248,12 @@
         <!-- SEARCH PAGE -->
         <div class="search-page" id="searchPage">
             <div class="search-page-header">
-                <button class="search-back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i></button>
+                <button class="search-back-btn" onclick="goBack()"><span class="material-symbols-outlined">arrow_back</span></button>
                 <input type="text" class="search-page-input" placeholder="Search for movies, TV shows..." id="searchPageInput" oninput="performSearch(this.value)">
             </div>
             <div class="poster-grid" id="searchResults">
                 <div class="empty-state">
-                    <i class="fas fa-search"></i>
+                    <span class="material-symbols-outlined">search</span>
                     <h3>Find your next favorite</h3>
                     <p>Search for shows, movies, genres, and more.</p>
                 </div>
@@ -2276,23 +2291,23 @@
             <div class="settings-section">
                 <div class="settings-row" onclick="openMyList()">
                     <div class="settings-row-left">
-                        <div class="menu-icon-wrap red"><i class="fas fa-check"></i></div>
+                        <div class="menu-icon-wrap red"><span class="material-symbols-outlined">check</span></div>
                         <div>
                             <div class="settings-row-title">My List</div>
                             <div class="settings-row-subtitle">Your saved titles</div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <span class="material-symbols-outlined chevron-right">chevron_right</span>
                 </div>
                 <div class="settings-row" onclick="openWatchHistory()">
                     <div class="settings-row-left">
-                        <div class="menu-icon-wrap blue"><i class="fas fa-history"></i></div>
+                        <div class="menu-icon-wrap blue"><span class="material-symbols-outlined">history</span></div>
                         <div>
                             <div class="settings-row-title">Watch History</div>
                             <div class="settings-row-subtitle">Recently watched</div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <span class="material-symbols-outlined chevron-right">chevron_right</span>
                 </div>
             </div>
 
@@ -2300,37 +2315,37 @@
             <div class="settings-section">
                 <div class="settings-row" onclick="openSettings()">
                     <div class="settings-row-left">
-                        <div class="menu-icon-wrap orange"><i class="fas fa-cog"></i></div>
+                        <div class="menu-icon-wrap orange"><span class="material-symbols-outlined">settings</span></div>
                         <div>
                             <div class="settings-row-title">Settings</div>
                             <div class="settings-row-subtitle">App preferences & more</div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <span class="material-symbols-outlined chevron-right">chevron_right</span>
                 </div>
                 <div class="settings-row" onclick="openModal('languageModal')">
                     <div class="settings-row-left">
-                        <div class="menu-icon-wrap green"><i class="fas fa-globe"></i></div>
+                        <div class="menu-icon-wrap green"><span class="material-symbols-outlined">language</span></div>
                         <div>
                             <div class="settings-row-title">Language</div>
                             <div class="settings-row-subtitle" id="languageDisplay">English</div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <span class="material-symbols-outlined chevron-right">chevron_right</span>
                 </div>
                 <div class="settings-row" onclick="openModal('notificationModal')">
                     <div class="settings-row-left">
-                        <div class="menu-icon-wrap red"><i class="fas fa-bell"></i></div>
+                        <div class="menu-icon-wrap red"><span class="material-symbols-outlined">notifications</span></div>
                         <div>
                             <div class="settings-row-title">Notifications</div>
                             <div class="settings-row-subtitle">Manage alerts</div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <span class="material-symbols-outlined chevron-right">chevron_right</span>
                 </div>
                 <!-- PWA Install Banner -->
                 <div class="install-banner" id="installBanner">
-                    <div class="install-icon"><i class="fas fa-download"></i></div>
+                    <div class="install-icon"><span class="material-symbols-outlined">download</span></div>
                     <div class="install-text">
                         <h4>Install Velqore</h4>
                         <p>Add to home screen for the best experience</p>
@@ -2343,47 +2358,47 @@
             <div class="settings-section">
                 <div class="settings-row" onclick="openModal('editProfileModal')">
                     <div class="settings-row-left">
-                        <div class="menu-icon-wrap blue"><i class="fas fa-user-edit"></i></div>
+                        <div class="menu-icon-wrap blue"><span class="material-symbols-outlined">edit</span></div>
                         <div>
                             <div class="settings-row-title">Edit Profile</div>
                             <div class="settings-row-subtitle">Update your info</div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <span class="material-symbols-outlined chevron-right">chevron_right</span>
                 </div>
                 <div class="settings-row" onclick="openModal('privacyModal')">
                     <div class="settings-row-left">
-                        <div class="menu-icon-wrap purple"><i class="fas fa-shield-alt"></i></div>
+                        <div class="menu-icon-wrap purple"><span class="material-symbols-outlined">shield</span></div>
                         <div>
                             <div class="settings-row-title">Privacy & Security</div>
                             <div class="settings-row-subtitle">Manage your data</div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <span class="material-symbols-outlined chevron-right">chevron_right</span>
                 </div>
                 <div class="settings-row" onclick="openModal('helpModal')">
                     <div class="settings-row-left">
-                        <div class="menu-icon-wrap green"><i class="fas fa-question-circle"></i></div>
+                        <div class="menu-icon-wrap green"><span class="material-symbols-outlined">help</span></div>
                         <div>
                             <div class="settings-row-title">Help & Support</div>
                             <div class="settings-row-subtitle">FAQs and contact</div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <span class="material-symbols-outlined chevron-right">chevron_right</span>
                 </div>
                 <div class="settings-row" onclick="openModal('aboutModal')">
                     <div class="settings-row-left">
-                        <div class="menu-icon-wrap orange"><i class="fas fa-info-circle"></i></div>
+                        <div class="menu-icon-wrap orange"><span class="material-symbols-outlined">info</span></div>
                         <div>
                             <div class="settings-row-title">About Velqore</div>
                             <div class="settings-row-subtitle">Version 2.0.0</div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <span class="material-symbols-outlined chevron-right">chevron_right</span>
                 </div>
                 <div class="settings-row" id="logoutBtn" onclick="handleLogout()" style="color:var(--netflix-red);">
                     <div class="settings-row-left">
-                        <div class="menu-icon-wrap red"><i class="fas fa-sign-out-alt"></i></div>
+                        <div class="menu-icon-wrap red"><span class="material-symbols-outlined">logout</span></div>
                         <div>
                             <div class="settings-row-title">Sign Out</div>
                         </div>
@@ -2400,7 +2415,7 @@
         <!-- ===== SETTINGS PAGE ===== -->
         <div class="settings-page" id="settingsPage">
             <div class="settings-header">
-                <button class="settings-back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i></button>
+                <button class="settings-back-btn" onclick="goBack()"><span class="material-symbols-outlined">arrow_back</span></button>
                 <h2 class="category-title">Settings</h2>
             </div>
 
@@ -2408,23 +2423,23 @@
             <div class="settings-section">
                 <div class="settings-row" onclick="openModal('themeModal')">
                     <div class="settings-row-left">
-                        <div class="menu-icon-wrap purple"><i class="fas fa-palette"></i></div>
+                        <div class="menu-icon-wrap purple"><span class="material-symbols-outlined">palette</span></div>
                         <div>
                             <div class="settings-row-title">Theme</div>
                             <div class="settings-row-subtitle" id="themeDisplay">Netflix Dark</div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <span class="material-symbols-outlined chevron-right">chevron_right</span>
                 </div>
                 <div class="settings-row" onclick="openModal('fontSizeModal')">
                     <div class="settings-row-left">
-                        <div class="menu-icon-wrap orange"><i class="fas fa-text-height"></i></div>
+                        <div class="menu-icon-wrap orange"><span class="material-symbols-outlined">text_fields</span></div>
                         <div>
                             <div class="settings-row-title">Font Size</div>
                             <div class="settings-row-subtitle" id="fontSizeDisplay">Medium</div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <span class="material-symbols-outlined chevron-right">chevron_right</span>
                 </div>
             </div>
 
@@ -2432,17 +2447,17 @@
             <div class="settings-section">
                 <div class="settings-row" onclick="openModal('qualityModal')">
                     <div class="settings-row-left">
-                        <div class="menu-icon-wrap red"><i class="fas fa-tv"></i></div>
+                        <div class="menu-icon-wrap red"><span class="material-symbols-outlined">display_settings</span></div>
                         <div>
                             <div class="settings-row-title">Video Quality</div>
                             <div class="settings-row-subtitle" id="qualityDisplay">Auto (Recommended)</div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <span class="material-symbols-outlined chevron-right">chevron_right</span>
                 </div>
                 <div class="settings-row">
                     <div class="settings-row-left">
-                        <div class="menu-icon-wrap green"><i class="fas fa-play-circle"></i></div>
+                        <div class="menu-icon-wrap green"><span class="material-symbols-outlined">play_circle</span></div>
                         <div>
                             <div class="settings-row-title">Autoplay Next Episode</div>
                             <div class="settings-row-subtitle">Auto-play next episodes</div>
@@ -2455,7 +2470,7 @@
                 </div>
                 <div class="settings-row">
                     <div class="settings-row-left">
-                        <div class="menu-icon-wrap purple"><i class="fas fa-image"></i></div>
+                        <div class="menu-icon-wrap purple"><span class="material-symbols-outlined">image</span></div>
                         <div>
                             <div class="settings-row-title">Autoplay Previews</div>
                             <div class="settings-row-subtitle">Preview trailers while browsing</div>
@@ -2468,13 +2483,13 @@
                 </div>
                 <div class="settings-row" onclick="openModal('subtitleModal')">
                     <div class="settings-row-left">
-                        <div class="menu-icon-wrap orange"><i class="fas fa-closed-captioning"></i></div>
+                        <div class="menu-icon-wrap orange"><span class="material-symbols-outlined">closed_caption</span></div>
                         <div>
                             <div class="settings-row-title">Subtitles</div>
                             <div class="settings-row-subtitle" id="subtitleDisplay">Off</div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <span class="material-symbols-outlined chevron-right">chevron_right</span>
                 </div>
             </div>
 
@@ -2482,7 +2497,7 @@
             <div class="settings-section">
                 <div class="settings-row">
                     <div class="settings-row-left">
-                        <div class="menu-icon-wrap blue"><i class="fas fa-mobile-alt"></i></div>
+                        <div class="menu-icon-wrap blue"><span class="material-symbols-outlined">smartphone</span></div>
                         <div>
                             <div class="settings-row-title">Data Saver</div>
                             <div class="settings-row-subtitle">Reduce data usage</div>
@@ -2495,7 +2510,7 @@
                 </div>
                 <div class="settings-row">
                     <div class="settings-row-left">
-                        <div class="menu-icon-wrap purple"><i class="fas fa-user-shield"></i></div>
+                        <div class="menu-icon-wrap purple"><span class="material-symbols-outlined">security</span></div>
                         <div>
                             <div class="settings-row-title">Personalized Recommendations</div>
                             <div class="settings-row-subtitle">Based on your activity</div>
@@ -2508,23 +2523,23 @@
                 </div>
                 <div class="settings-row" onclick="confirmClearHistory()">
                     <div class="settings-row-left">
-                        <div class="menu-icon-wrap red"><i class="fas fa-trash"></i></div>
+                        <div class="menu-icon-wrap red"><span class="material-symbols-outlined">delete</span></div>
                         <div>
                             <div class="settings-row-title">Clear Watch History</div>
                             <div class="settings-row-subtitle">Remove all viewing data</div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <span class="material-symbols-outlined chevron-right">chevron_right</span>
                 </div>
                 <div class="settings-row" onclick="exportUserData()">
                     <div class="settings-row-left">
-                        <div class="menu-icon-wrap green"><i class="fas fa-file-export"></i></div>
+                        <div class="menu-icon-wrap green"><span class="material-symbols-outlined">file_download</span></div>
                         <div>
                             <div class="settings-row-title">Export My Data</div>
                             <div class="settings-row-subtitle">Download a copy</div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <span class="material-symbols-outlined chevron-right">chevron_right</span>
                 </div>
             </div>
 
@@ -2532,23 +2547,23 @@
             <div class="settings-section">
                 <div class="settings-row" onclick="openModal('parentalModal')">
                     <div class="settings-row-left">
-                        <div class="menu-icon-wrap orange"><i class="fas fa-child"></i></div>
+                        <div class="menu-icon-wrap orange"><span class="material-symbols-outlined">child_care</span></div>
                         <div>
                             <div class="settings-row-title">Kids Mode</div>
                             <div class="settings-row-subtitle" id="kidsModeDisplay">Disabled</div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <span class="material-symbols-outlined chevron-right">chevron_right</span>
                 </div>
                 <div class="settings-row" onclick="openModal('maturityModal')">
                     <div class="settings-row-left">
-                        <div class="menu-icon-wrap red"><i class="fas fa-lock"></i></div>
+                        <div class="menu-icon-wrap red"><span class="material-symbols-outlined">lock</span></div>
                         <div>
                             <div class="settings-row-title">Maturity Rating</div>
                             <div class="settings-row-subtitle" id="maturityDisplay">All Ages</div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <span class="material-symbols-outlined chevron-right">chevron_right</span>
                 </div>
             </div>
 
@@ -2561,11 +2576,11 @@
                 <img src="" alt="" id="detailsHeaderImg">
                 <div class="details-header-gradient"></div>
                 <div class="details-play-overlay" onclick="playContent(currentContent)">
-                    <i class="fas fa-play"></i>
+                    <div class="play-circle"><span class="material-symbols-outlined filled">play_arrow</span></div>
                     <span>Play</span>
                 </div>
             </div>
-            <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i></button>
+            <button class="back-btn" onclick="goBack()"><span class="material-symbols-outlined">arrow_back</span></button>
             <div class="details-content" id="detailsContent"></div>
         </div>
 
@@ -2590,7 +2605,7 @@
             <div class="modal-handle"></div>
             <div class="modal-header">
                 <h3 class="modal-title">Choose Theme</h3>
-                <button class="modal-close" onclick="closeModal('themeModal')"><i class="fas fa-times"></i></button>
+                <button class="modal-close" onclick="closeModal('themeModal')"><span class="material-symbols-outlined">close</span></button>
             </div>
             <div class="theme-grid">
                 <div class="theme-option theme-dark active" data-theme="dark" onclick="setTheme('dark', 'Netflix Dark')">Netflix Dark</div>
@@ -2607,7 +2622,7 @@
             <div class="modal-handle"></div>
             <div class="modal-header">
                 <h3 class="modal-title">Font Size</h3>
-                <button class="modal-close" onclick="closeModal('fontSizeModal')"><i class="fas fa-times"></i></button>
+                <button class="modal-close" onclick="closeModal('fontSizeModal')"><span class="material-symbols-outlined">close</span></button>
             </div>
             <div class="quality-options">
                 <div class="quality-option" onclick="setFontSize('small', 'Small')">
@@ -2615,21 +2630,21 @@
                         <div class="quality-label">Small</div>
                         <div class="quality-meta">Compact text</div>
                     </div>
-                    <i class="fas fa-check"></i>
+                    <span class="material-symbols-outlined">check</span>
                 </div>
                 <div class="quality-option active" onclick="setFontSize('medium', 'Medium')">
                     <div>
                         <div class="quality-label">Medium</div>
                         <div class="quality-meta">Default</div>
                     </div>
-                    <i class="fas fa-check"></i>
+                    <span class="material-symbols-outlined">check</span>
                 </div>
                 <div class="quality-option" onclick="setFontSize('large', 'Large')">
                     <div>
                         <div class="quality-label">Large</div>
                         <div class="quality-meta">Easier to read</div>
                     </div>
-                    <i class="fas fa-check"></i>
+                    <span class="material-symbols-outlined">check</span>
                 </div>
             </div>
         </div>
@@ -2641,7 +2656,7 @@
             <div class="modal-handle"></div>
             <div class="modal-header">
                 <h3 class="modal-title">Video Quality</h3>
-                <button class="modal-close" onclick="closeModal('qualityModal')"><i class="fas fa-times"></i></button>
+                <button class="modal-close" onclick="closeModal('qualityModal')"><span class="material-symbols-outlined">close</span></button>
             </div>
             <div class="quality-options">
                 <div class="quality-option active" onclick="setQuality('auto', 'Auto (Recommended)')">
@@ -2649,35 +2664,35 @@
                         <div class="quality-label">Auto</div>
                         <div class="quality-meta">Adjusts to your connection</div>
                     </div>
-                    <i class="fas fa-check"></i>
+                    <span class="material-symbols-outlined">check</span>
                 </div>
                 <div class="quality-option" onclick="setQuality('4k', '4K Ultra HD')">
                     <div>
                         <div class="quality-label">4K Ultra HD</div>
                         <div class="quality-meta">Best quality • High data usage</div>
                     </div>
-                    <i class="fas fa-check"></i>
+                    <span class="material-symbols-outlined">check</span>
                 </div>
                 <div class="quality-option" onclick="setQuality('1080p', 'Full HD (1080p)')">
                     <div>
                         <div class="quality-label">Full HD (1080p)</div>
                         <div class="quality-meta">High quality</div>
                     </div>
-                    <i class="fas fa-check"></i>
+                    <span class="material-symbols-outlined">check</span>
                 </div>
                 <div class="quality-option" onclick="setQuality('720p', 'HD (720p)')">
                     <div>
                         <div class="quality-label">HD (720p)</div>
                         <div class="quality-meta">Standard quality</div>
                     </div>
-                    <i class="fas fa-check"></i>
+                    <span class="material-symbols-outlined">check</span>
                 </div>
                 <div class="quality-option" onclick="setQuality('480p', 'SD (480p)')">
                     <div>
                         <div class="quality-label">SD (480p)</div>
                         <div class="quality-meta">Low data usage</div>
                     </div>
-                    <i class="fas fa-check"></i>
+                    <span class="material-symbols-outlined">check</span>
                 </div>
             </div>
         </div>
@@ -2689,17 +2704,17 @@
             <div class="modal-handle"></div>
             <div class="modal-header">
                 <h3 class="modal-title">Language</h3>
-                <button class="modal-close" onclick="closeModal('languageModal')"><i class="fas fa-times"></i></button>
+                <button class="modal-close" onclick="closeModal('languageModal')"><span class="material-symbols-outlined">close</span></button>
             </div>
             <div class="quality-options">
-                <div class="quality-option active" onclick="setLanguage('English')"><div class="quality-label">🇺🇸 English</div><i class="fas fa-check"></i></div>
-                <div class="quality-option" onclick="setLanguage('Spanish')"><div class="quality-label">🇪🇸 Español</div><i class="fas fa-check"></i></div>
-                <div class="quality-option" onclick="setLanguage('Hindi')"><div class="quality-label">🇮🇳 हिन्दी</div><i class="fas fa-check"></i></div>
-                <div class="quality-option" onclick="setLanguage('French')"><div class="quality-label">🇫🇷 Français</div><i class="fas fa-check"></i></div>
-                <div class="quality-option" onclick="setLanguage('German')"><div class="quality-label">🇩🇪 Deutsch</div><i class="fas fa-check"></i></div>
-                <div class="quality-option" onclick="setLanguage('Japanese')"><div class="quality-label">🇯🇵 日本語</div><i class="fas fa-check"></i></div>
-                <div class="quality-option" onclick="setLanguage('Korean')"><div class="quality-label">🇰🇷 한국어</div><i class="fas fa-check"></i></div>
-                <div class="quality-option" onclick="setLanguage('Chinese')"><div class="quality-label">🇨🇳 中文</div><i class="fas fa-check"></i></div>
+                <div class="quality-option active" onclick="setLanguage('English')"><div class="quality-label">🇺🇸 English</div><span class="material-symbols-outlined">check</span></div>
+                <div class="quality-option" onclick="setLanguage('Spanish')"><div class="quality-label">🇪🇸 Español</div><span class="material-symbols-outlined">check</span></div>
+                <div class="quality-option" onclick="setLanguage('Hindi')"><div class="quality-label">🇮🇳 हिन्दी</div><span class="material-symbols-outlined">check</span></div>
+                <div class="quality-option" onclick="setLanguage('French')"><div class="quality-label">🇫🇷 Français</div><span class="material-symbols-outlined">check</span></div>
+                <div class="quality-option" onclick="setLanguage('German')"><div class="quality-label">🇩🇪 Deutsch</div><span class="material-symbols-outlined">check</span></div>
+                <div class="quality-option" onclick="setLanguage('Japanese')"><div class="quality-label">🇯🇵 日本語</div><span class="material-symbols-outlined">check</span></div>
+                <div class="quality-option" onclick="setLanguage('Korean')"><div class="quality-label">🇰🇷 한국어</div><span class="material-symbols-outlined">check</span></div>
+                <div class="quality-option" onclick="setLanguage('Chinese')"><div class="quality-label">🇨🇳 中文</div><span class="material-symbols-outlined">check</span></div>
             </div>
         </div>
     </div>
@@ -2710,13 +2725,13 @@
             <div class="modal-handle"></div>
             <div class="modal-header">
                 <h3 class="modal-title">Subtitles</h3>
-                <button class="modal-close" onclick="closeModal('subtitleModal')"><i class="fas fa-times"></i></button>
+                <button class="modal-close" onclick="closeModal('subtitleModal')"><span class="material-symbols-outlined">close</span></button>
             </div>
             <div class="quality-options">
-                <div class="quality-option active" onclick="setSubtitle('Off')"><div class="quality-label">Off</div><i class="fas fa-check"></i></div>
-                <div class="quality-option" onclick="setSubtitle('English')"><div class="quality-label">English</div><i class="fas fa-check"></i></div>
-                <div class="quality-option" onclick="setSubtitle('Spanish')"><div class="quality-label">Spanish</div><i class="fas fa-check"></i></div>
-                <div class="quality-option" onclick="setSubtitle('Hindi')"><div class="quality-label">Hindi</div><i class="fas fa-check"></i></div>
+                <div class="quality-option active" onclick="setSubtitle('Off')"><div class="quality-label">Off</div><span class="material-symbols-outlined">check</span></div>
+                <div class="quality-option" onclick="setSubtitle('English')"><div class="quality-label">English</div><span class="material-symbols-outlined">check</span></div>
+                <div class="quality-option" onclick="setSubtitle('Spanish')"><div class="quality-label">Spanish</div><span class="material-symbols-outlined">check</span></div>
+                <div class="quality-option" onclick="setSubtitle('Hindi')"><div class="quality-label">Hindi</div><span class="material-symbols-outlined">check</span></div>
             </div>
         </div>
     </div>
@@ -2727,7 +2742,7 @@
             <div class="modal-handle"></div>
             <div class="modal-header">
                 <h3 class="modal-title">Notifications</h3>
-                <button class="modal-close" onclick="closeModal('notificationModal')"><i class="fas fa-times"></i></button>
+                <button class="modal-close" onclick="closeModal('notificationModal')"><span class="material-symbols-outlined">close</span></button>
             </div>
             <div style="padding: 8px 0;">
                 <div class="settings-row">
@@ -2785,7 +2800,7 @@
             <div class="modal-handle"></div>
             <div class="modal-header">
                 <h3 class="modal-title">Edit Profile</h3>
-                <button class="modal-close" onclick="closeModal('editProfileModal')"><i class="fas fa-times"></i></button>
+                <button class="modal-close" onclick="closeModal('editProfileModal')"><span class="material-symbols-outlined">close</span></button>
             </div>
             <div style="padding: 16px;">
                 <p style="font-size:12px; color:var(--text-muted); margin-bottom:10px; text-transform:uppercase; letter-spacing:1px;">Avatar</p>
@@ -2803,7 +2818,7 @@
             <div class="modal-handle"></div>
             <div class="modal-header">
                 <h3 class="modal-title">Privacy & Security</h3>
-                <button class="modal-close" onclick="closeModal('privacyModal')"><i class="fas fa-times"></i></button>
+                <button class="modal-close" onclick="closeModal('privacyModal')"><span class="material-symbols-outlined">close</span></button>
             </div>
             <div style="padding: 8px 0;">
                 <div class="settings-row">
@@ -2840,7 +2855,7 @@
                             <div class="settings-row-subtitle">Update your password</div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <span class="material-symbols-outlined chevron-right">chevron_right</span>
                 </div>
                 <div class="settings-row" onclick="confirmDeleteAccount()" style="color:var(--netflix-red);">
                     <div class="settings-row-left">
@@ -2849,7 +2864,7 @@
                             <div class="settings-row-subtitle">Permanently delete</div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <span class="material-symbols-outlined chevron-right">chevron_right</span>
                 </div>
             </div>
         </div>
@@ -2861,7 +2876,7 @@
             <div class="modal-handle"></div>
             <div class="modal-header">
                 <h3 class="modal-title">Kids Mode</h3>
-                <button class="modal-close" onclick="closeModal('parentalModal')"><i class="fas fa-times"></i></button>
+                <button class="modal-close" onclick="closeModal('parentalModal')"><span class="material-symbols-outlined">close</span></button>
             </div>
             <div style="padding: 16px;">
                 <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Enable Kids Mode to restrict content to family-friendly titles only.</p>
@@ -2886,14 +2901,14 @@
             <div class="modal-handle"></div>
             <div class="modal-header">
                 <h3 class="modal-title">Maturity Rating</h3>
-                <button class="modal-close" onclick="closeModal('maturityModal')"><i class="fas fa-times"></i></button>
+                <button class="modal-close" onclick="closeModal('maturityModal')"><span class="material-symbols-outlined">close</span></button>
             </div>
             <div class="quality-options">
-                <div class="quality-option active" onclick="setMaturity('All Ages')"><div class="quality-label">All Ages</div><i class="fas fa-check"></i></div>
-                <div class="quality-option" onclick="setMaturity('7+')"><div class="quality-label">7+</div><i class="fas fa-check"></i></div>
-                <div class="quality-option" onclick="setMaturity('13+')"><div class="quality-label">13+</div><i class="fas fa-check"></i></div>
-                <div class="quality-option" onclick="setMaturity('16+')"><div class="quality-label">16+</div><i class="fas fa-check"></i></div>
-                <div class="quality-option" onclick="setMaturity('18+')"><div class="quality-label">18+ (Mature)</div><i class="fas fa-check"></i></div>
+                <div class="quality-option active" onclick="setMaturity('All Ages')"><div class="quality-label">All Ages</div><span class="material-symbols-outlined">check</span></div>
+                <div class="quality-option" onclick="setMaturity('7+')"><div class="quality-label">7+</div><span class="material-symbols-outlined">check</span></div>
+                <div class="quality-option" onclick="setMaturity('13+')"><div class="quality-label">13+</div><span class="material-symbols-outlined">check</span></div>
+                <div class="quality-option" onclick="setMaturity('16+')"><div class="quality-label">16+</div><span class="material-symbols-outlined">check</span></div>
+                <div class="quality-option" onclick="setMaturity('18+')"><div class="quality-label">18+ (Mature)</div><span class="material-symbols-outlined">check</span></div>
             </div>
         </div>
     </div>
@@ -2904,58 +2919,58 @@
             <div class="modal-handle"></div>
             <div class="modal-header">
                 <h3 class="modal-title">Help & Support</h3>
-                <button class="modal-close" onclick="closeModal('helpModal')"><i class="fas fa-times"></i></button>
+                <button class="modal-close" onclick="closeModal('helpModal')"><span class="material-symbols-outlined">close</span></button>
             </div>
             <div style="padding: 8px 0;">
                 <div class="settings-row" onclick="showToast('Opening FAQ...', 'info')">
                     <div class="settings-row-left">
-                        <div class="menu-icon-wrap blue"><i class="fas fa-question"></i></div>
+                        <div class="menu-icon-wrap blue"><span class="material-symbols-outlined">help</span></div>
                         <div>
                             <div class="settings-row-title">FAQ</div>
                             <div class="settings-row-subtitle">Frequently asked questions</div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <span class="material-symbols-outlined chevron-right">chevron_right</span>
                 </div>
                 <div class="settings-row" onclick="showToast('Opening live chat...', 'info')">
                     <div class="settings-row-left">
-                        <div class="menu-icon-wrap green"><i class="fas fa-comments"></i></div>
+                        <div class="menu-icon-wrap green"><span class="material-symbols-outlined">chat</span></div>
                         <div>
                             <div class="settings-row-title">Live Chat</div>
                             <div class="settings-row-subtitle">Chat with support</div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <span class="material-symbols-outlined chevron-right">chevron_right</span>
                 </div>
                 <div class="settings-row" onclick="window.location.href='mailto:support@velqore.com'">
                     <div class="settings-row-left">
-                        <div class="menu-icon-wrap orange"><i class="fas fa-envelope"></i></div>
+                        <div class="menu-icon-wrap orange"><span class="material-symbols-outlined">mail</span></div>
                         <div>
                             <div class="settings-row-title">Email Support</div>
                             <div class="settings-row-subtitle">support@velqore.com</div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <span class="material-symbols-outlined chevron-right">chevron_right</span>
                 </div>
                 <div class="settings-row" onclick="showToast('Report submitted', 'success')">
                     <div class="settings-row-left">
-                        <div class="menu-icon-wrap red"><i class="fas fa-bug"></i></div>
+                        <div class="menu-icon-wrap red"><span class="material-symbols-outlined">bug_report</span></div>
                         <div>
                             <div class="settings-row-title">Report a Problem</div>
                             <div class="settings-row-subtitle">Found a bug?</div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <span class="material-symbols-outlined chevron-right">chevron_right</span>
                 </div>
                 <div class="settings-row" onclick="showToast('Thanks for your feedback!', 'success')">
                     <div class="settings-row-left">
-                        <div class="menu-icon-wrap purple"><i class="fas fa-star"></i></div>
+                        <div class="menu-icon-wrap purple"><span class="material-symbols-outlined">star</span></div>
                         <div>
                             <div class="settings-row-title">Rate the App</div>
                             <div class="settings-row-subtitle">Share your experience</div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <span class="material-symbols-outlined chevron-right">chevron_right</span>
                 </div>
             </div>
         </div>
@@ -2967,7 +2982,7 @@
             <div class="modal-handle"></div>
             <div class="modal-header">
                 <h3 class="modal-title">About Velqore</h3>
-                <button class="modal-close" onclick="closeModal('aboutModal')"><i class="fas fa-times"></i></button>
+                <button class="modal-close" onclick="closeModal('aboutModal')"><span class="material-symbols-outlined">close</span></button>
             </div>
             <div class="about-card">
                 <div class="logo-big">V</div>
@@ -2982,7 +2997,7 @@
                             <div class="settings-row-title">Terms of Service</div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <span class="material-symbols-outlined chevron-right">chevron_right</span>
                 </div>
                 <div class="settings-row" onclick="showToast('Opening Privacy Policy...', 'info')">
                     <div class="settings-row-left">
@@ -2990,7 +3005,7 @@
                             <div class="settings-row-title">Privacy Policy</div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <span class="material-symbols-outlined chevron-right">chevron_right</span>
                 </div>
                 <div class="settings-row" onclick="showToast('Opening Licenses...', 'info')">
                     <div class="settings-row-left">
@@ -2998,7 +3013,7 @@
                             <div class="settings-row-title">Open Source Licenses</div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <span class="material-symbols-outlined chevron-right">chevron_right</span>
                 </div>
                 <div class="settings-row" onclick="checkForUpdates()">
                     <div class="settings-row-left">
@@ -3007,7 +3022,7 @@
                             <div class="settings-row-subtitle">You're on the latest version</div>
                         </div>
                     </div>
-                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <span class="material-symbols-outlined chevron-right">chevron_right</span>
                 </div>
             </div>
         </div>
@@ -3016,19 +3031,19 @@
     <!-- ===== BOTTOM NAV ===== -->
     <nav class="nav-bar" id="navBar">
         <div class="nav-item active" onclick="navigateTo('home')" data-page="home">
-            <i class="fas fa-home"></i>
+            <span class="material-symbols-outlined">home</span>
             <span>Home</span>
         </div>
         <div class="nav-item" onclick="navigateTo('webseries')" data-page="webseries">
-            <i class="fas fa-tv"></i>
+            <span class="material-symbols-outlined">tv</span>
             <span>TV Shows</span>
         </div>
         <div class="nav-item" onclick="navigateTo('movies')" data-page="movies">
-            <i class="fas fa-film"></i>
+            <span class="material-symbols-outlined">movie</span>
             <span>Movies</span>
         </div>
         <div class="nav-item" onclick="navigateTo('profile')" data-page="profile">
-            <i class="fas fa-user"></i>
+            <span class="material-symbols-outlined">person</span>
             <span>Profile</span>
         </div>
     </nav>
@@ -3390,8 +3405,8 @@
         if (detailsBtn && currentContent && currentContent.id === itemId) {
             detailsBtn.classList.toggle('active', isInList);
             detailsBtn.innerHTML = isInList ?
-                '<i class="fas fa-check"></i><span>My List</span>' :
-                '<i class="fas fa-plus"></i><span>My List</span>';
+                '<span class="material-symbols-outlined filled">check</span><span>My List</span>' :
+                '<span class="material-symbols-outlined">add</span><span>My List</span>';
         }
     }
 
@@ -3401,7 +3416,7 @@
         const list = getMyList();
         navigateTo('watchlist');
         document.getElementById('watchlistGrid').innerHTML = list.length === 0 ?
-            '<div class="empty-state"><i class="fas fa-check"></i><h3>Your list is empty</h3><p>Add titles to keep watching here.</p></div>' :
+            '<div class="empty-state"><span class="material-symbols-outlined">check</span><h3>Your list is empty</h3><p>Add titles to keep watching here.</p></div>' :
             list.map(item => createPosterCard(item)).join('');
     }
 
@@ -3409,7 +3424,7 @@
         const history = getWatchHistory();
         navigateTo('history');
         document.getElementById('historyGrid').innerHTML = history.length === 0 ?
-            '<div class="empty-state"><i class="fas fa-history"></i><h3>No watch history</h3><p>Start watching to see your history.</p></div>' :
+            '<div class="empty-state"><span class="material-symbols-outlined">history</span><h3>No watch history</h3><p>Start watching to see your history.</p></div>' :
             history.map(item => createPosterCard(item)).join('');
     }
 
@@ -3433,10 +3448,10 @@
         const input = document.getElementById(id);
         if (input.type === 'password') {
             input.type = 'text';
-            icon.classList.replace('fa-eye', 'fa-eye-slash');
+            icon.textContent = 'visibility_off';
         } else {
             input.type = 'password';
-            icon.classList.replace('fa-eye-slash', 'fa-eye');
+            icon.textContent = 'visibility';
         }
     }
 
@@ -3446,7 +3461,7 @@
             password = document.getElementById('loginPassword').value,
             btn = document.getElementById('loginBtn');
         btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        btn.innerHTML = '<span class="material-symbols-outlined" style="animation:spin 0.8s linear infinite;">sync</span>';
         db.ref(`registered_users/${email.replace(/\./g, ',')}`).once('value', snap => {
             const ud = snap.val();
             if (!ud || ud.password !== password) {
@@ -3470,7 +3485,7 @@
             password = document.getElementById('signupPassword').value,
             btn = document.getElementById('signupBtn');
         btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        btn.innerHTML = '<span class="material-symbols-outlined" style="animation:spin 0.8s linear infinite;">sync</span>';
         db.ref(`registered_users/${email.replace(/\./g, ',')}`).once('value', snap => {
             if (snap.exists()) {
                 document.getElementById('authErrorText').textContent = 'Email already registered.';
@@ -3668,7 +3683,7 @@
             const r = document.getElementById('searchResults');
             q = q.trim().toLowerCase();
             if (!q) return r.innerHTML =
-                '<div class="empty-state"><i class="fas fa-search"></i><h3>Find your next favorite</h3><p>Search for shows, movies, genres, and more.</p></div>';
+                '<div class="empty-state"><span class="material-symbols-outlined">search</span><h3>Find your next favorite</h3><p>Search for shows, movies, genres, and more.</p></div>';
             const res = [...allWebseries, ...allMovies].filter(i => i.title.toLowerCase().includes(q));
             r.innerHTML = res.length ? res.map(i => createPosterCard(i)).join('') :
                 '<div class="empty-state"><h3>No results found</h3><p>Try a different search term.</p></div>';
@@ -3772,7 +3787,7 @@
         return `<div class="category-section">
                     <div class="category-header">
                         <h3 class="category-title">${title}</h3>
-                        ${typeUrl ? `<span class="view-all" onclick="navigateTo('${typeUrl}')">See All <i class="fas fa-chevron-right" style="font-size:10px;"></i></span>` : ''}
+                        ${typeUrl ? `<span class="view-all" onclick="navigateTo('${typeUrl}')">See All <span class="material-symbols-outlined" style="font-size:10px;">chevron_right</span></span>` : ''}
                     </div>
                     <div class="poster-scroll">${items.map(x => createPosterCard(x)).join('')}</div>
                 </div>`;
@@ -3820,7 +3835,7 @@
                                 <select class="season-selector" onchange="switchSeason('${item.id}', this.value)">
                                     ${item.seasons.map((s,idx) => `<option value="${idx}">${s.name || 'Season ' + (idx+1)}</option>`).join('')}
                                 </select>
-                                <i class="fas fa-chevron-down" style="font-size: 11px;"></i>
+                                <span class="material-symbols-outlined" style="font-size: 11px;">expand_more</span>
                             </div>
                         </div>
                         <div id="episodeListContainer">${renderEpisodeList(item, 0)}</div>`;
@@ -3837,22 +3852,22 @@
                         <span class="hd-badge">HD</span>
                     </div>
                     <div class="details-action-buttons">
-                        <button class="btn-full-play" onclick="playContent(currentContent)"><i class="fas fa-play"></i> Play</button>
+                        <button class="btn-full-play" onclick="playContent(currentContent)"><span class="material-symbols-outlined filled">play_arrow</span> Play</button>
                     </div>
                     <p class="details-storyline">${item.storyline || 'Explore this exciting title on Velqore.'}</p>
                     <p class="details-cast-text"><strong>Cast:</strong> ${item.cast ? item.cast.slice(0,5).map(c => c.name).join(', ') : 'Various Artists'}</p>
                     ${item.category ? `<p class="details-cast-text"><strong>Genres:</strong> ${item.category}</p>` : ''}
                     <div class="interaction-row">
                         <div class="interaction-item ${inList ? 'active' : ''}" id="interactionMyList" onclick="toggleMyList(currentContent)">
-                            <i class="fas fa-${inList ? 'check' : 'plus'}"></i>
+                            <span class="material-symbols-outlined ${inList ? 'filled' : ''}">${inList ? 'check' : 'add'}</span>
                             <span>My List</span>
                         </div>
                         <div class="interaction-item" onclick="showToast('Thanks for rating!', 'success')">
-                            <i class="far fa-thumbs-up"></i>
+                            <span class="material-symbols-outlined">thumb_up</span>
                             <span>Rate</span>
                         </div>
                         <div class="interaction-item" onclick="showToast('Link copied!', 'info')">
-                            <i class="fas fa-paper-plane"></i>
+                            <span class="material-symbols-outlined">send</span>
                             <span>Share</span>
                         </div>
                     </div>
@@ -3871,7 +3886,7 @@
                         <div class="episode-number">${ep.episodeNumber || (idx+1)}</div>
                         <div class="episode-thumbnail">
                             <img src="${ep.thumbnail || series.backdrop || series.poster}" loading="lazy" alt="">
-                            <div class="play-icon"><i class="fas fa-play"></i></div>
+                            <div class="play-icon"><span class="material-symbols-outlined filled">play_arrow</span></div>
                         </div>
                         <div class="episode-info">
                             <div class="episode-info-header">
