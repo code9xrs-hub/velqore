@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Velqore - Watch Movies & Web Series</title>
+    <meta name="description" content="Velqore - Unlimited Movies & Series Streaming. Watch your favorite movies and TV shows anytime, anywhere.">
+    <meta name="theme-color" content="#E50914">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Velqore">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -191,7 +198,6 @@
             height: 100%;
             border: none;
             background: #000;
-            /* Removed sandbox attribute — player server does not allow it */
             allow: "autoplay; fullscreen; encrypted-media; picture-in-picture";
             loading: "lazy";
             -webkit-tap-highlight-color: transparent;
@@ -1993,6 +1999,68 @@
                 height: 54px;
             }
         }
+
+        /* ===== INSTALL BANNER (PWA) ===== */
+        .install-banner {
+            display: none;
+            background: var(--netflix-gray-1);
+            margin: 0 16px 14px;
+            border-radius: 12px;
+            padding: 12px 16px;
+            align-items: center;
+            gap: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            transition: background 0.25s;
+        }
+        .install-banner:active {
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .install-banner.show {
+            display: flex;
+        }
+        .install-banner .install-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: rgba(229, 9, 20, 0.15);
+            color: var(--netflix-red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        .install-banner .install-text {
+            flex: 1;
+            min-width: 0;
+        }
+        .install-banner .install-text h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+        }
+        .install-banner .install-text p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        .install-banner .install-btn {
+            background: var(--netflix-red);
+            border: none;
+            color: white;
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+            flex-shrink: 0;
+        }
+        .install-banner .install-btn:active {
+            transform: scale(0.93);
+            background: #f40612;
+        }
     </style>
 </head>
 <body data-theme="dark" data-font-size="medium">
@@ -2240,6 +2308,15 @@
                         </div>
                     </div>
                     <i class="fas fa-chevron-right chevron-right"></i>
+                </div>
+                <!-- PWA Install Banner -->
+                <div class="install-banner" id="installBanner">
+                    <div class="install-icon"><i class="fas fa-download"></i></div>
+                    <div class="install-text">
+                        <h4>Install Velqore</h4>
+                        <p>Add to home screen for the best experience</p>
+                    </div>
+                    <button class="install-btn" id="installBtn" onclick="installPWA()">Install</button>
                 </div>
             </div>
 
@@ -2985,6 +3062,76 @@
     };
 
     // ============================================================
+    //  PWA - INSTALLATION
+    // ============================================================
+    let deferredPrompt = null;
+    let isAppInstalled = false;
+
+    // Check if app is already installed
+    function checkIfInstalled() {
+        // On standalone mode (installed PWA)
+        if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true) {
+            isAppInstalled = true;
+            return true;
+        }
+        // Check for iOS standalone
+        if (window.navigator.standalone) {
+            isAppInstalled = true;
+            return true;
+        }
+        return false;
+    }
+
+    // Listen for beforeinstallprompt
+    window.addEventListener('beforeinstallprompt', function(e) {
+        e.preventDefault();
+        deferredPrompt = e;
+        // Show install banner if not already installed
+        if (!checkIfInstalled()) {
+            document.getElementById('installBanner').classList.add('show');
+        }
+        return false;
+    });
+
+    // Listen for app installed event
+    window.addEventListener('appinstalled', function(e) {
+        isAppInstalled = true;
+        document.getElementById('installBanner').classList.remove('show');
+        showToast('Velqore installed successfully! 🎉', 'success');
+    });
+
+    // Install PWA function
+    function installPWA() {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then(function(choiceResult) {
+                if (choiceResult.outcome === 'accepted') {
+                    isAppInstalled = true;
+                    document.getElementById('installBanner').classList.remove('show');
+                    showToast('Velqore installed! 🎉', 'success');
+                } else {
+                    showToast('Installation declined', 'info');
+                }
+                deferredPrompt = null;
+            });
+        } else {
+            // Fallback: show manual instructions
+            showToast('Open this page in your browser menu and select "Add to Home Screen"', 'info');
+        }
+    }
+
+    // Hide install banner if already installed on load
+    document.addEventListener('DOMContentLoaded', function() {
+        if (checkIfInstalled()) {
+            document.getElementById('installBanner').classList.remove('show');
+        }
+        // Also hide if user dismissed it previously
+        if (localStorage.getItem('velqore_install_dismissed') === 'true') {
+            document.getElementById('installBanner').classList.remove('show');
+        }
+    });
+
+    // ============================================================
     //  SETTINGS
     // ============================================================
     function getSetting(key, defaultVal) {
@@ -3354,6 +3501,10 @@
             initBackButtonHandler();
             updateProfileStats();
             renderAvatarPicker();
+            // Check if app is installed
+            if (checkIfInstalled()) {
+                document.getElementById('installBanner').classList.remove('show');
+            }
         }, 1500);
     }
 
