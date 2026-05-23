@@ -12,7 +12,7 @@
 
 **Live Demo:** [https://velqore.vercel.app/](https://velqore.vercel.app/)  
 **Admin Panel:** [https://velqore.vercel.app/admin.html](https://velqore.vercel.app/admin.html)  
-**Documentation:** [https://github.com/code9xrs-hub/velqore](https://github.com/code9xrs-hub/velqore)
+**Documentation:** [https://github.com/code9xrs-hub/velqore](https://github.com/code9xrs-hub/README.md)
 
 </div>
 
@@ -363,8 +363,8 @@ npm run start
 
 ### **Premium Entertainment Experience for Everyone**
 
-[Website](https://velqore.vercel.app) • [Docs](https://github.com/code9xrs-hub/velqore) • [Demo](https://velqore.vercel.app/admin.html)
+[Website](https://velqore.vercel.app) • [Docs](https://github.com/code9xrs-hub/README.md) • [Demo](https://velqore.vercel.app/admin.html)
 
-**© 2024 Velqore — Built with ❤️**
+**© 2026 Velqore — Built with ❤️**
 
 </div>
