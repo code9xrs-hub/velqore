@@ -14,31 +14,8 @@ Here's a **modern, professional GitHub README** for your Velqore project with ic
 
 ### 🚀 Unlimited Movies & Web Series Streaming Platform
 
-[**Live Demo**](#) · [**Admin Panel**](#) · [**Documentation**](#)
+[**Live Demo**](https://velqore.vercel.app/) · [**Admin Panel**](https://velqore.vercel.app/admin.html) · [**Documentation**](https://github.com/code9xrs-hub/velqore/blob/main/README.md)
 
-</div>
-
----
-
-## 📸 Screenshots
-
-<div align="center">
-  <table>
-    <tr>
-      <td width="33%">
-        <img src="https://via.placeholder.com/300x180/E50914/FFFFFF?text=Home+Page" alt="Home Page" />
-        <br><em>🏠 Home Page with Hero Carousel</em>
-      </td>
-      <td width="33%">
-        <img src="https://via.placeholder.com/300x180/141414/FFFFFF?text=Admin+Panel" alt="Admin Panel" />
-        <br><em>⚙️ Admin Control Panel</em>
-      </td>
-      <td width="33%">
-        <img src="https://via.placeholder.com/300x180/1a1a1a/FFFFFF?text=Player+Interface" alt="Player Interface" />
-        <br><em>🎥 Floating Video Player</em>
-      </td>
-    </tr>
-  </table>
 </div>
 
 ---
@@ -94,12 +71,12 @@ Here's a **modern, professional GitHub README** for your Velqore project with ic
 
 ### 1️⃣ Clone Repository
 ```bash
-git clone https://github.com/your-username/velqore.git
+git clone https://github.com/code9xrs-hub/velqore.git
 cd velqore
 ```
 
 ### 2️⃣ Setup Firebase
-Create a Firebase project and add your config to `index.html`:
+Create a Firebase project and add your config to `index.html` `admin.html`:
 
 ```javascript
 const firebaseConfig = {
@@ -158,6 +135,7 @@ firebase deploy
 2. Connect repository to Netlify
 3. Deploy automatically
 
+**and other hosting platfrom**
 ---
 
 ## 🔑 Admin Credentials
@@ -335,18 +313,6 @@ git clone https://github.com/your-username/velqore.git && cd velqore && npx serv
 ✅ **Step 3:** Deploy to your hosting  
 ✅ **Step 4:** Start adding content via Admin Panel  
 ✅ **Step 5:** Share with the world! 🎉
-
----
-
-## 📸 Demo Screenshots Placeholders
-
-*Replace these URLs with actual screenshots:*
-
-| Screenshot | URL |
-|------------|-----|
-| Home Page | `https://via.placeholder.com/800x400/E50914/FFFFFF?text=Velqore+Home` |
-| Admin Panel | `https://via.placeholder.com/800x400/141414/FFFFFF?text=Admin+Panel` |
-| Player | `https://via.placeholder.com/800x400/000000/FFFFFF?text=Video+Player` |
 
 ---
 
