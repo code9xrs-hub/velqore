@@ -3053,12 +3053,13 @@
         }
 
         /* With data-lenis-prevent, Lenis delegates to native behavior.
-           touch-action: pan-x ensures horizontal swipes scroll the row
-           while vertical swipes pass through to the document for page scroll. */
+           touch-action: manipulation allows both horizontal swipes (to scroll
+           the row) and vertical swipes (to scroll the page). The previous
+           pan-x-only value blocked vertical scrolling after tapping a poster. */
         .poster-scroll,
         .top10-scroll,
         .category-pills {
-            touch-action: pan-x pinch-zoom;
+            touch-action: manipulation;
         }
 
 
