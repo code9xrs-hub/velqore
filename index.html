@@ -1270,7 +1270,7 @@
             min-height: 100vh;
         }
 
-        /* ===== HERO BANNER — FULLY RESPONSIVE ===== */
+        /* ===== HERO BANNER — NETFLIX CARD SWAP ===== */
         .hero-banner {
             position: relative;
             width: 100vw;
@@ -1279,8 +1279,86 @@
             overflow: hidden;
             background-color: #000;
             margin-left: calc(-50vw + 50%);
+            touch-action: pan-y;
+            user-select: none;
         }
 
+        /* Card Stack Container */
+        .hero-card-stack {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .hero-card {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform, opacity, filter;
+        }
+
+        .hero-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 20%;
+        }
+
+        .hero-card.card-active {
+            transform: translateX(0) scale(1);
+            opacity: 1;
+            filter: blur(0px) brightness(1);
+            z-index: 3;
+        }
+
+        .hero-card.card-next {
+            transform: translateX(75%) scale(0.85);
+            opacity: 0.6;
+            filter: blur(2px) brightness(0.8);
+            z-index: 2;
+            border-radius: 0 12px 12px 0;
+            box-shadow: -8px 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-card.card-far-next {
+            transform: translateX(85%) scale(0.7);
+            opacity: 0.3;
+            filter: blur(4px) brightness(0.7);
+            z-index: 1;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .hero-card.card-prev {
+            transform: translateX(-10%) scale(0.9);
+            opacity: 0.25;
+            filter: blur(3px) brightness(0.75);
+            z-index: 1;
+        }
+
+        .hero-card.card-hidden {
+            transform: translateX(100%) scale(0.5);
+            opacity: 0;
+            filter: blur(6px);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Glassmorphism Overlay */
+        .hero-glass-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 4;
+            background: rgba(0, 0, 0, 0.12);
+            backdrop-filter: blur(0.5px) saturate(1.2);
+            -webkit-backdrop-filter: blur(0.5px) saturate(1.2);
+            pointer-events: none;
+            user-select: none;
+        }
+
+        /* Keep bg-img for fallback */
         .hero-bg-img {
             position: absolute;
             inset: 0;
@@ -1288,6 +1366,7 @@
             overflow: hidden;
             pointer-events: none;
             user-select: none;
+            opacity: 0;
         }
 
         .hero-bg-img img {
@@ -1295,9 +1374,6 @@
             height: 100%;
             object-fit: cover;
             object-position: center 20%;
-            transition: transform 0.1s linear, opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-            will-change: transform, opacity;
-            animation: heroSlideFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         @keyframes heroSlideFadeIn {
@@ -1324,28 +1400,36 @@
             }
         }
 
-        .hero-content>* {
+        .hero-content-inner>* {
             animation: heroContentReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        .hero-content>*:nth-child(1) {
+        .hero-content-inner>*:nth-child(1) {
             animation-delay: 0.1s;
         }
 
-        .hero-content>*:nth-child(2) {
+        .hero-content-inner>*:nth-child(2) {
             animation-delay: 0.2s;
         }
 
-        .hero-content>*:nth-child(3) {
+        .hero-content-inner>*:nth-child(3) {
             animation-delay: 0.3s;
         }
 
-        .hero-content>*:nth-child(4) {
+        .hero-content-inner>*:nth-child(4) {
             animation-delay: 0.4s;
         }
 
-        .hero-content>*:nth-child(5) {
+        .hero-content-inner>*:nth-child(5) {
             animation-delay: 0.5s;
+        }
+
+        .hero-content-inner>*:nth-child(6) {
+            animation-delay: 0.55s;
+        }
+
+        .hero-content-inner>*:nth-child(7) {
+            animation-delay: 0.6s;
         }
 
         .hero-gradient-top {
@@ -1355,7 +1439,7 @@
             right: 0;
             height: clamp(15%, 25%, 30%);
             background: linear-gradient(to bottom, rgba(0, 0, 0, 0.85) 0%, transparent 100%);
-            z-index: 1;
+            z-index: 5;
             pointer-events: none;
             user-select: none;
         }
@@ -1367,7 +1451,7 @@
             right: 0;
             height: 65%;
             background: linear-gradient(to top, #141414 0%, rgba(20, 20, 20, 0.5) 35%, transparent 100%);
-            z-index: 1;
+            z-index: 5;
             pointer-events: none;
             user-select: none;
         }
@@ -1376,7 +1460,7 @@
             position: absolute;
             inset: 0;
             background: linear-gradient(90deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.15) 45%, transparent 65%);
-            z-index: 1;
+            z-index: 5;
             pointer-events: none;
             user-select: none;
         }
@@ -1387,7 +1471,7 @@
             top: clamp(64px, 10vh, 80px);
             left: 0;
             right: 0;
-            z-index: 3;
+            z-index: 6;
             display: flex;
             justify-content: center;
             gap: clamp(8px, 2vw, 16px);
@@ -1412,17 +1496,33 @@
             background-color: rgba(255, 255, 255, 0.1);
         }
 
-        /* Hero content — details shown directly on the slide */
+        /* Hero content — glassmorphism panel */
         .hero-content {
             position: absolute;
             bottom: clamp(60px, 18%, 25%);
             left: clamp(16px, 4%, 4%);
             right: clamp(16px, 4%, 40%);
-            z-index: 3;
+            z-index: 6;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
             gap: clamp(8px, 1.5vh, 16px);
+            transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .hero-content-inner {
+            background: rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(16px) saturate(1.8);
+            -webkit-backdrop-filter: blur(16px) saturate(1.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: clamp(16px, 2vw, 24px) clamp(20px, 3vw, 32px);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: clamp(8px, 1.5vh, 16px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            max-width: clamp(320px, 50vw, 560px);
         }
 
         .hero-title-text {
@@ -1539,25 +1639,209 @@
 
         .slider-dots {
             display: flex;
-            gap: clamp(5px, 0.8vw, 8px);
+            gap: clamp(4px, 0.6vw, 6px);
             justify-content: flex-start;
-            margin-top: clamp(2px, 0.5vh, 6px);
+            margin-top: clamp(4px, 0.8vh, 8px);
         }
 
         .slider-dot {
-            width: clamp(6px, 0.7vw, 8px);
-            height: clamp(6px, 0.7vw, 8px);
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.35);
+            width: clamp(8px, 1vw, 12px);
+            height: clamp(3px, 0.4vw, 4px);
+            border-radius: 2px;
+            background-color: rgba(255, 255, 255, 0.25);
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             min-width: 8px;
-            min-height: 8px;
+            min-height: 3px;
         }
 
         .slider-dot.active {
             background-color: var(--netflix-red);
-            transform: scale(1.3);
+            width: clamp(20px, 2.5vw, 28px);
+            border-radius: 2px;
+        }
+
+        /* Hero Navigation Buttons */
+        .hero-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 7;
+            width: clamp(40px, 5vw, 52px);
+            height: clamp(40px, 5vw, 52px);
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(12px) saturate(1.5);
+            -webkit-backdrop-filter: blur(12px) saturate(1.5);
+            color: rgba(255, 255, 255, 0.9);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+        }
+
+        .hero-nav-btn:hover {
+            background: rgba(229, 9, 20, 0.6);
+            border-color: rgba(229, 9, 20, 0.4);
+            transform: translateY(-50%) scale(1.12);
+            box-shadow: 0 8px 24px rgba(229, 9, 20, 0.4);
+            color: white;
+        }
+
+        .hero-nav-btn:active {
+            transform: translateY(-50%) scale(0.92);
+            transition: transform 0.1s ease;
+        }
+
+        .hero-nav-btn .material-symbols-outlined {
+            font-size: clamp(20px, 2.5vw, 28px);
+        }
+
+        .hero-nav-prev {
+            left: clamp(8px, 1.5vw, 16px);
+        }
+
+        .hero-nav-next {
+            right: clamp(8px, 1.5vw, 16px);
+        }
+
+        /* Slide counter badge */
+        .hero-slide-counter {
+            position: absolute;
+            bottom: clamp(12px, 2vh, 20px);
+            right: clamp(16px, 4%, 4%);
+            z-index: 7;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px) saturate(1.4);
+            -webkit-backdrop-filter: blur(10px) saturate(1.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: clamp(4px, 0.5vw, 6px) clamp(10px, 1.2vw, 14px);
+            font-size: clamp(11px, 1vw, 13px);
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .hero-slide-counter .counter-current {
+            color: var(--netflix-red);
+            font-weight: 800;
+        }
+
+        /* Card swap animation keyframes */
+        @keyframes cardSwapIn {
+            from {
+                transform: translateX(75%) scale(0.85);
+                opacity: 0.6;
+                filter: blur(2px) brightness(0.8);
+            }
+
+            to {
+                transform: translateX(0) scale(1);
+                opacity: 1;
+                filter: blur(0px) brightness(1);
+            }
+        }
+
+        @keyframes cardSwapOut {
+            from {
+                transform: translateX(0) scale(1);
+                opacity: 1;
+                filter: blur(0px) brightness(1);
+            }
+
+            to {
+                transform: translateX(-10%) scale(0.9);
+                opacity: 0.25;
+                filter: blur(3px) brightness(0.75);
+            }
+        }
+
+        @keyframes heroContentSwap {
+            0% {
+                opacity: 0;
+                transform: translateY(16px) scale(0.97);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Responsive adjustments for card stack */
+        @media (max-width: 768px) {
+            .hero-card.card-next {
+                transform: translateX(65%) scale(0.82);
+                opacity: 0.5;
+                filter: blur(1.5px) brightness(0.8);
+                border-radius: 0 8px 8px 0;
+            }
+
+            .hero-card.card-far-next {
+                transform: translateX(72%) scale(0.68);
+                opacity: 0.2;
+                filter: blur(3px) brightness(0.7);
+            }
+
+            .hero-nav-btn {
+                width: 36px;
+                height: 36px;
+            }
+
+            .hero-nav-prev {
+                left: 6px;
+            }
+
+            .hero-nav-next {
+                right: 6px;
+            }
+
+            .hero-content-inner {
+                padding: 12px 16px;
+                border-radius: 8px;
+                backdrop-filter: blur(10px) saturate(1.5);
+                -webkit-backdrop-filter: blur(10px) saturate(1.5);
+            }
+
+            .hero-slide-counter {
+                bottom: 8px;
+                right: 12px;
+                padding: 3px 8px;
+                font-size: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-card.card-next {
+                transform: translateX(55%) scale(0.78);
+                opacity: 0.4;
+                filter: blur(1px) brightness(0.75);
+            }
+
+            .hero-card.card-far-next {
+                opacity: 0;
+                filter: blur(4px);
+            }
+
+            .hero-content-inner {
+                padding: 10px 14px;
+                backdrop-filter: blur(8px) saturate(1.3);
+                -webkit-backdrop-filter: blur(8px) saturate(1.3);
+            }
+
+            .hero-nav-btn {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+            }
         }
 
         /* ===== CATEGORY PILLS ===== */
@@ -3237,9 +3521,14 @@
         <!-- MAIN CONTENT -->
         <main id="mainContent">
 
-            <!-- HERO BANNER -->
+            <!-- HERO BANNER — NETFLIX CARD SWAP -->
             <div class="hero-banner" id="heroBanner">
+                <!-- Card Stack (background images) -->
+                <div class="hero-card-stack" id="heroCardStack"></div>
+                <!-- Fallback bg-img (hidden, kept for compatibility) -->
                 <div class="hero-bg-img"><img src="" id="heroBg" alt=""></div>
+                <!-- Glassmorphism overlay -->
+                <div class="hero-glass-overlay"></div>
                 <div class="hero-gradient-top"></div>
                 <div class="hero-gradient-side"></div>
                 <div class="hero-gradient-bottom"></div>
@@ -3252,18 +3541,33 @@
                         onclick="document.querySelector('.category-pills').scrollIntoView({behavior:'smooth'})">Categories</button>
                 </div>
 
-                <!-- Hero content — details shown directly on the slide -->
+                <!-- Navigation Buttons -->
+                <button class="hero-nav-btn hero-nav-prev" id="heroNavPrev" onclick="heroSlidePrev()">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </button>
+                <button class="hero-nav-btn hero-nav-next" id="heroNavNext" onclick="heroSlideNext()">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </button>
+
+                <!-- Slide Counter -->
+                <div class="hero-slide-counter" id="heroSlideCounter">
+                    <span class="counter-current">1</span> / <span class="counter-total">10</span>
+                </div>
+
+                <!-- Hero content — glassmorphism panel -->
                 <div class="hero-content" id="heroContent">
-                    <div class="hero-title-text" id="heroTitleLarge">Loading...</div>
-                    <div class="hero-tags-row" id="heroMeta"></div>
-                    <div class="hero-desc" id="heroDesc">Discover the best movies and TV shows, streaming now.</div>
-                    <div class="hero-buttons-row">
-                        <button class="btn-hero-play" onclick="playHeroContent()"><span
-                                class="material-symbols-outlined filled">play_arrow</span> Play</button>
-                        <button class="btn-hero-info" onclick="openHeroDetails()"><span
-                                class="material-symbols-outlined">info</span> More Info</button>
+                    <div class="hero-content-inner" id="heroContentInner">
+                        <div class="hero-title-text" id="heroTitleLarge">Loading...</div>
+                        <div class="hero-tags-row" id="heroMeta"></div>
+                        <div class="hero-desc" id="heroDesc">Discover the best movies and TV shows, streaming now.</div>
+                        <div class="hero-buttons-row">
+                            <button class="btn-hero-play" onclick="playHeroContent()"><span
+                                    class="material-symbols-outlined filled">play_arrow</span> Play</button>
+                            <button class="btn-hero-info" onclick="openHeroDetails()"><span
+                                    class="material-symbols-outlined">info</span> More Info</button>
+                        </div>
+                        <div class="slider-dots" id="sliderDots"></div>
                     </div>
-                    <div class="slider-dots" id="sliderDots"></div>
                 </div>
             </div>
 
@@ -4714,11 +5018,11 @@
             window.addEventListener('scroll', () => {
                 const h = document.getElementById('header');
                 if (h) h.classList.toggle('scrolled', window.scrollY > 50);
-                // Hero parallax
-                const heroImg = document.querySelector('.hero-bg-img img');
-                if (heroImg) {
+                // Hero parallax — target active card image
+                const heroActiveCard = document.querySelector('.hero-card.card-active img');
+                if (heroActiveCard) {
                     const scrolled = window.scrollY;
-                    heroImg.style.transform = `translateY(-10%) translateY(${scrolled * 0.15}px)`;
+                    heroActiveCard.style.transform = `translateY(-10%) translateY(${scrolled * 0.15}px)`;
                 }
             });
 
@@ -4936,39 +5240,186 @@
             setTimeout(() => initScrollReveal(), 100);
         }
 
+        // ============================================================
+        //  HERO SLIDER — NETFLIX CARD SWAP ANIMATION
+        // ============================================================
+        let heroSwipeStartX = 0, heroSwipeEndX = 0, heroIsSwiping = false;
+        let heroAutoPlayPaused = false, heroAutoPlayResumeTimer = null;
+
         function renderHeroSlider() {
-            const all = [...allWebseries, ...allMovies].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)).slice(0, 5);
-            if (all.length === 0) return;
-            document.getElementById('sliderDots').innerHTML = all.map((_, i) =>
-                `<div class="slider-dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})"></div>`).join('');
+            // Fetch 10 random trending movies/series dynamically
+            const pool = [...allWebseries, ...allMovies];
+            if (pool.length === 0) return;
+            // Shuffle and take up to 10
+            const shuffled = pool.sort(() => Math.random() - 0.5);
+            const all = shuffled.slice(0, Math.min(10, pool.length));
             currentSlide = 0;
             window.heroContent = all;
+
+            // Build card stack
+            const stack = document.getElementById('heroCardStack');
+            if (stack) {
+                stack.innerHTML = all.map((item, i) => {
+                    const bgUrl = item.backdrop || item.poster;
+                    return `<div class="hero-card ${i === 0 ? 'card-active' : i === 1 ? 'card-next' : i === 2 ? 'card-far-next' : 'card-hidden'}" data-index="${i}">
+                        <img src="${bgUrl}" alt="${item.title}" loading="${i < 3 ? 'eager' : 'lazy'}">
+                    </div>`;
+                }).join('');
+            }
+
+            // Build slider dots
+            document.getElementById('sliderDots').innerHTML = all.map((_, i) =>
+                `<div class="slider-dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})"></div>`).join('');
+
+            // Update counter
+            const counter = document.getElementById('heroSlideCounter');
+            if (counter) {
+                counter.querySelector('.counter-current').textContent = '1';
+                counter.querySelector('.counter-total').textContent = all.length;
+            }
+
             updateHeroContent(all[0]);
             clearInterval(sliderInterval);
-            if (all.length > 1) sliderInterval = setInterval(() => {
-                currentSlide = (currentSlide + 1) % all.length;
-                goToSlide(currentSlide);
+            if (all.length > 1) startHeroAutoPlay();
+
+            // Init swipe support
+            initHeroSwipe();
+        }
+
+        function startHeroAutoPlay() {
+            clearInterval(sliderInterval);
+            if (heroAutoPlayPaused) return;
+            sliderInterval = setInterval(() => {
+                if (!heroAutoPlayPaused) {
+                    currentSlide = (currentSlide + 1) % window.heroContent.length;
+                    goToSlide(currentSlide);
+                }
             }, 6000);
         }
 
+        function pauseHeroAutoPlay(resumeAfter = 12000) {
+            heroAutoPlayPaused = true;
+            clearTimeout(heroAutoPlayResumeTimer);
+            heroAutoPlayResumeTimer = setTimeout(() => {
+                heroAutoPlayPaused = false;
+                startHeroAutoPlay();
+            }, resumeAfter);
+        }
+
+        function heroSlideNext() {
+            if (!window.heroContent || window.heroContent.length === 0) return;
+            currentSlide = (currentSlide + 1) % window.heroContent.length;
+            goToSlide(currentSlide);
+            pauseHeroAutoPlay();
+        }
+
+        function heroSlidePrev() {
+            if (!window.heroContent || window.heroContent.length === 0) return;
+            currentSlide = (currentSlide - 1 + window.heroContent.length) % window.heroContent.length;
+            goToSlide(currentSlide);
+            pauseHeroAutoPlay();
+        }
+
         function goToSlide(i) {
-            document.querySelectorAll('.slider-dot').forEach((d, idx) => d.classList.toggle('active', idx === i));
+            const all = window.heroContent;
+            if (!all || !all[i]) return;
             currentSlide = i;
-            if (window.heroContent[i]) updateHeroContent(window.heroContent[i]);
+
+            // Update card stack positions (with circular wrap-around)
+            const total = all.length;
+            const cards = document.querySelectorAll('.hero-card');
+            cards.forEach((card, idx) => {
+                // Calculate circular distance from current slide
+                let diff = idx - i;
+                // Normalize to shortest circular distance
+                if (diff > total / 2) diff -= total;
+                if (diff < -total / 2) diff += total;
+                card.classList.remove('card-active', 'card-next', 'card-far-next', 'card-prev', 'card-hidden');
+                if (diff === 0) card.classList.add('card-active');
+                else if (diff === 1) card.classList.add('card-next');
+                else if (diff === 2) card.classList.add('card-far-next');
+                else if (diff === -1) card.classList.add('card-prev');
+                else card.classList.add('card-hidden');
+            });
+
+            // Update dots
+            document.querySelectorAll('.slider-dot').forEach((d, idx) => d.classList.toggle('active', idx === i));
+
+            // Update counter
+            const counter = document.getElementById('heroSlideCounter');
+            if (counter) counter.querySelector('.counter-current').textContent = i + 1;
+
+            // Animate content swap
+            updateHeroContent(all[i]);
         }
 
         function updateHeroContent(item) {
+            const inner = document.getElementById('heroContentInner');
+            // Trigger content swap animation
+            if (inner) {
+                inner.style.animation = 'none';
+                inner.offsetHeight; // force reflow
+                inner.style.animation = 'heroContentSwap 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards';
+            }
+
             document.getElementById('heroTitleLarge').textContent = item.title;
             const tags = item.category ? [item.category, item.year, item.type === 'webseries' ? 'Series' : 'Movie'].filter(
                 Boolean) : ['Trending'];
             document.getElementById('heroMeta').innerHTML = tags.map((g, i) =>
                 `${i > 0 ? '<span class="hero-tag-dot"></span>' : ''}<span>${g}</span>`).join('');
-            // Description shown directly on the slide
             const descEl = document.getElementById('heroDesc');
             if (descEl) descEl.textContent = item.description || item.storyline || item.overview || 'Discover the best movies and TV shows, streaming now.';
+            // Also update fallback bg-img for compatibility
             const bgUrl = item.backdrop || item.poster;
             document.getElementById('heroBg').src = bgUrl;
             window.currentHeroItem = item;
+        }
+
+        // Swipe / Touch support for hero slider
+        function initHeroSwipe() {
+            const banner = document.getElementById('heroBanner');
+            if (!banner || banner._swipeInit) return;
+            banner._swipeInit = true;
+
+            banner.addEventListener('touchstart', (e) => {
+                heroSwipeStartX = e.touches[0].clientX;
+                heroIsSwiping = true;
+            }, { passive: true });
+
+            banner.addEventListener('touchmove', (e) => {
+                if (!heroIsSwiping) return;
+                heroSwipeEndX = e.touches[0].clientX;
+            }, { passive: true });
+
+            banner.addEventListener('touchend', () => {
+                if (!heroIsSwiping) return;
+                heroIsSwiping = false;
+                const diff = heroSwipeStartX - heroSwipeEndX;
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0) heroSlideNext();
+                    else heroSlidePrev();
+                }
+            }, { passive: true });
+
+            // Mouse drag support for desktop
+            banner.addEventListener('mousedown', (e) => {
+                heroSwipeStartX = e.clientX;
+                heroIsSwiping = true;
+            });
+            banner.addEventListener('mousemove', (e) => {
+                if (!heroIsSwiping) return;
+                heroSwipeEndX = e.clientX;
+            });
+            banner.addEventListener('mouseup', () => {
+                if (!heroIsSwiping) return;
+                heroIsSwiping = false;
+                const diff = heroSwipeStartX - heroSwipeEndX;
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0) heroSlideNext();
+                    else heroSlidePrev();
+                }
+            });
+            banner.addEventListener('mouseleave', () => { heroIsSwiping = false; });
         }
 
         function playHeroContent() { if (window.currentHeroItem) playContent(window.currentHeroItem); }
@@ -5414,10 +5865,10 @@
                 }
             }
 
-            // Hero parallax
-            const heroImg = document.querySelector('.hero-bg-img img');
-            if (heroImg) {
-                heroImg.style.transform = `translateY(-10%) translateY(${scroll * 0.12}px)`;
+            // Hero parallax — target active card image
+            const heroActiveCard = document.querySelector('.hero-card.card-active img');
+            if (heroActiveCard) {
+                heroActiveCard.style.transform = `translateY(-10%) translateY(${scroll * 0.12}px)`;
             }
 
             // Hero content opacity fade as user scrolls down
