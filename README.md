@@ -258,7 +258,7 @@ firebase deploy
 ---
 
 ## 📊 API Endpoints
-
+by- https://mirrorbox.dpdns.org/
 | Endpoint | Method | Description |
 |----------|--------|-------------|
 | `/webseries` | GET | Fetch all web series |
@@ -299,7 +299,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 | Channel | Link |
 |---------|------|
-| 📧 Email | support@velqore.com |
+| 📧 Email | code9x.rs@gmail.com |
 | 🐦 Twitter | [@Velqore](https://twitter.com) |
 | 💬 Discord | [Join Server](https://discord.gg) |
 
@@ -314,7 +314,7 @@ If you like this project, please give it a ⭐ on GitHub!
 [![Star on GitHub](https://img.shields.io/github/stars/your-username/velqore?style=social)](https://github.com/your-username/velqore)
 [![Follow on GitHub](https://img.shields.io/github/followers/your-username?style=social)](https://github.com/your-username)
 
-### Made with ❤️ by [Your Name]
+### Made with ❤️ by [code9xrs-hub]
 
 </div>
 
@@ -353,27 +353,3 @@ git clone https://github.com/your-username/velqore.git && cd velqore && npx serv
 **Happy Streaming!** 🎬
 
 ---
-
-This README includes:
-
-✅ **Badges & Icons** (top section)
-✅ **Screenshot placeholders** with table layout
-✅ **Features tables** for both main app & admin
-✅ **Tech stack** with categorized technologies
-✅ **Installation guide** with code blocks
-✅ **Deployment options** (Firebase, Netlify)
-✅ **Database structure** visualization
-✅ **Admin credentials** (default)
-✅ **Key features demo** with ASCII diagrams
-✅ **PWA installation** instructions
-✅ **Themes** section
-✅ **API endpoints** table
-✅ **Contributing & License** sections
-✅ **Support & social media** links
-✅ **Quick start** one-liner
-✅ **Professional, modern design** with emojis
-
-Just **copy this entire markdown** into your `README.md` file and replace:
-- `your-username` with your GitHub username
-- Placeholder image URLs with actual screenshots
-- Your name/email where mentioned
