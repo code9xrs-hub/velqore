@@ -13,6 +13,10 @@
     <meta name="apple-mobile-web-app-title" content="Velqore">
 
     <!-- ===== FAVICON ===== -->
+    <!-- ===== LENIS SMOOTH SCROLL ===== -->
+    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+    <!-- ===== FAVICON ===== -->
     <link rel="icon" type="image/svg+xml"
         href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23E50914' rx='12'/%3E%3Ctext x='32' y='44' font-family='Arial, sans-serif' font-size='40' font-weight='900' fill='white' text-anchor='middle'%3EV%3C/text%3E%3C/svg%3E">
     <link rel="apple-touch-icon"
@@ -268,10 +272,12 @@
             }
 
             .poster-card:hover {
-                transform: scale(1.25);
-                box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
+                transform: scale(1.3);
+                box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.12);
                 z-index: 120;
                 border-radius: 4px 4px 0 0;
+                transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-radius 0s;
+                transition-delay: 0.15s;
             }
 
             .poster-card:hover .poster-hover-info {
@@ -288,6 +294,24 @@
 
             .poster-card:hover .poster-overlay {
                 background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, transparent 55%);
+            }
+
+            /* Glow shimmer on poster hover */
+            .poster-card::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.06) 50%, transparent 70%);
+                background-size: 200% 100%;
+                opacity: 0;
+                transition: opacity 0.35s;
+                pointer-events: none;
+                z-index: 5;
+            }
+
+            .poster-card:hover::after {
+                opacity: 1;
+                animation: shimmerSlide 0.8s ease-out forwards;
             }
 
             .category-section {
@@ -1262,6 +1286,8 @@
             inset: 0;
             z-index: 0;
             overflow: hidden;
+            pointer-events: none;
+            user-select: none;
         }
 
         .hero-bg-img img {
@@ -1269,8 +1295,57 @@
             height: 100%;
             object-fit: cover;
             object-position: center 20%;
-            transition: transform 0.1s linear;
-            will-change: transform;
+            transition: transform 0.1s linear, opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform, opacity;
+            animation: heroSlideFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes heroSlideFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(1.08) translateY(-10%);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(-10%);
+            }
+        }
+
+        @keyframes heroContentReveal {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-content>* {
+            animation: heroContentReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .hero-content>*:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .hero-content>*:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .hero-content>*:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .hero-content>*:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .hero-content>*:nth-child(5) {
+            animation-delay: 0.5s;
         }
 
         .hero-gradient-top {
@@ -1281,6 +1356,8 @@
             height: clamp(15%, 25%, 30%);
             background: linear-gradient(to bottom, rgba(0, 0, 0, 0.85) 0%, transparent 100%);
             z-index: 1;
+            pointer-events: none;
+            user-select: none;
         }
 
         .hero-gradient-bottom {
@@ -1291,6 +1368,8 @@
             height: 65%;
             background: linear-gradient(to top, #141414 0%, rgba(20, 20, 20, 0.5) 35%, transparent 100%);
             z-index: 1;
+            pointer-events: none;
+            user-select: none;
         }
 
         .hero-gradient-side {
@@ -1298,6 +1377,8 @@
             inset: 0;
             background: linear-gradient(90deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.15) 45%, transparent 65%);
             z-index: 1;
+            pointer-events: none;
+            user-select: none;
         }
 
         /* Top quick tags — hidden on desktop */
@@ -1402,14 +1483,26 @@
             gap: 6px;
             border: none;
             cursor: pointer;
-            transition: background 0.2s, transform 0.15s;
+            transition: background 0.25s, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s;
             min-height: 44px;
             min-width: 44px;
+            position: relative;
+            overflow: hidden;
+            animation: heroPulse 3s ease-in-out infinite;
+            -webkit-tap-highlight-color: transparent;
+            box-shadow: 0 0 0 0 var(--netflix-red-glow);
         }
 
         .btn-hero-play:hover {
-            background-color: rgba(255, 255, 255, 0.8);
-            transform: scale(1.04);
+            background-color: rgba(255, 255, 255, 0.85);
+            transform: scale(1.06);
+            box-shadow: 0 8px 32px rgba(229, 9, 20, 0.5);
+            animation: none;
+        }
+
+        .btn-hero-play:active {
+            transform: scale(0.96);
+            transition: transform 0.1s ease;
         }
 
         .btn-hero-info {
@@ -1425,14 +1518,23 @@
             gap: 6px;
             border: none;
             cursor: pointer;
-            transition: background-color 0.2s, transform 0.15s;
+            transition: background-color 0.25s, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s;
             min-height: 44px;
             min-width: 44px;
+            position: relative;
+            overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .btn-hero-info:hover {
-            background-color: rgba(128, 128, 128, 0.65);
-            transform: scale(1.04);
+            background-color: rgba(128, 128, 128, 0.7);
+            transform: scale(1.06);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+        }
+
+        .btn-hero-info:active {
+            transform: scale(0.96);
+            transition: transform 0.1s ease;
         }
 
         .slider-dots {
@@ -1552,6 +1654,13 @@
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             flex-shrink: 0;
             transform-origin: center center;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Active/pressed state for touch devices */
+        .poster-card:active {
+            transform: scale(0.95);
+            transition: transform 0.1s ease;
         }
 
         .poster-card img {
@@ -1559,6 +1668,10 @@
             height: 100%;
             object-fit: cover;
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .poster-card:hover img {
+            transform: scale(1.06);
         }
 
         .poster-card .poster-overlay {
@@ -2807,6 +2920,100 @@
             }
         }
 
+        /* ===== ENHANCED DYNAMIC ANIMATIONS ===== */
+        @keyframes heroPulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 var(--netflix-red-glow);
+            }
+
+            50% {
+                box-shadow: 0 0 0 12px rgba(229, 9, 20, 0);
+            }
+        }
+
+        @keyframes floatUpDown {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+        @keyframes softGlow {
+
+            0%,
+            100% {
+                filter: brightness(1) drop-shadow(0 0 4px rgba(229, 9, 20, 0));
+            }
+
+            50% {
+                filter: brightness(1.15) drop-shadow(0 0 12px rgba(229, 9, 20, 0.5));
+            }
+        }
+
+        @keyframes borderPulse {
+
+            0%,
+            100% {
+                border-color: rgba(229, 9, 20, 0.4);
+            }
+
+            50% {
+                border-color: rgba(229, 9, 20, 1);
+            }
+        }
+
+        @keyframes scaleInBounce {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+
+            60% {
+                transform: scale(1.05);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes shimmerSlide {
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        /* --- Lenis-ready: kill native scroll-behavior to avoid conflicts --- */
+        html.lenis,
+        html.lenis body {
+            height: auto;
+        }
+
+        .lenis.lenis-smooth {
+            scroll-behavior: auto !important;
+        }
+
+        .lenis.lenis-smooth [data-lenis-prevent] {
+            overscroll-behavior: contain;
+        }
+
+        .lenis.lenis-stopped {
+            overflow: clip;
+        }
+
         .hidden {
             display: none !important;
         }
@@ -2832,11 +3039,23 @@
             pointer-events: auto;
         }
 
-        .hero-banner,
+        .hero-banner {
+            touch-action: pan-y pinch-zoom;
+            pointer-events: auto;
+        }
+
+        .hero-banner .hero-bg-img,
+        .hero-banner .hero-gradient-top,
+        .hero-banner .hero-gradient-bottom,
+        .hero-banner .hero-gradient-side {
+            pointer-events: none;
+            user-select: none;
+        }
+
         .poster-scroll,
         .top10-scroll,
         .category-pills {
-            touch-action: pan-x;
+            touch-action: pan-x pinch-zoom;
         }
 
 
@@ -5077,25 +5296,37 @@
         function checkForUpdates() { showToast('You\'re on the latest version (2.0.0)', 'success'); }
 
         // ============================================================
-        //  SCROLL-REVEAL OBSERVER
+        //  SCROLL-REVEAL OBSERVER + DYNAMIC SECTION ENTRANCE
         // ============================================================
         function initScrollReveal() {
-            if (!('IntersectionObserver' in window)) return;
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
-            document.querySelectorAll('.category-section').forEach(section => {
+            const sections = document.querySelectorAll('.category-section');
+            sections.forEach((section, i) => {
+                section.setAttribute('data-reveal', 'true');
                 section.style.opacity = '0';
-                section.style.transform = 'translateY(20px)';
-                section.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-                observer.observe(section);
+                section.style.transform = 'translateY(30px) scale(0.97)';
+                section.style.transition = 'opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)';
+                section.style.transitionDelay = `${Math.min(i * 0.04, 0.3)}s`;
             });
+
+            // Also observe poster cards for staggered entrance
+            if ('IntersectionObserver' in window) {
+                const cardObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0) scale(1)';
+                            cardObserver.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
+
+                document.querySelectorAll('.poster-card, .top10-card').forEach((card, i) => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(16px) scale(0.94)';
+                    card.style.transition = `opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${Math.min(i * 0.015, 0.4)}s, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) ${Math.min(i * 0.015, 0.4)}s`;
+                    cardObserver.observe(card);
+                });
+            }
         }
 
         // ============================================================
@@ -5143,16 +5374,139 @@
     </script>
 
     <script>
+        // ============================================================
+        //  LENIS SMOOTH SCROLL — FULL INERTIA & TOUCH SUPPORT
+        // ============================================================
+        const lenis = new Lenis({
+            duration: 1.6,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -8 * t)),
+            smoothWheel: true,
+            smoothTouch: true,
+            wheelMultiplier: 1.2,
+            touchMultiplier: 2.5,
+            normalizeWheel: true,
+            gestureOrientation: 'vertical',
+            infinite: false,
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        // --- Scroll-driven effects: header + parallax + hero fade ---
+        lenis.on('scroll', ({ scroll, limit, velocity, direction, progress }) => {
+            // Header scrolled class
+            const h = document.getElementById('header');
+            if (h) {
+                h.classList.toggle('scrolled', scroll > 30);
+                // dynamic shadow intensity based on scroll
+                if (scroll > 10) {
+                    const alpha = Math.min(0.35, scroll / 600);
+                    h.style.boxShadow = `0 2px 20px rgba(0,0,0,${alpha})`;
+                } else {
+                    h.style.boxShadow = 'none';
+                }
+            }
+
+            // Hero parallax
+            const heroImg = document.querySelector('.hero-bg-img img');
+            if (heroImg) {
+                heroImg.style.transform = `translateY(-10%) translateY(${scroll * 0.12}px)`;
+            }
+
+            // Hero content opacity fade as user scrolls down
+            const heroContent = document.getElementById('heroContent');
+            if (heroContent) {
+                const heroBanner = document.getElementById('heroBanner');
+                const heroHeight = heroBanner ? heroBanner.offsetHeight : 700;
+                const fadeStart = heroHeight * 0.25;
+                const fadeEnd = heroHeight * 0.85;
+                const opacity = 1 - Math.min(1, Math.max(0, (scroll - fadeStart) / (fadeEnd - fadeStart)));
+                heroContent.style.opacity = opacity;
+                heroContent.style.transform = `translateY(${(1 - opacity) * 30}px)`;
+            }
+
+            // Reveal category sections on scroll
+            revealOnScroll(scroll, limit, velocity);
+        });
+
+        // --- Debounced scroll-reveal for performance ---
+        let revealTimeout;
+        function revealOnScroll(scroll, limit, velocity) {
+            if (revealTimeout) return;
+            revealTimeout = requestAnimationFrame(() => {
+                const sections = document.querySelectorAll('.category-section[data-reveal]');
+                sections.forEach(section => {
+                    const rect = section.getBoundingClientRect();
+                    if (rect.top < window.innerHeight * 0.85) {
+                        section.style.opacity = '1';
+                        section.style.transform = 'translateY(0) scale(1)';
+                        section.removeAttribute('data-reveal');
+                    }
+                });
+                revealTimeout = null;
+            });
+        }
+
+        // --- Stop Lenis when modals / details / player overlay are open ---
+        function shouldStopLenis() {
+            const activeOverlays = document.querySelectorAll(
+                '.details-page.active, .search-page.active, .profile-page.active, .settings-page.active, #playerOverlay.active'
+            );
+            return activeOverlays.length > 0;
+        }
+
+        // Use MutationObserver to detect overlay opens/closes and toggle Lenis
+        const lenisOverlayObserver = new MutationObserver(() => {
+            if (shouldStopLenis()) {
+                lenis.stop();
+            } else {
+                lenis.start();
+            }
+        });
+        const overlayTargets = document.querySelectorAll('.details-page, .search-page, .profile-page, .settings-page, #playerOverlay');
+        overlayTargets.forEach(el => {
+            lenisOverlayObserver.observe(el, { attributes: true, attributeFilter: ['class'] });
+        });
+        const playerOverlay = document.getElementById('playerOverlay');
+        if (playerOverlay) {
+            lenisOverlayObserver.observe(playerOverlay, { attributes: true, attributeFilter: ['class'] });
+        }
+
+        // --- Page load finalization ---
         window.addEventListener('load', () => {
             document.body.style.overflowY = 'auto';
             document.documentElement.style.overflowY = 'auto';
+            lenis.resize();
+            lenis.start();
         });
 
-        document.addEventListener('touchmove', function () { }, { passive: true });
-
+        // --- Resize recalculation ---
+        let resizeDebounce;
         window.addEventListener('resize', () => {
-            document.body.style.height = 'auto';
+            clearTimeout(resizeDebounce);
+            resizeDebounce = setTimeout(() => {
+                document.body.style.height = 'auto';
+                lenis.resize();
+            }, 200);
         });
+
+        // --- Passive touch listener to prevent browser pull-to-refresh blocking ---
+        document.addEventListener('touchmove', function (e) {
+            // Allow Lenis to handle touch; never call preventDefault here
+        }, { passive: true });
+
+        // --- Handle orientation changes on mobile ---
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                lenis.resize();
+            }, 400);
+        });
+
+        // --- Expose Lenis globally ---
+        window.__lenis = lenis;
     </script>
 
 </body>
