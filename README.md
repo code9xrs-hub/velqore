@@ -1,5 +1,3 @@
-Here's a **modern, professional GitHub README** for your Velqore project with icons, badges, images, and complete documentation structure:
-
 ---
 
 # 🎬 Velqore - Netflix Style Streaming Platform
@@ -289,8 +287,8 @@ If you like this project, please give it a ⭐ on GitHub!
 
 <div align="center">
 
-[![Star on GitHub](https://img.shields.io/github/stars/your-username/velqore?style=social)](https://github.com/your-username/velqore)
-[![Follow on GitHub](https://img.shields.io/github/followers/your-username?style=social)](https://github.com/your-username)
+[![Star on GitHub](https://img.shields.io/github/stars/code9xrs-hub/velqore?style=social)](https://github.com/code9xrs-hub/velqore)
+[![Follow on GitHub](https://img.shields.io/github/followers/code9xrs-hub?style=social)](https://github.com/code9xrs-hub)
 
 ### Made with ❤️ by [code9xrs-hub]
 
@@ -301,7 +299,7 @@ If you like this project, please give it a ⭐ on GitHub!
 ## 🚀 Quick Start One-Liner
 
 ```bash
-git clone https://github.com/your-username/velqore.git && cd velqore && npx serve
+git clone https://github.com/code9xrs-hub/velqore.git && cd velqore && npx serve
 ```
 
 ---
