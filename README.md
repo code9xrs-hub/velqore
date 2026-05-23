@@ -10,9 +10,9 @@
 
 ### 🚀 **Premium OTT Platform with Netflix-Inspired UI & Powerful Admin Dashboard**
 
-**Live Demo:** [https://velqore.vercel.app/](https://velqore.vercel.app/)  
-**Admin Panel:** [https://velqore.vercel.app/admin.html](https://velqore.vercel.app/admin.html)  
-**Documentation:** [https://github.com/code9xrs-hub/velqore](https://github.com/code9xrs-hub/README.md)
+**Live Demo:** [User](https://velqore.vercel.app/)  
+**Admin Panel:** [Admin](https://velqore.vercel.app/admin.html)  
+**Documentation:** [Docs](https://github.com/code9xrs-hub/README.md)
 
 </div>
 
