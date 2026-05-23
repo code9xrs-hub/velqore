@@ -3276,7 +3276,7 @@
         <!-- ===== CONTENT PAGES ===== -->
 
         <!-- WEB SERIES PAGE -->
-        <div class="content-page" id="webseriesPage">
+        <div class="content-page" id="webseriesPage" data-lenis-prevent>
             <div class="content-page-header">
                 <button class="content-back-btn" onclick="goBack()"><span
                         class="material-symbols-outlined">arrow_back</span></button>
@@ -3286,7 +3286,7 @@
         </div>
 
         <!-- MOVIES PAGE -->
-        <div class="content-page" id="moviesPage">
+        <div class="content-page" id="moviesPage" data-lenis-prevent>
             <div class="content-page-header">
                 <button class="content-back-btn" onclick="goBack()"><span
                         class="material-symbols-outlined">arrow_back</span></button>
@@ -3296,7 +3296,7 @@
         </div>
 
         <!-- WATCHLIST PAGE -->
-        <div class="content-page" id="watchlistPage">
+        <div class="content-page" id="watchlistPage" data-lenis-prevent>
             <div class="content-page-header">
                 <button class="content-back-btn" onclick="goBack()"><span
                         class="material-symbols-outlined">arrow_back</span></button>
@@ -3306,7 +3306,7 @@
         </div>
 
         <!-- HISTORY PAGE -->
-        <div class="content-page" id="historyPage">
+        <div class="content-page" id="historyPage" data-lenis-prevent>
             <div class="content-page-header">
                 <button class="content-back-btn" onclick="goBack()"><span
                         class="material-symbols-outlined">arrow_back</span></button>
@@ -3316,7 +3316,7 @@
         </div>
 
         <!-- SEARCH PAGE -->
-        <div class="search-page" id="searchPage">
+        <div class="search-page" id="searchPage" data-lenis-prevent>
             <div class="search-page-header">
                 <button class="search-back-btn" onclick="goBack()"><span
                         class="material-symbols-outlined">arrow_back</span></button>
@@ -3333,7 +3333,7 @@
         </div>
 
         <!-- PROFILE PAGE -->
-        <div class="profile-page" id="profilePage">
+        <div class="profile-page" id="profilePage" data-lenis-prevent>
             <div class="profile-banner">
                 <div class="profile-header">
                     <div class="profile-avatar-big" id="profileAvatar">G</div>
@@ -3486,7 +3486,7 @@
         </div>
 
         <!-- ===== SETTINGS PAGE ===== -->
-        <div class="settings-page" id="settingsPage">
+        <div class="settings-page" id="settingsPage" data-lenis-prevent>
             <div class="settings-header">
                 <button class="settings-back-btn" onclick="closeSettingsPanel()"><span
                         class="material-symbols-outlined">arrow_back</span></button>
@@ -3655,7 +3655,7 @@
         </div>
 
         <!-- ===== DETAILS PAGE ===== -->
-        <div class="details-page" id="detailsPage">
+        <div class="details-page" id="detailsPage" data-lenis-prevent>
             <div class="details-modal-backdrop" onclick="closeDetails()"></div>
             <div class="details-modal-wrapper">
                 <div class="details-header" id="detailsHeader">
@@ -5450,30 +5450,8 @@
             });
         }
 
-        // --- Stop Lenis when modals / details / player overlay are open ---
-        function shouldStopLenis() {
-            const activeOverlays = document.querySelectorAll(
-                '.details-page.active, .search-page.active, .profile-page.active, .settings-page.active, #playerOverlay.active'
-            );
-            return activeOverlays.length > 0;
-        }
-
-        // Use MutationObserver to detect overlay opens/closes and toggle Lenis
-        const lenisOverlayObserver = new MutationObserver(() => {
-            if (shouldStopLenis()) {
-                lenis.stop();
-            } else {
-                lenis.start();
-            }
-        });
-        const overlayTargets = document.querySelectorAll('.details-page, .search-page, .profile-page, .settings-page, #playerOverlay');
-        overlayTargets.forEach(el => {
-            lenisOverlayObserver.observe(el, { attributes: true, attributeFilter: ['class'] });
-        });
-        const playerOverlay = document.getElementById('playerOverlay');
-        if (playerOverlay) {
-            lenisOverlayObserver.observe(playerOverlay, { attributes: true, attributeFilter: ['class'] });
-        }
+        // --- Lenis automatically passes scroll events through to elements
+        //     with [data-lenis-prevent], so overlays scroll natively ---
 
         // --- Page load finalization ---
         window.addEventListener('load', () => {
