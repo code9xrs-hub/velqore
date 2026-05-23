@@ -69,28 +69,28 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* ===== FIX: ENABLE SCROLLING - Show scrollbar ===== */
+        /* ===== HIDE SCROLLBARS EVERYWHERE ===== */
         ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+            width: 0;
+            height: 0;
+            display: none;
         }
 
         ::-webkit-scrollbar-track {
-            background: transparent;
+            display: none;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
+            display: none;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.3);
+            display: none;
         }
 
         * {
-            -ms-overflow-style: auto;
-            scrollbar-width: auto;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
 
         :root {
@@ -150,6 +150,7 @@
             background-color: #000;
             min-height: 100vh;
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
         body {
@@ -182,30 +183,6 @@
             font-size: 16px;
         }
 
-        /* ===== MOBILE ONLY VIEWPORT CONSTRAINT ===== */
-        @media (max-width: 767px) {
-            body {
-                max-width: 480px;
-                margin: 0 auto;
-                border-left: 1px solid rgba(255, 255, 255, 0.05);
-                border-right: 1px solid rgba(255, 255, 255, 0.05);
-            }
-
-            .auth-screen,
-            .loading-screen,
-            .header,
-            .details-page,
-            .search-page,
-            .profile-page,
-            .content-page,
-            .floating-player,
-            .nav-bar,
-            .settings-page,
-            .modal-overlay {
-                max-width: 480px;
-                margin: 0 auto;
-            }
-        }
 
         /* ===== RESPONSIVE & DESKTOP STYLING OVERRIDES ===== */
         @media (min-width: 768px) {
@@ -247,7 +224,7 @@
 
             .header {
                 height: 68px;
-                padding: 0 4%;
+                padding: 0 clamp(16px, 4%, 60px);
                 background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, transparent 100%);
                 border-bottom: none;
             }
@@ -259,48 +236,7 @@
                 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
             }
 
-            .hero-banner {
-                height: 85vh;
-                max-height: 800px;
-                min-height: 500px;
-            }
-
-            .hero-content {
-                bottom: 25%;
-                left: 4%;
-                right: 35%;
-                text-align: left;
-                align-items: flex-start;
-                gap: 18px;
-            }
-
-            .hero-title-text {
-                font-size: 52px;
-                font-weight: 800;
-                line-height: 1.1;
-                text-align: left;
-                max-width: 600px;
-            }
-
-            .hero-buttons-row {
-                justify-content: flex-start;
-                gap: 14px;
-            }
-
-            .btn-hero-play {
-                padding: 12px 28px;
-                font-size: 15px;
-                border-radius: 4px;
-                font-weight: 700;
-            }
-
-            .btn-hero-info {
-                padding: 12px 28px;
-                font-size: 15px;
-                border-radius: 4px;
-                font-weight: 700;
-            }
-
+            /* Hero — desktop uses clamp() from base; only override desktop-specific differences */
             .top-tags {
                 display: none;
             }
@@ -315,15 +251,15 @@
             }
 
             .poster-grid {
-                grid-template-columns: repeat(6, 1fr);
-                gap: 16px;
-                padding: 0 4% 40px;
+                grid-template-columns: repeat(auto-fill, minmax(clamp(150px, 14vw, 180px), 1fr));
+                gap: clamp(12px, 1.5vw, 20px);
+                padding: 0 clamp(16px, 4%, 60px) clamp(30px, 3vh, 40px);
             }
 
             /* Row scrollbars hiding & scaling support */
             .poster-scroll {
-                padding: 20px 4% 20px;
-                margin: -20px 0;
+                padding: clamp(12px, 2vh, 20px) clamp(16px, 4%, 60px) clamp(12px, 2vh, 20px);
+                margin: clamp(-16px, -2vh, -20px) 0;
                 scrollbar-width: none;
             }
 
@@ -356,16 +292,16 @@
 
             .category-section {
                 overflow: visible !important;
-                padding: 15px 0 25px;
+                padding: clamp(12px, 2vh, 20px) 0 clamp(20px, 3vh, 30px);
             }
 
             .category-header {
-                padding: 0 4%;
-                margin-bottom: 12px;
+                padding: 0 clamp(16px, 4%, 60px);
+                margin-bottom: clamp(8px, 1.5vh, 14px);
             }
 
             .category-title {
-                font-size: 20px;
+                font-size: clamp(18px, 2.5vw, 24px);
             }
 
             .poster-row-container {
@@ -375,7 +311,7 @@
             /* Similar content grid */
             .similar-grid {
                 grid-template-columns: repeat(4, 1fr);
-                gap: 12px;
+                gap: clamp(10px, 1.5vw, 16px);
             }
         }
 
@@ -389,12 +325,14 @@
         .logo-netflix {
             display: none;
             cursor: pointer;
+            flex-shrink: 0;
         }
 
         .netflix-logo-svg {
-            height: 25px;
+            height: 28px;
             width: auto;
             display: block;
+            filter: drop-shadow(0 2px 6px rgba(229, 9, 20, 0.3));
         }
 
         .desktop-nav-links {
@@ -485,7 +423,7 @@
         .poster-row-container {
             position: relative;
             display: flex;
-            align-items: center;
+            align-items: stretch;
             width: 100%;
         }
 
@@ -493,8 +431,9 @@
             position: absolute;
             top: 0;
             bottom: 0;
-            width: 4%;
-            background: rgba(20, 20, 20, 0.5);
+            width: clamp(36px, 4vw, 50px);
+            background: rgba(20, 20, 20, 0.4);
+            backdrop-filter: blur(4px);
             border: none;
             color: #FFFFFF;
             font-size: 28px;
@@ -503,24 +442,24 @@
             display: none;
             align-items: center;
             justify-content: center;
-            transition: background-color 0.2s, color 0.2s;
+            transition: background-color 0.25s ease, color 0.25s ease, opacity 0.25s ease;
         }
 
         .row-arrow:hover {
-            background: rgba(20, 20, 20, 0.85);
-            color: #E50914;
+            background: rgba(20, 20, 20, 0.9);
+            color: var(--netflix-red);
         }
 
         .row-arrow.left {
             left: 0;
-            border-top-right-radius: 4px;
-            border-bottom-right-radius: 4px;
+            border-top-right-radius: 6px;
+            border-bottom-right-radius: 6px;
         }
 
         .row-arrow.right {
             right: 0;
-            border-top-left-radius: 4px;
-            border-bottom-left-radius: 4px;
+            border-top-left-radius: 6px;
+            border-bottom-left-radius: 6px;
         }
 
         .row-arrow.hidden {
@@ -650,7 +589,7 @@
             font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
 
-        /* ===== PORTABLE SCREENS ===== */
+        /* ===== PORTABLE SCREENS — FULL VIEWPORT ===== */
         .auth-screen,
         .loading-screen,
         .header,
@@ -667,16 +606,16 @@
             bottom: 0;
             left: 0;
             right: 0;
-            margin: 0 auto;
+            margin: 0;
             width: 100%;
-            max-width: 480px;
+            max-width: 100%;
             will-change: transform, opacity;
             overscroll-behavior: none;
         }
 
         .header {
             bottom: auto;
-            height: 60px;
+            height: clamp(56px, 8vh, 68px);
             z-index: 100;
             pointer-events: none;
         }
@@ -687,7 +626,7 @@
 
         .nav-bar {
             top: auto;
-            height: 64px;
+            height: clamp(60px, 8vh, 72px);
             z-index: 150;
         }
 
@@ -749,7 +688,7 @@
                 right: 0;
                 bottom: 0;
                 left: auto;
-                width: 480px;
+                width: clamp(360px, 42vw, 520px);
                 max-width: 90vw;
                 transform: none !important;
                 display: none;
@@ -977,7 +916,7 @@
 
         .auth-container {
             width: 100%;
-            max-width: 380px;
+            max-width: clamp(340px, 55vw, 420px);
             background: rgba(0, 0, 0, 0.85);
             border-radius: 8px;
             padding: 40px 30px;
@@ -1168,12 +1107,16 @@
         }
 
         .netflix-logo {
-            font-size: 80px;
+            font-size: 90px;
             font-weight: 900;
             color: var(--netflix-red);
             text-shadow: 0 0 60px var(--netflix-red-glow);
             animation: logoPulse 1.5s ease-in-out infinite;
             letter-spacing: -5px;
+            background: linear-gradient(135deg, #e50914, #ff4757);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         @keyframes logoPulse {
@@ -1239,12 +1182,13 @@
             font-size: 28px;
             font-weight: 900;
             color: var(--netflix-red);
-            letter-spacing: -2px;
+            letter-spacing: -1px;
             cursor: pointer;
-            text-shadow: 0 2px 10px rgba(229, 9, 20, 0.25);
-            background: linear-gradient(to right, #e50914, #b81d24);
+            text-shadow: 0 2px 14px rgba(229, 9, 20, 0.35);
+            background: linear-gradient(135deg, #e50914, #ff4757);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .header-actions {
@@ -1264,6 +1208,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            min-width: 44px;
+            min-height: 44px;
         }
 
         .notification-badge {
@@ -1277,8 +1223,10 @@
         }
 
         .profile-btn {
-            width: 32px;
-            height: 32px;
+            min-width: 44px;
+            min-height: 44px;
+            width: clamp(32px, 5vw, 36px);
+            height: clamp(32px, 5vw, 36px);
             border-radius: 4px;
             background: linear-gradient(135deg, var(--netflix-red), #ff2e2e);
             display: flex;
@@ -1286,27 +1234,27 @@
             justify-content: center;
             border: none;
             font-weight: 700;
-            font-size: 13px;
+            font-size: clamp(12px, 1.6vw, 14px);
             cursor: pointer;
             color: white;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
         main#mainContent {
-            padding-top: 72px;
-            padding-bottom: 108px;
-            min-height: calc(100vh - 180px);
+            padding-top: clamp(60px, 9vh, 72px);
+            padding-bottom: clamp(70px, 10vh, 108px);
+            min-height: 100vh;
         }
 
-        /* ===== HERO BANNER ===== */
+        /* ===== HERO BANNER — FULLY RESPONSIVE ===== */
         .hero-banner {
             position: relative;
-            width: 100%;
-            height: 60vh;
-            min-height: 360px;
-            max-height: 480px;
+            width: 100vw;
+            height: clamp(360px, 65vh, 85vh);
+            max-height: 900px;
             overflow: hidden;
             background-color: #000;
+            margin-left: calc(-50vw + 50%);
         }
 
         .hero-bg-img {
@@ -1318,10 +1266,9 @@
 
         .hero-bg-img img {
             width: 100%;
-            height: 120%;
+            height: 100%;
             object-fit: cover;
             object-position: center 20%;
-            transform: translateY(-10%);
             transition: transform 0.1s linear;
             will-change: transform;
         }
@@ -1331,8 +1278,8 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 25%;
-            background: linear-gradient(to bottom, rgba(20, 20, 20, 0.9) 0%, transparent 100%);
+            height: clamp(15%, 25%, 30%);
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.85) 0%, transparent 100%);
             z-index: 1;
         }
 
@@ -1341,75 +1288,78 @@
             bottom: 0;
             left: 0;
             right: 0;
-            height: 70%;
-            background: linear-gradient(to top, var(--netflix-dark) 5%, rgba(20, 20, 20, 0.4) 40%, transparent 100%);
+            height: 65%;
+            background: linear-gradient(to top, #141414 0%, rgba(20, 20, 20, 0.5) 35%, transparent 100%);
             z-index: 1;
         }
 
         .hero-gradient-side {
             position: absolute;
             inset: 0;
-            background: linear-gradient(90deg, rgba(20, 20, 20, 0.4) 0%, transparent 40%);
+            background: linear-gradient(90deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.15) 45%, transparent 65%);
             z-index: 1;
         }
 
+        /* Top quick tags — hidden on desktop */
         .top-tags {
             position: absolute;
-            top: 76px;
+            top: clamp(64px, 10vh, 80px);
             left: 0;
             right: 0;
             z-index: 3;
             display: flex;
             justify-content: center;
-            gap: 16px;
-            padding: 0 16px;
+            gap: clamp(8px, 2vw, 16px);
         }
 
         .top-tag {
             background: rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.15);
             color: rgba(255, 255, 255, 0.9);
-            font-size: 12px;
+            font-size: clamp(11px, 1.2vw, 13px);
             font-weight: 600;
             cursor: pointer;
-            padding: 6px 14px;
+            padding: clamp(6px, 0.8vw, 10px) clamp(14px, 2vw, 20px);
             border-radius: 4px;
             transition: all 0.2s;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
         }
 
         .top-tag:hover {
             background-color: rgba(255, 255, 255, 0.1);
         }
 
+        /* Hero content — details shown directly on the slide */
         .hero-content {
             position: absolute;
-            bottom: 24px;
-            left: 16px;
-            right: 16px;
+            bottom: clamp(60px, 18%, 25%);
+            left: clamp(16px, 4%, 4%);
+            right: clamp(16px, 4%, 40%);
             z-index: 3;
-            text-align: center;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 12px;
+            align-items: flex-start;
+            gap: clamp(8px, 1.5vh, 16px);
         }
 
         .hero-title-text {
-            font-size: clamp(24px, 5vw, 32px);
+            font-size: clamp(22px, 4.5vw, 52px);
             font-weight: 800;
             line-height: 1.1;
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85);
             color: white;
             letter-spacing: -0.02em;
+            max-width: 700px;
         }
 
         .hero-tags-row {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
+            gap: clamp(6px, 1vw, 10px);
             flex-wrap: wrap;
-            font-size: 11px;
+            font-size: clamp(10px, 1.1vw, 13px);
             color: rgba(255, 255, 255, 0.8);
             font-weight: 500;
         }
@@ -1421,97 +1371,118 @@
             border-radius: 50%;
         }
 
+        .hero-desc {
+            font-size: clamp(11px, 1.1vw, 14px);
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.45;
+            max-width: clamp(280px, 45vw, 520px);
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
         .hero-buttons-row {
             display: flex;
-            gap: 10px;
-            width: 100%;
-            justify-content: center;
-            margin-top: 4px;
+            gap: clamp(8px, 1.2vw, 14px);
+            margin-top: clamp(2px, 0.5vh, 8px);
         }
 
         .btn-hero-play {
             background-color: white;
             color: black;
-            padding: 10px 24px;
+            padding: clamp(10px, 1.2vw, 14px) clamp(20px, 2.5vw, 32px);
             border-radius: 4px;
             font-weight: 700;
-            font-size: 13px;
+            font-size: clamp(13px, 1.2vw, 16px);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 6px;
             border: none;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: background 0.2s, transform 0.15s;
+            min-height: 44px;
+            min-width: 44px;
         }
 
         .btn-hero-play:hover {
             background-color: rgba(255, 255, 255, 0.8);
+            transform: scale(1.04);
         }
 
         .btn-hero-info {
-            background-color: rgba(128, 128, 128, 0.4);
+            background-color: rgba(128, 128, 128, 0.45);
             color: white;
-            padding: 10px 24px;
+            padding: clamp(10px, 1.2vw, 14px) clamp(20px, 2.5vw, 32px);
             border-radius: 4px;
             font-weight: 600;
-            font-size: 13px;
+            font-size: clamp(13px, 1.2vw, 16px);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 6px;
             border: none;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: background-color 0.2s, transform 0.15s;
+            min-height: 44px;
+            min-width: 44px;
         }
 
         .btn-hero-info:hover {
-            background-color: rgba(128, 128, 128, 0.6);
+            background-color: rgba(128, 128, 128, 0.65);
+            transform: scale(1.04);
         }
 
         .slider-dots {
             display: flex;
-            gap: 6px;
-            justify-content: center;
-            margin-top: 4px;
+            gap: clamp(5px, 0.8vw, 8px);
+            justify-content: flex-start;
+            margin-top: clamp(2px, 0.5vh, 6px);
         }
 
         .slider-dot {
-            width: 6px;
-            height: 6px;
+            width: clamp(6px, 0.7vw, 8px);
+            height: clamp(6px, 0.7vw, 8px);
             border-radius: 50%;
             background-color: rgba(255, 255, 255, 0.35);
             cursor: pointer;
             transition: all 0.2s;
+            min-width: 8px;
+            min-height: 8px;
         }
 
         .slider-dot.active {
             background-color: var(--netflix-red);
-            transform: scale(1.2);
+            transform: scale(1.3);
         }
 
         /* ===== CATEGORY PILLS ===== */
         .category-pills {
             display: flex;
-            gap: 8px;
+            gap: clamp(6px, 1.5vw, 10px);
             overflow-x: auto;
-            padding: 16px;
+            padding: clamp(10px, 2vh, 16px) clamp(12px, 3vw, 16px);
             scroll-snap-type: x mandatory;
             -webkit-overflow-scrolling: touch;
         }
 
         .category-pill {
             flex-shrink: 0;
-            padding: 6px 14px;
+            padding: clamp(8px, 1vh, 10px) clamp(14px, 2.5vw, 18px);
             border-radius: 4px;
             background-color: rgba(255, 255, 255, 0.08);
             border: none;
-            font-size: 12px;
+            font-size: clamp(11px, 1.3vw, 13px);
             font-weight: 500;
             cursor: pointer;
             color: var(--text-secondary);
             white-space: nowrap;
             transition: all 0.2s;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
         }
 
         .category-pill.active {
@@ -1522,45 +1493,55 @@
 
         /* ===== CONTENT SECTIONS ===== */
         .category-section {
-            padding: 10px 0 16px;
+            padding: clamp(14px, 2.2vh, 22px) 0;
         }
 
         .category-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding: 0 16px;
-            margin-bottom: 8px;
+            align-items: baseline;
+            padding: 0 clamp(12px, 3vw, 16px);
+            margin-bottom: clamp(8px, 1.4vh, 14px);
         }
 
         .category-title {
-            font-size: 15px;
+            font-size: clamp(15px, 2.2vw, 20px);
             font-weight: 700;
             color: white;
-            letter-spacing: -0.01em;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
         }
 
         .view-all {
             color: var(--netflix-red);
-            font-size: 11px;
+            font-size: clamp(11px, 1.3vw, 13px);
             font-weight: 600;
             display: flex;
             align-items: center;
             gap: 2px;
             cursor: pointer;
+            min-height: 44px;
+            transition: opacity 0.2s ease;
         }
 
         .poster-scroll {
             display: flex;
-            gap: 8px;
+            gap: clamp(8px, 1.2vw, 10px);
             overflow-x: auto;
-            padding: 0 16px 8px;
+            padding: 0 clamp(12px, 3vw, 16px) clamp(10px, 1.4vh, 14px);
             scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .poster-scroll::-webkit-scrollbar {
+            display: none;
         }
 
         .poster-card {
             flex: 0 0 auto;
-            width: 100px;
+            width: clamp(105px, 18vw, 145px);
             aspect-ratio: 2/3;
             border-radius: 4px;
             overflow: hidden;
@@ -1685,43 +1666,54 @@
 
         .top10-scroll {
             display: flex;
-            gap: 8px;
+            gap: 0;
             overflow-x: auto;
-            padding: 0 16px 8px;
+            padding: 0 clamp(12px, 3vw, 16px) clamp(10px, 1.4vh, 14px);
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .top10-scroll::-webkit-scrollbar {
+            display: none;
         }
 
         .top10-card {
             flex: 0 0 auto;
             display: flex;
             align-items: flex-end;
-            margin-right: -10px;
             cursor: pointer;
             position: relative;
+            scroll-snap-align: start;
         }
 
         .top10-number {
-            font-size: 90px;
+            font-size: clamp(75px, 16vw, 120px);
             font-weight: 900;
             line-height: 0.72;
             letter-spacing: -6px;
             color: #000;
-            -webkit-text-stroke: 2px #5a5a5a;
+            -webkit-text-stroke: 2.5px #6a6a6a;
             font-family: 'Poppins', 'Inter', sans-serif;
-            margin-right: -12px;
+            margin-right: -14px;
             user-select: none;
             z-index: 1;
+            flex-shrink: 0;
+            pointer-events: none;
         }
 
         .top10-card .poster-card {
-            width: 90px;
+            width: clamp(95px, 20vw, 135px);
             z-index: 2;
+            flex-shrink: 0;
         }
 
         .poster-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            padding: 0 16px 20px;
+            grid-template-columns: repeat(auto-fill, minmax(clamp(90px, 22vw, 140px), 1fr));
+            gap: clamp(6px, 1.2vw, 12px);
+            padding: 0 clamp(12px, 3vw, 16px) clamp(16px, 2.5vh, 24px);
         }
 
         .poster-grid .poster-card {
@@ -1738,8 +1730,8 @@
         .details-header {
             position: relative;
             width: 100%;
-            height: 40vh;
-            min-height: 280px;
+            height: clamp(240px, 40vh, 400px);
+            min-height: 240px;
             overflow: hidden;
             background-color: #000;
         }
@@ -1757,44 +1749,6 @@
                 linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, transparent 25%);
         }
 
-        .details-play-overlay {
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            z-index: 3;
-        }
-
-        .details-play-overlay span {
-            font-size: 11px;
-            font-weight: 700;
-            color: white;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .details-play-overlay .play-circle {
-            width: 52px;
-            height: 52px;
-            background-color: white;
-            color: black;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: var(--icon-size);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
-            transition: transform 0.2s;
-        }
-
-        .details-play-overlay:active .play-circle {
-            transform: scale(0.92);
-        }
 
         .back-btn {
             position: fixed;
@@ -2610,19 +2564,22 @@
             display: flex;
             align-items: center;
             justify-content: space-around;
-            padding: 0 8px;
+            padding: 0 clamp(4px, 2vw, 8px);
         }
 
         .nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 2px;
-            padding: 8px 12px;
+            justify-content: center;
+            gap: clamp(1px, 0.3vh, 4px);
+            padding: clamp(6px, 1vh, 10px) clamp(8px, 2vw, 16px);
+            min-height: 44px;
+            min-width: 44px;
             color: var(--text-muted);
             cursor: pointer;
             transition: color 0.3s;
-            font-size: 9px;
+            font-size: clamp(8px, 1vw, 10px);
             font-weight: 500;
             position: relative;
         }
@@ -2633,7 +2590,7 @@
             top: 0;
             left: 50%;
             transform: translateX(-50%) scaleX(0);
-            width: 24px;
+            width: clamp(20px, 3vw, 28px);
             height: 3px;
             background: var(--netflix-red);
             border-radius: 0 0 3px 3px;
@@ -2649,7 +2606,7 @@
         }
 
         .nav-item span {
-            font-size: 9px;
+            font-size: clamp(8px, 1vw, 10px);
             font-weight: 500;
             transition: transform 0.2s ease;
         }
@@ -2659,7 +2616,7 @@
         }
 
         .nav-item .material-symbols-outlined {
-            font-size: 24px;
+            font-size: clamp(22px, 3vw, 26px);
             font-variation-settings: 'FILL' 0, 'wght' 300;
             transition: transform 0.2s ease, font-variation-settings 0.3s;
         }
@@ -2676,17 +2633,17 @@
         /* ===== TOAST ===== */
         #toastContainer {
             position: fixed;
-            bottom: 76px;
+            bottom: clamp(72px, 10vh, 80px);
             left: 0;
             right: 0;
             margin: 0 auto;
-            max-width: 480px;
+            max-width: 100%;
             z-index: 400;
             display: flex;
             flex-direction: column;
             align-items: center;
             pointer-events: none;
-            padding: 0 16px;
+            padding: 0 clamp(16px, 4%, 40px);
         }
 
         .toast {
@@ -3003,7 +2960,7 @@
 
     <!-- ===== LOADING SCREEN ===== -->
     <div class="loading-screen hidden" id="loadingScreen">
-        <div class="netflix-logo">N</div>
+        <div class="netflix-logo">V</div>
         <div class="loading-bar"></div>
     </div>
 
@@ -3014,13 +2971,17 @@
         <header class="header" id="header">
             <div class="header-left-side">
                 <div class="logo-netflix" onclick="navigateTo('home')">
-                    <svg viewBox="0 0 111 30" xmlns="http://www.w3.org/2000/svg" class="netflix-logo-svg">
-                        <path
-                            d="M10.5 0h6.1v30h-6.1zM28.4 0h6.2v30h-4.3l-10.9-19v19h-6.2V0h4.3l10.9 19zM42.2 6.1h7.8V0h-21.7v30h22v-6.1h-8.1v-5.8h7v-6.1h-7zM66.6 6.1V0H51v30h6.1v-12h7.8v-6.1h-7.8v-5.8zM76.9 0h6.1v23.9h8v6.1H76.9zM93.3 0h6.1v30h-6.1zM111 0h-4.3l-5.6 12-5.6-12h-4.3l7.7 15.8L91.2 30h4.3l5.6-12 5.6 12h4.3l-7.7-15.8z"
-                            fill="#E50914" />
+                    <svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg" class="netflix-logo-svg">
+                        <defs>
+                            <linearGradient id="vGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#E50914" />
+                                <stop offset="100%" stop-color="#FF4757" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M30 0L2 30h10l18-24 18 24h10L30 0z" fill="url(#vGrad)" />
                     </svg>
                 </div>
-                <div class="logo-n" onclick="navigateTo('home')">N</div>
+                <div class="logo-n" onclick="navigateTo('home')">V</div>
                 <nav class="desktop-nav-links">
                     <span class="nav-link-item active" onclick="navigateTo('home')">Home</span>
                     <span class="nav-link-item" onclick="navigateTo('webseries')">TV Shows</span>
@@ -3053,13 +3014,14 @@
         <!-- MAIN CONTENT -->
         <main id="mainContent">
 
-            <!-- HERO BANNER — GLASS BOX -->
+            <!-- HERO BANNER -->
             <div class="hero-banner" id="heroBanner">
                 <div class="hero-bg-img"><img src="" id="heroBg" alt=""></div>
                 <div class="hero-gradient-top"></div>
                 <div class="hero-gradient-side"></div>
                 <div class="hero-gradient-bottom"></div>
 
+                <!-- Top quick tags -->
                 <div class="top-tags">
                     <button class="top-tag" onclick="navigateTo('webseries')">TV Shows</button>
                     <button class="top-tag" onclick="navigateTo('movies')">Movies</button>
@@ -3067,14 +3029,16 @@
                         onclick="document.querySelector('.category-pills').scrollIntoView({behavior:'smooth'})">Categories</button>
                 </div>
 
-                <div class="hero-content">
+                <!-- Hero content — details shown directly on the slide -->
+                <div class="hero-content" id="heroContent">
                     <div class="hero-title-text" id="heroTitleLarge">Loading...</div>
                     <div class="hero-tags-row" id="heroMeta"></div>
+                    <div class="hero-desc" id="heroDesc">Discover the best movies and TV shows, streaming now.</div>
                     <div class="hero-buttons-row">
                         <button class="btn-hero-play" onclick="playHeroContent()"><span
                                 class="material-symbols-outlined filled">play_arrow</span> Play</button>
                         <button class="btn-hero-info" onclick="openHeroDetails()"><span
-                                class="material-symbols-outlined">info</span> Info</button>
+                                class="material-symbols-outlined">info</span> More Info</button>
                     </div>
                     <div class="slider-dots" id="sliderDots"></div>
                 </div>
@@ -3319,7 +3283,7 @@
                         <div class="menu-icon-wrap purple"><span class="material-symbols-outlined">palette</span></div>
                         <div>
                             <div class="settings-row-title">Theme</div>
-                            <div class="settings-row-subtitle" id="themeDisplay">Netflix Dark</div>
+                            <div class="settings-row-subtitle" id="themeDisplay">Velqore Red</div>
                         </div>
                     </div>
                     <span class="material-symbols-outlined chevron-right">chevron_right</span>
@@ -3478,10 +3442,6 @@
                 <div class="details-header" id="detailsHeader">
                     <img src="" alt="" id="detailsHeaderImg">
                     <div class="details-header-gradient"></div>
-                    <div class="details-play-overlay" onclick="playContent(currentContent)">
-                        <div class="play-circle"><span class="material-symbols-outlined filled">play_arrow</span></div>
-                        <span>Play</span>
-                    </div>
                 </div>
                 <button class="back-btn" onclick="goBack()"><span
                         class="material-symbols-outlined">close</span></button>
@@ -3517,7 +3477,7 @@
                 </div>
                 <div class="theme-grid">
                     <div class="theme-option theme-dark active" data-theme="dark"
-                        onclick="setTheme('dark', 'Netflix Dark')">Netflix Dark</div>
+                        onclick="setTheme('dark', 'Velqore Red')">Velqore Red</div>
                     <div class="theme-option theme-midnight" data-theme="midnight"
                         onclick="setTheme('midnight', 'Midnight Blue')">Midnight</div>
                     <div class="theme-option theme-amoled" data-theme="amoled"
@@ -4010,6 +3970,10 @@
                 <span class="material-symbols-outlined">home</span>
                 <span>Home</span>
             </div>
+            <div class="nav-item" onclick="openSearchPage()" data-page="search">
+                <span class="material-symbols-outlined">search</span>
+                <span>Search</span>
+            </div>
             <div class="nav-item" onclick="navigateTo('webseries')" data-page="webseries">
                 <span class="material-symbols-outlined">tv</span>
                 <span>TV Shows</span>
@@ -4146,9 +4110,9 @@
             const fontSize = getSetting('fontSize', 'medium');
             document.body.setAttribute('data-font-size', fontSize);
 
-            const themeLabels = { dark: 'Netflix Dark', midnight: 'Midnight Blue', amoled: 'AMOLED Black', crimson: 'Crimson Red' };
+            const themeLabels = { dark: 'Velqore Red', midnight: 'Midnight Blue', amoled: 'AMOLED Black', crimson: 'Crimson Red' };
             const themeDisplay = document.getElementById('themeDisplay');
-            if (themeDisplay) themeDisplay.textContent = themeLabels[theme] || 'Netflix Dark';
+            if (themeDisplay) themeDisplay.textContent = themeLabels[theme] || 'Velqore Red';
 
             const fsDisplay = document.getElementById('fontSizeDisplay');
             if (fsDisplay) fsDisplay.textContent = fontSize.charAt(0).toUpperCase() + fontSize.slice(1);
@@ -4624,7 +4588,18 @@
 
         function navigateTo(p) {
             isNavigating = true;
+            // Close search page if open
+            if (document.getElementById('searchPage').classList.contains('active') && p !== 'search') {
+                document.getElementById('searchPage').classList.remove('active');
+            }
+            // Update bottom nav items
             document.querySelectorAll('.nav-item').forEach(i => i.classList.toggle('active', i.dataset.page === p));
+            // Update desktop top nav links
+            document.querySelectorAll('.nav-link-item').forEach(i => {
+                i.classList.remove('active');
+                const onclick = i.getAttribute('onclick') || '';
+                if (onclick.includes(`'${p}'`)) i.classList.add('active');
+            });
             document.querySelectorAll('.content-page, .profile-page, .search-page, .details-page, .settings-page').forEach(
                 e => e.classList.remove('active'));
             if (p === 'webseries') document.getElementById('webseriesPage').classList.add('active');
@@ -4643,13 +4618,25 @@
         function openProfile() { navigateTo('profile'); }
 
         function openSearchPage() {
+            // Close search if already open
+            if (document.getElementById('searchPage').classList.contains('active')) {
+                document.getElementById('searchPage').classList.remove('active');
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.toggle('active', i.dataset.page === 'home'));
+                navigationStack.pop();
+                return;
+            }
             document.getElementById('searchPage').classList.add('active');
             document.getElementById('searchPageInput').focus();
+            // Update bottom nav active state
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.toggle('active', i.dataset.page === 'search'));
             navigationStack.push('search');
         }
 
         function closeSearchPage() {
             document.getElementById('searchPage').classList.remove('active');
+            // Restore bottom nav to previous page
+            const prev = navigationStack.length > 1 ? navigationStack[navigationStack.length - 2] || 'home' : 'home';
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.toggle('active', i.dataset.page === prev));
             navigationStack.pop();
         }
 
@@ -4753,7 +4740,11 @@
                 Boolean) : ['Trending'];
             document.getElementById('heroMeta').innerHTML = tags.map((g, i) =>
                 `${i > 0 ? '<span class="hero-tag-dot"></span>' : ''}<span>${g}</span>`).join('');
-            document.getElementById('heroBg').src = item.backdrop || item.poster;
+            // Description shown directly on the slide
+            const descEl = document.getElementById('heroDesc');
+            if (descEl) descEl.textContent = item.description || item.storyline || item.overview || 'Discover the best movies and TV shows, streaming now.';
+            const bgUrl = item.backdrop || item.poster;
+            document.getElementById('heroBg').src = bgUrl;
             window.currentHeroItem = item;
         }
 
