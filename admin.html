@@ -1,0 +1,1884 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin Panel - Velqore</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --deep-red: #E50914;
+            --deep-red-dark: #B20710;
+            --deep-red-glow: rgba(229, 9, 20, 0.4);
+            --deep-black: #000000;
+            --dark-gray: #0A0A0A;
+            --medium-gray: #141414;
+            --light-gray: #1F1F1F;
+            --card-gray: #181818;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B3B3B3;
+            --text-muted: #6D6D6D;
+        }
+
+        html,
+        body {
+            background: var(--deep-black);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-gray);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--deep-red);
+            border-radius: 4px;
+        }
+
+        /* Login Screen */
+        .login-screen {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, var(--deep-black) 0%, #1a0a0a 50%, var(--deep-black) 100%);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-screen.hidden {
+            display: none;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 380px;
+            background: linear-gradient(145deg, rgba(20, 20, 20, 0.95) 0%, rgba(10, 10, 10, 0.98) 100%);
+            border: 1px solid rgba(229, 9, 20, 0.3);
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: 0 25px 80px rgba(229, 9, 20, 0.2), 0 0 100px rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-logo .logo-icon {
+            font-size: 60px;
+            font-weight: 900;
+            color: var(--deep-red);
+            text-shadow: 0 0 40px var(--deep-red-glow), 0 0 80px var(--deep-red-glow);
+            letter-spacing: -4px;
+        }
+
+        .login-logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-top: 10px;
+            background: linear-gradient(135deg, #fff 0%, #ccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .login-logo p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 16px 20px 16px 50px;
+            background: var(--medium-gray);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            color: white;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--deep-red);
+            box-shadow: 0 0 20px var(--deep-red-glow);
+        }
+
+        .form-group .input-icon {
+            position: absolute;
+            left: 18px;
+            top: 46px;
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
+        .form-group input:focus+.input-icon {
+            color: var(--deep-red);
+        }
+
+        .form-group .toggle-password {
+            position: absolute;
+            right: 18px;
+            top: 46px;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .form-group .toggle-password:hover {
+            color: var(--deep-red);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--deep-red) 0%, var(--deep-red-dark) 100%);
+            border: none;
+            border-radius: 14px;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 30px var(--deep-red-glow);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px var(--deep-red-glow);
+        }
+
+        .login-error {
+            background: rgba(229, 9, 20, 0.15);
+            border: 1px solid rgba(229, 9, 20, 0.4);
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #ff6b6b;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .login-error.show {
+            display: flex;
+        }
+
+        /* Main Admin Panel */
+        .admin-panel {
+            display: none;
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        .glass-card {
+            background: linear-gradient(135deg, rgba(20, 20, 20, 0.9) 0%, rgba(10, 10, 10, 0.95) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(229, 9, 20, 0.2);
+            border-radius: 16px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--deep-red) 0%, var(--deep-red-dark) 100%);
+            box-shadow: 0 4px 15px rgba(229, 9, 20, 0.3);
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(229, 9, 20, 0.5);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--medium-gray) 0%, var(--dark-gray) 100%);
+            border: 1px solid rgba(229, 9, 20, 0.3);
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--deep-red);
+        }
+
+        /* Layouts & Sidebar */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            border-bottom: 1px solid rgba(229, 9, 20, 0.2);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-left .menu-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .header-left .menu-btn:hover {
+            background: var(--deep-red);
+        }
+
+        .header-logo {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--deep-red);
+            text-shadow: 0 0 20px var(--deep-red-glow);
+            letter-spacing: -2px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+        }
+
+        .admin-badge {
+            background: linear-gradient(135deg, var(--deep-red), var(--deep-red-dark));
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .three-dot-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            right: 0px;
+            top: 55px;
+            width: 200px;
+            background: var(--medium-gray);
+            border: 1px solid rgba(229, 9, 20, 0.3);
+            border-radius: 12px;
+            display: none;
+            z-index: 200;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 14px 16px;
+            transition: 0.2s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(229, 9, 20, 0.2);
+        }
+
+        .sidebar {
+            position: fixed;
+            left: -280px;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: linear-gradient(180deg, var(--dark-gray) 0%, var(--deep-black) 100%);
+            z-index: 1000;
+            transition: left 0.3s ease;
+            border-right: 1px solid rgba(229, 9, 20, 0.2);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+            display: none;
+            backdrop-filter: blur(5px);
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(229, 9, 20, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-header .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--deep-red), var(--deep-red-dark));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            font-weight: 900;
+            box-shadow: 0 5px 20px var(--deep-red-glow);
+        }
+
+        .sidebar-menu {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px 0;
+        }
+
+        .menu-item {
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: 0.3s;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+        }
+
+        .menu-item:hover,
+        .menu-item.active {
+            background: rgba(229, 9, 20, 0.15);
+            border-left-color: var(--deep-red);
+        }
+
+        .sidebar-footer {
+            padding: 15px 20px;
+            border-top: 1px solid rgba(229, 9, 20, 0.2);
+        }
+
+        .main-content {
+            padding: 75px 16px 100px;
+            min-height: 100vh;
+        }
+
+        .section-page {
+            display: none;
+        }
+
+        .section-page.active {
+            display: block;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--card-gray) 0%, var(--medium-gray) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 18px;
+            transition: 0.3s;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(229, 9, 20, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .stat-icon {
+            width: 42px;
+            height: 42px;
+            background: rgba(229, 9, 20, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            color: var(--deep-red);
+            font-size: 18px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, #ccc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .quick-action-btn {
+            padding: 20px 16px;
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .quick-action-btn i {
+            font-size: 24px;
+        }
+
+        .tabs-container {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            margin-bottom: 16px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tabs-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab-btn {
+            flex-shrink: 0;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: var(--light-gray);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--deep-red), var(--deep-red-dark));
+            border-color: var(--deep-red);
+            color: white;
+            box-shadow: 0 4px 15px var(--deep-red-glow);
+        }
+
+        .search-results-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            padding: 10px 0;
+        }
+
+        .search-result-card {
+            background: var(--card-gray);
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .search-result-card:hover {
+            border-color: var(--deep-red);
+            transform: scale(1.03);
+        }
+
+        .search-result-card img {
+            width: 100%;
+            aspect-ratio: 2/3;
+            object-fit: cover;
+        }
+
+        .search-result-card .card-info {
+            padding: 10px;
+        }
+
+        .search-result-card .card-title {
+            font-size: 11px;
+            font-weight: 600;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .content-card {
+            background: var(--card-gray);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 12px;
+            transition: 0.3s;
+        }
+
+        .content-card:hover {
+            border-color: rgba(229, 9, 20, 0.3);
+        }
+
+        .content-card-poster {
+            width: 80px;
+            height: 115px;
+            border-radius: 10px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .content-card-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .content-card-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Forms */
+        .form-row {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--medium-gray);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--deep-red);
+            box-shadow: 0 0 15px var(--deep-red-glow);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .preview-box {
+            position: relative;
+            border-radius: 14px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .preview-box img {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+        }
+
+        .preview-box .preview-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 50%);
+        }
+
+        .preview-box .preview-content {
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            right: 16px;
+        }
+
+        .preview-box .preview-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .cast-scroll {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 10px 0;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .cast-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .cast-card {
+            flex-shrink: 0;
+            width: 70px;
+            text-align: center;
+        }
+
+        .cast-card img {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            object-fit: cover;
+            margin-bottom: 6px;
+        }
+
+        .cast-card .cast-name {
+            font-size: 10px;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Seasons & Episodes Container */
+        .season-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .season-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .episode-row {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 14px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: 0.3s;
+        }
+
+        .fetching-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 5000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fetching-overlay.show {
+            display: flex;
+        }
+
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--medium-gray);
+            border-top-color: var(--deep-red);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .toast-container {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+        }
+
+        .toast {
+            padding: 14px 24px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            animation: slideUp 0.3s ease;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .toast.success {
+            background: linear-gradient(135deg, #00C853, #00E676);
+            color: black;
+        }
+
+        .toast.error {
+            background: linear-gradient(135deg, var(--deep-red), var(--deep-red-dark));
+            color: white;
+        }
+
+        .toast.info {
+            background: linear-gradient(135deg, #2196F3, #42A5F5);
+            color: white;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 65px;
+            background: rgba(0, 0, 0, 0.95);
+            border-top: 1px solid rgba(229, 9, 20, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            z-index: 100;
+            padding: 0 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .nav-item.active {
+            color: var(--deep-red);
+        }
+
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--deep-red), var(--deep-red-dark));
+            border-radius: 0 0 3px 3px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.online {
+            background: #00C853;
+        }
+
+        .status-dot.offline {
+            background: #FF5252;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .search-results-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            .stats-grid,
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Login Screen -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-container">
+            <div class="login-logo">
+                <div class="logo-icon">V</div>
+                <h1>Velqore Admin</h1>
+                <p>Control Panel Access</p>
+            </div>
+
+            <div class="login-error" id="loginError">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="loginErrorText">Invalid credentials</span>
+            </div>
+
+            <form class="login-form" id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Admin Username</label>
+                    <input type="text" id="adminUsername" placeholder="Enter username" required autocomplete="off">
+                    <i class="fas fa-user input-icon"></i>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="adminPassword" placeholder="Enter password" required autocomplete="off">
+                    <i class="fas fa-lock input-icon"></i>
+                    <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility()"></i>
+                </div>
+                <button type="submit" class="login-btn" id="loginBtn">Sign In</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="fetching-overlay" id="fetchingOverlay">
+            <div class="loader"></div>
+            <p class="fetching-text" style="color:var(--text-secondary); margin-top:20px;">Fetching TMDB Data...</p>
+        </div>
+
+        <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">V</div>
+                <div>
+                    <h2 style="font-size:18px;font-weight:700;">Velqore</h2>
+                    <p style="font-size:11px;color:var(--text-secondary);">Admin Control Panel</p>
+                </div>
+            </div>
+
+            <div class="sidebar-menu">
+                <p
+                    style="padding:10px 20px; font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:2px; font-weight:600;">
+                    Main Menu</p>
+                <div class="menu-item active" onclick="showSection('dashboard')" data-section="dashboard"><i
+                        class="fas fa-th-large"></i><span>Dashboard</span></div>
+                <div class="menu-item" onclick="showSection('categories')" data-section="categories"><i
+                        class="fas fa-folder"></i><span>Categories</span></div>
+                <div class="menu-item" onclick="showSection('webseries')" data-section="webseries"><i
+                        class="fas fa-film"></i><span>Web Series</span></div>
+                <div class="menu-item" onclick="showSection('movies')" data-section="movies"><i
+                        class="fas fa-video"></i><span>Movies</span></div>
+                <div class="menu-item" onclick="showSection('users')" data-section="users"><i
+                        class="fas fa-users"></i><span>Users</span></div>
+
+                <p
+                    style="padding:10px 20px; font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:2px; font-weight:600; margin-top:10px;">
+                    Quick Actions</p>
+                <div class="menu-item" onclick="showSection('add-content')" data-section="add-content"><i
+                        class="fas fa-plus-circle"></i><span>Add Content</span></div>
+                <div class="menu-item" onclick="showSection('tmdb-fetch')" data-section="tmdb-fetch"><i
+                        class="fas fa-cloud-download-alt"></i><span>TMDB Fetch</span></div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div style="display:flex; align-items:center; gap:10px; padding:12px; background:rgba(0,0,0,0.3); border-radius:10px; margin-bottom:10px;"
+                    id="firebaseStatus">
+                    <div class="status-dot offline"></div>
+                    <span style="font-size:12px;color:var(--text-secondary);">Firebase: Disconnected</span>
+                </div>
+                <button onclick="handleLogout()"
+                    style="width:100%; padding:12px; background:rgba(229,9,20,0.2); border:1px solid rgba(229,9,20,0.3); border-radius:10px; color:var(--deep-red); font-size:13px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+                <span class="header-logo">V</span>
+            </div>
+            <h1 class="header-title" id="pageTitle">Dashboard</h1>
+            <div class="header-right">
+                <div class="admin-badge"><i class="fas fa-shield-alt"></i>Admin</div>
+                <button class="three-dot-btn" onclick="toggleDropdown()"><i class="fas fa-ellipsis-v"></i></button>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <div class="dropdown-item" onclick="refreshData()"><i class="fas fa-sync-alt"
+                            style="color:var(--deep-red);"></i> Refresh Data</div>
+                    <div class="dropdown-item" onclick="showSection('add-content')"><i class="fas fa-plus"
+                            style="color:var(--deep-red);"></i> Add Content</div>
+                    <div class="dropdown-item" onclick="exportData()"><i class="fas fa-download"
+                            style="color:var(--deep-red);"></i> Export Data</div>
+                    <div class="dropdown-item" onclick="clearCache()" style="color:#ff6b6b;"><i class="fas fa-trash"
+                            style="color:#ff6b6b;"></i> Clear Cache</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <div class="section-page active" id="dashboard">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-film"></i></div>
+                        <div class="stat-value" id="totalWebseries">0</div>
+                        <div class="stat-label" style="font-size:12px;color:var(--text-secondary);margin-top:4px;">Web
+                            Series</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-video"></i></div>
+                        <div class="stat-value" id="totalMovies">0</div>
+                        <div class="stat-label" style="font-size:12px;color:var(--text-secondary);margin-top:4px;">
+                            Movies</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-folder"></i></div>
+                        <div class="stat-value" id="totalCategories">0</div>
+                        <div class="stat-label" style="font-size:12px;color:var(--text-secondary);margin-top:4px;">
+                            Categories</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-users"></i></div>
+                        <div class="stat-value" id="totalUsers">0</div>
+                        <div class="stat-label" style="font-size:12px;color:var(--text-secondary);margin-top:4px;">
+                            Registered Users</div>
+                    </div>
+                </div>
+
+                <div class="glass-card" style="padding:16px;margin-bottom:16px;">
+                    <h3 style="font-size:14px;font-weight:600;margin-bottom:14px;">Recent Content</h3>
+                    <div id="recentContent">
+                        <p style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px;">No recent
+                            content</p>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <button class="quick-action-btn btn-primary"
+                        onclick="showSection('webseries');switchTab(document.querySelector('[data-tab=\'ws-add\']'),'ws-add');">
+                        <i class="fas fa-plus"></i> Add Series
+                    </button>
+                    <button class="quick-action-btn btn-secondary"
+                        onclick="showSection('movies');switchTab(document.querySelector('[data-tab=\'mv-add\']'),'mv-add');">
+                        <i class="fas fa-plus"></i> Add Movie
+                    </button>
+                </div>
+            </div>
+
+            <!-- Categories Section -->
+            <div class="section-page" id="categories">
+                <div class="glass-card" style="padding:16px;margin-bottom:16px;">
+                    <h3 style="font-size:14px;font-weight:600;margin-bottom:14px;">Add New Category</h3>
+                    <div style="display:flex;gap:10px;">
+                        <input type="text" id="categoryInput" class="form-input" placeholder="Category name"
+                            style="flex:1;">
+                        <button onclick="saveCategory()" class="btn-primary"
+                            style="padding:14px 20px;border-radius:12px;"><i class="fas fa-plus"></i></button>
+                    </div>
+                </div>
+                <div class="glass-card" style="padding:16px;">
+                    <h3 style="font-size:14px;font-weight:600;margin-bottom:14px;">All Categories</h3>
+                    <div id="categoriesList"></div>
+                </div>
+            </div>
+
+            <!-- Web Series Section -->
+            <div class="section-page" id="webseries">
+                <div class="tabs-container">
+                    <button class="tab-btn active" data-tab="ws-list" onclick="switchTab(this,'ws-list')">All
+                        Series</button>
+                    <button class="tab-btn" data-tab="ws-add" onclick="switchTab(this,'ws-add')">Add New</button>
+                </div>
+
+                <div id="ws-list" class="tab-content">
+                    <div id="webseriesList"></div>
+                </div>
+
+                <div id="ws-add" class="tab-content" style="display:none;">
+                    <div class="glass-card" style="padding:16px;margin-bottom:16px;">
+                        <h3 style="font-size:14px;font-weight:600;margin-bottom:14px;"><i class="fas fa-search"
+                                style="color:var(--deep-red);margin-right:8px;"></i>Search Web Series</h3>
+                        <div style="display:flex;gap:10px;margin-bottom:14px;">
+                            <input type="text" id="tmdbSeriesSearch" class="form-input"
+                                placeholder="Search series name...">
+                            <button onclick="searchTMDBSeries()" class="btn-primary"
+                                style="padding:14px 18px;border-radius:12px;"><i class="fas fa-search"></i></button>
+                        </div>
+                        <div id="tmdbSeriesResults" style="display:none;">
+                            <div class="search-results-grid" id="seriesResultsGrid"></div>
+                        </div>
+                    </div>
+
+                    <div id="seriesForm" style="display:none;">
+                        <div class="preview-box" id="seriesPreview"></div>
+
+                        <div class="glass-card" style="padding:16px;margin-bottom:16px;">
+                            <div class="form-section-title"
+                                style="font-size: 16px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-info-circle" style="color:var(--deep-red);"></i> Series Details</div>
+
+                            <input type="hidden" id="seriesTmdbId">
+                            <input type="hidden" id="seriesEditId">
+                            <input type="hidden" id="seriesCreatedAt">
+
+                            <div class="form-row"><label class="form-label">Title</label><input type="text"
+                                    id="seriesTitle" class="form-input" placeholder="Series Title"></div>
+                            <div class="form-row"><label class="form-label">Poster URL</label><input type="text"
+                                    id="seriesPoster" class="form-input" placeholder="Poster URL"></div>
+                            <div class="form-row"><label class="form-label">Backdrop URL</label><input type="text"
+                                    id="seriesBackdrop" class="form-input" placeholder="Backdrop URL"></div>
+                            <div class="form-row"><label class="form-label">Trailer (YouTube Link)</label><input
+                                    type="text" id="seriesTrailer" class="form-input"
+                                    placeholder="YouTube Trailer Link"></div>
+
+                            <div class="form-grid">
+                                <div class="form-row"><label class="form-label">Year</label><input type="text"
+                                        id="seriesYear" class="form-input" placeholder="Year"></div>
+                                <div class="form-row"><label class="form-label">Rating</label><input type="text"
+                                        id="seriesRating" class="form-input" placeholder="e.g. 16+"></div>
+                            </div>
+
+                            <div class="form-row"><label class="form-label">Category</label><select id="seriesCategory"
+                                    class="form-select">
+                                    <option value="">Select Category</option>
+                                </select></div>
+                            <div class="form-row"><label class="form-label">Storyline</label><textarea
+                                    id="seriesStoryline" class="form-textarea" placeholder="Storyline"></textarea></div>
+                            <div class="form-row"><label class="form-label">Cast</label>
+                                <div class="cast-scroll" id="seriesCast"></div>
+                            </div>
+                        </div>
+
+                        <div class="glass-card" style="padding:16px;margin-bottom:16px;">
+                            <div
+                                style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+                                <div class="form-section-title"
+                                    style="margin-bottom:0; font-size:16px; font-weight:600;"><i class="fas fa-list"
+                                        style="color:var(--deep-red); margin-right:8px;"></i>Seasons & Episodes</div>
+                                <button onclick="addNewSeason()" class="btn-secondary"
+                                    style="padding:8px 14px;border-radius:8px;font-size:12px;"><i class="fas fa-plus"
+                                        style="margin-right:5px;"></i> Season</button>
+                            </div>
+                            <div id="seasonsContainer"></div>
+                        </div>
+
+                        <button onclick="saveSeries()" class="btn-primary"
+                            style="width:100%;padding:16px;border-radius:14px;font-size:15px;font-weight:600;"><i
+                                class="fas fa-save" style="margin-right:8px;"></i> Save Web Series Data</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Movies Section -->
+            <div class="section-page" id="movies">
+                <div class="tabs-container">
+                    <button class="tab-btn active" data-tab="mv-list" onclick="switchTab(this,'mv-list')">All
+                        Movies</button>
+                    <button class="tab-btn" data-tab="mv-add" onclick="switchTab(this,'mv-add')">Add New</button>
+                </div>
+
+                <div id="mv-list" class="tab-content">
+                    <div id="moviesList"></div>
+                </div>
+
+                <div id="mv-add" class="tab-content" style="display:none;">
+                    <div class="glass-card" style="padding:16px;margin-bottom:16px;">
+                        <h3 style="font-size:14px;font-weight:600;margin-bottom:14px;"><i class="fas fa-search"
+                                style="color:var(--deep-red);margin-right:8px;"></i>Search Movie</h3>
+                        <div style="display:flex;gap:10px;margin-bottom:14px;">
+                            <input type="text" id="tmdbMovieSearch" class="form-input"
+                                placeholder="Search movie name...">
+                            <button onclick="searchTMDBMovies()" class="btn-primary"
+                                style="padding:14px 18px;border-radius:12px;"><i class="fas fa-search"></i></button>
+                        </div>
+                        <div id="tmdbMovieResults" style="display:none;">
+                            <div class="search-results-grid" id="movieResultsGrid"></div>
+                        </div>
+                    </div>
+
+                    <div id="movieForm" style="display:none;">
+                        <div class="preview-box" id="moviePreview"></div>
+
+                        <div class="glass-card" style="padding:16px;margin-bottom:16px;">
+                            <div class="form-section-title"
+                                style="font-size: 16px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-info-circle" style="color:var(--deep-red);"></i> Movie Details</div>
+
+                            <input type="hidden" id="movieTmdbId">
+                            <input type="hidden" id="movieEditId">
+                            <input type="hidden" id="movieCreatedAt">
+
+                            <div class="form-row"><label class="form-label">Title</label><input type="text"
+                                    id="movieTitle" class="form-input"></div>
+                            <div class="form-row"><label class="form-label">Poster URL</label><input type="text"
+                                    id="moviePoster" class="form-input"></div>
+                            <div class="form-row"><label class="form-label">Backdrop URL</label><input type="text"
+                                    id="movieBackdrop" class="form-input"></div>
+                            <div class="form-row"><label class="form-label">Trailer (YouTube)</label><input type="text"
+                                    id="movieTrailer" class="form-input"></div>
+
+                            <div class="form-grid">
+                                <div class="form-row"><label class="form-label">Year</label><input type="text"
+                                        id="movieYear" class="form-input"></div>
+                                <div class="form-row"><label class="form-label">Rating</label><input type="text"
+                                        id="movieRating" class="form-input" placeholder="e.g. 16+"></div>
+                            </div>
+
+                            <div class="form-row"><label class="form-label">Category</label><select id="movieCategory"
+                                    class="form-select">
+                                    <option value="">Select Category</option>
+                                </select></div>
+                            <div class="form-row"><label class="form-label">Storyline</label><textarea
+                                    id="movieStoryline" class="form-textarea"></textarea></div>
+                            <div class="form-row"><label class="form-label">Cast</label>
+                                <div class="cast-scroll" id="movieCast"></div>
+                            </div>
+                            <div class="form-row"><label class="form-label">Duration</label><input type="text"
+                                    id="movieDuration" class="form-input" placeholder="e.g. 2h 15m"></div>
+                        </div>
+
+                        <button onclick="saveMovie()" class="btn-primary"
+                            style="width:100%;padding:16px;border-radius:14px;font-size:15px;font-weight:600;"><i
+                                class="fas fa-save" style="margin-right:8px;"></i> Save Movie Data</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Section -->
+            <div class="section-page" id="users">
+                <div class="glass-card" style="padding:16px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+                        <h3 style="font-size:14px;font-weight:600;">All Registered Users</h3>
+                        <button onclick="loadUsers()"
+                            style="background:none;border:none;color:var(--deep-red);cursor:pointer;"><i
+                                class="fas fa-sync-alt"></i></button>
+                    </div>
+                    <div id="usersList"></div>
+                </div>
+            </div>
+
+            <!-- TMDB Fetch Section -->
+            <div class="section-page" id="tmdb-fetch">
+                <div class="glass-card" style="padding:16px;margin-bottom:16px;">
+                    <h3 style="font-size:14px;font-weight:600;margin-bottom:14px;"><i class="fas fa-cloud-download-alt"
+                            style="color:var(--deep-red);margin-right:8px;"></i> Quick TMDB Fetch by ID</h3>
+                    <div class="tabs-container" style="margin-bottom:14px;">
+                        <button class="tab-btn active"
+                            onclick="currentFetchType='movie';this.parentElement.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');">Movie</button>
+                        <button class="tab-btn"
+                            onclick="currentFetchType='tv';this.parentElement.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');">TV
+                            Series</button>
+                    </div>
+                    <div style="display:flex;gap:10px;">
+                        <input type="text" id="quickTmdbId" class="form-input" placeholder="Enter TMDB ID">
+                        <button id="quickFetchBtn" onclick="quickFetch()" class="btn-primary"
+                            style="padding:14px 18px;border-radius:12px;"><i class="fas fa-download"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Content Section -->
+            <div class="section-page" id="add-content">
+                <div class="glass-card" style="padding:24px;margin-bottom:16px;">
+                    <h3 style="font-size:16px;font-weight:600;text-align:center;margin-bottom:24px;">What would you like
+                        to add?</h3>
+                    <div style="display:flex;flex-direction:column;gap:12px;">
+                        <button
+                            onclick="showSection('webseries');switchTab(document.querySelector('[data-tab=\'ws-add\']'),'ws-add');"
+                            class="btn-secondary"
+                            style="padding:20px;border-radius:14px;display:flex;align-items:center;gap:16px;text-align:left;">
+                            <div
+                                style="width:50px;height:50px;background:rgba(229,9,20,0.2);border-radius:12px;display:flex;align-items:center;justify-content:center;">
+                                <i class="fas fa-film" style="font-size:20px;color:var(--deep-red);"></i></div>
+                            <div>
+                                <div style="font-size:15px;font-weight:600;">Web Series</div>
+                                <div style="font-size:11px;color:var(--text-secondary);">Add TV shows with seasons</div>
+                            </div>
+                        </button>
+                        <button
+                            onclick="showSection('movies');switchTab(document.querySelector('[data-tab=\'mv-add\']'),'mv-add');"
+                            class="btn-secondary"
+                            style="padding:20px;border-radius:14px;display:flex;align-items:center;gap:16px;text-align:left;">
+                            <div
+                                style="width:50px;height:50px;background:rgba(229,9,20,0.2);border-radius:12px;display:flex;align-items:center;justify-content:center;">
+                                <i class="fas fa-video" style="font-size:20px;color:var(--deep-red);"></i></div>
+                            <div>
+                                <div style="font-size:15px;font-weight:600;">Movie</div>
+                                <div style="font-size:11px;color:var(--text-secondary);">Add movies with links</div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <div class="nav-item active" onclick="showSection('dashboard')" data-section="dashboard"><i
+                    class="fas fa-th-large"></i><span style="font-size:10px;font-weight:500;">Home</span></div>
+            <div class="nav-item" onclick="showSection('webseries')" data-section="webseries"><i
+                    class="fas fa-film"></i><span style="font-size:10px;font-weight:500;">Series</span></div>
+            <div class="nav-item" onclick="showSection('movies')" data-section="movies"><i
+                    class="fas fa-video"></i><span style="font-size:10px;font-weight:500;">Movies</span></div>
+            <div class="nav-item" onclick="showSection('users')" data-section="users"><i class="fas fa-users"></i><span
+                    style="font-size:10px;font-weight:500;">Users</span></div>
+        </nav>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDh54l9HeQ-pbNddg1kpcNxb0ODxpBmHrA",
+            authDomain: "code9x-tools.firebaseapp.com",
+            databaseURL: "https://code9x-tools-default-rtdb.firebaseio.com",
+            projectId: "code9x-tools"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        const TMDB_API_KEY = '2e211dfda888f7cc55ce433d743f9bc3';
+        const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
+        const TMDB_IMG_BASE = 'https://image.tmdb.org/t/p/';
+        const ADMIN_CREDENTIALS = { username: 'admin', password: 'admin123' };
+
+        let currentFetchType = 'movie';
+        let seasonsData = [];
+        let seriesCastData = [];
+        let movieCastData = [];
+        let isLoggedIn = false;
+        let recentItems = { webseries: {}, movies: {} };
+
+        // UTILS
+        const escapeHTML = (str) => {
+            if (str === null || str === undefined) return '';
+            return String(str).replace(/[&<>'"]/g, match => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[match]));
+        };
+
+        const showToast = (message, type = 'info') => {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.getElementById('toastContainer').appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        };
+
+        // LOGIN SYSTEM
+        document.addEventListener('DOMContentLoaded', checkLoginStatus);
+
+        function checkLoginStatus() {
+            const loginData = localStorage.getItem('adminLoggedIn');
+            const loginTime = localStorage.getItem('adminLoginTime');
+            if (loginData === 'true' && loginTime && (Date.now() - parseInt(loginTime)) < 86400000) {
+                isLoggedIn = true; showAdminPanel();
+            } else { showLoginScreen(); }
+        }
+
+        function showLoginScreen() { document.getElementById('loginScreen').classList.remove('hidden'); document.getElementById('adminPanel').classList.remove('active'); }
+        function showAdminPanel() { document.getElementById('loginScreen').classList.add('hidden'); document.getElementById('adminPanel').classList.add('active'); initializeAdmin(); }
+        function togglePasswordVisibility() {
+            const input = document.getElementById('adminPassword'); const icon = document.querySelector('.toggle-password');
+            input.type = (input.type === 'password') ? 'text' : 'password';
+            icon.classList.toggle('fa-eye'); icon.classList.toggle('fa-eye-slash');
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('adminUsername').value.trim();
+            const p = document.getElementById('adminPassword').value;
+            const btn = document.getElementById('loginBtn');
+            const err = document.getElementById('loginError');
+
+            btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+            db.ref('admin_credentials').once('value').then(snap => {
+                const creds = snap.val() || ADMIN_CREDENTIALS;
+                if (!snap.exists()) db.ref('admin_credentials').set(ADMIN_CREDENTIALS);
+
+                if (u === creds.username && p === creds.password) {
+                    localStorage.setItem('adminLoggedIn', 'true'); localStorage.setItem('adminLoginTime', Date.now());
+                    isLoggedIn = true; showAdminPanel(); showToast('Welcome back!', 'success');
+                } else { throw new Error('Invalid'); }
+            }).catch(() => {
+                err.classList.add('show');
+            }).finally(() => {
+                btn.disabled = false; btn.innerHTML = 'Sign In';
+            });
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.clear(); isLoggedIn = false; location.reload();
+            }
+        }
+
+        // INIT
+        function initializeAdmin() {
+            db.ref('.info/connected').on('value', snap => {
+                document.getElementById('firebaseStatus').innerHTML = snap.val() ? '<div class="status-dot online"></div><span style="font-size:12px;color:#4ade80;">Firebase: Connected</span>' : '<div class="status-dot offline"></div><span style="font-size:12px;color:var(--text-secondary);">Firebase: Disconnected</span>';
+            });
+            loadCategories(); loadWebseries(); loadMovies(); loadUsers();
+        }
+
+        // UI NAV
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('overlay').classList.toggle('show'); }
+        function toggleDropdown() { document.getElementById('dropdownMenu').classList.toggle('show'); }
+        document.addEventListener('click', e => { if (!e.target.closest('.header-right')) document.getElementById('dropdownMenu').classList.remove('show'); });
+
+        function showSection(id) {
+            document.querySelectorAll('.section-page').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.menu-item, .nav-item').forEach(m => m.classList.remove('active'));
+            document.querySelectorAll(`[data-section="${id}"]`).forEach(m => m.classList.add('active'));
+            const titles = { 'dashboard': 'Dashboard', 'categories': 'Categories', 'webseries': 'Web Series', 'movies': 'Movies', 'users': 'Users', 'tmdb-fetch': 'TMDB Fetch', 'add-content': 'Add Content' };
+            document.getElementById('pageTitle').textContent = titles[id] || 'Dashboard';
+            if (document.getElementById('sidebar').classList.contains('open')) toggleSidebar();
+        }
+
+        function switchTab(btn, tabId) {
+            const parent = btn.closest('.section-page');
+            parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active');
+            parent.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none'); document.getElementById(tabId).style.display = 'block';
+        }
+
+        function renderRecentContent() {
+            const allItems = [
+                ...Object.entries(recentItems.webseries || {}).map(([id, item]) => ({ ...item, id, contentType: 'webseries' })),
+                ...Object.entries(recentItems.movies || {}).map(([id, item]) => ({ ...item, id, contentType: 'movies' }))
+            ];
+
+            allItems.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+            const topRecent = allItems.slice(0, 5);
+
+            const div = document.getElementById('recentContent');
+            if (topRecent.length === 0) {
+                div.innerHTML = '<p style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px;">No recent content</p>';
+                return;
+            }
+
+            div.innerHTML = topRecent.map(item => `
+                <div style="display:flex;align-items:center;gap:12px;padding:10px;background:rgba(0,0,0,0.2);border-radius:10px;margin-bottom:8px;">
+                    <img src="${item.poster}" style="width:40px;height:55px;border-radius:6px;object-fit:cover;" onerror="this.src='https://via.placeholder.com/40x55/141414/E50914?text=V'">
+                    <div style="flex:1;min-width:0;">
+                        <p style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHTML(item.title)}</p>
+                        <p style="font-size:11px;color:var(--text-secondary);">${item.contentType === 'webseries' ? 'Series' : 'Movie'} • ${item.year}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // CATEGORIES
+        function loadCategories() {
+            db.ref('categories').on('value', snap => {
+                const cats = snap.val() || {};
+                const catCount = Object.keys(cats).length;
+                document.getElementById('totalCategories').textContent = catCount;
+
+                const list = document.getElementById('categoriesList');
+                const s1 = document.getElementById('seriesCategory');
+                const s2 = document.getElementById('movieCategory');
+
+                if (catCount === 0) {
+                    list.innerHTML = '<p style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px;">No categories yet</p>';
+                    return;
+                }
+
+                let html = '', optHtml = '<option value="">Select Category</option>';
+                Object.entries(cats).forEach(([id, c]) => {
+                    const catName = escapeHTML(c.name);
+                    html += `<div class="content-card" style="margin-bottom:8px;padding:12px;"><div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:14px;font-weight:500;">${catName}</span><div style="display:flex;gap:8px;"><button onclick="editCategory('${id}','${catName}')" style="background:rgba(59,130,246,0.2);border:none;color:#60a5fa;padding:6px 10px;border-radius:8px;cursor:pointer;"><i class="fas fa-edit"></i></button><button onclick="deleteCategory('${id}')" style="background:rgba(229,9,20,0.2);border:none;color:var(--deep-red);padding:6px 10px;border-radius:8px;cursor:pointer;"><i class="fas fa-trash"></i></button></div></div></div>`;
+                    optHtml += `<option value="${catName}">${catName}</option>`;
+                });
+
+                list.innerHTML = html;
+                s1.innerHTML = optHtml;
+                s2.innerHTML = optHtml;
+            });
+        }
+        function saveCategory() {
+            const inp = document.getElementById('categoryInput'); const name = inp.value.trim();
+            if (!name) return showToast('Enter name', 'error');
+            db.ref('categories').push({ name, createdAt: Date.now() }).then(() => { showToast('Saved', 'success'); inp.value = ''; });
+        }
+        function editCategory(id, name) {
+            const n = prompt('Edit Category:', name);
+            if (n && n.trim()) db.ref(`categories/${id}`).update({ name: n.trim() }).then(() => showToast('Updated', 'success'));
+        }
+        function deleteCategory(id) { if (confirm('Delete this category? This cannot be undone.')) db.ref(`categories/${id}`).remove(); }
+
+        // TMDB & WEBSERIES (COMBINED LOGIC)
+        async function fetchTMDBData(type, id) {
+            const res = await fetch(`${TMDB_BASE_URL}/${type}/${id}?api_key=${TMDB_API_KEY}&append_to_response=credits,videos,images`);
+            const data = await res.json();
+            if (data.success === false) throw new Error('TMDB content not found');
+            return data;
+        }
+
+        async function searchTMDB(type, query, gridElement) {
+            if (!query) return;
+            const endpoint = type === 'tv' ? 'search/tv' : 'search/movie';
+            gridElement.parentElement.style.display = 'block';
+            gridElement.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;"><div class="loader" style="margin:0 auto;"></div></div>';
+
+            try {
+                const res = await fetch(`${TMDB_BASE_URL}/${endpoint}?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}`);
+                const data = await res.json();
+                if (data.results?.length > 0) {
+                    gridElement.innerHTML = data.results.slice(0, 12).map(i => {
+                        const title = type === 'tv' ? i.name : i.title;
+                        const year = type === 'tv' ? i.first_air_date?.split('-')[0] : i.release_date?.split('-')[0];
+                        const clickAction = type === 'tv' ? `fetchSeriesDetails(${i.id})` : `fetchMovieDetails(${i.id})`;
+                        return `<div class="search-result-card" onclick="${clickAction}">
+                                    <img src="${i.poster_path ? TMDB_IMG_BASE + 'w342' + i.poster_path : 'https://via.placeholder.com/342x513/141414/E50914?text=N/A'}" onerror="this.src='https://via.placeholder.com/342x513/141414/E50914?text=N/A'">
+                                    <div class="card-info"><p class="card-title">${escapeHTML(title)}</p><p class="card-year">${year || 'N/A'}</p></div>
+                                </div>`;
+                    }).join('');
+                } else gridElement.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-muted);padding:30px;">No results found</p>';
+            } catch (e) { gridElement.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--deep-red);padding:30px;">Error fetching data</p>'; }
+        }
+
+        function searchTMDBSeries() { searchTMDB('tv', document.getElementById('tmdbSeriesSearch').value.trim(), document.getElementById('seriesResultsGrid')); }
+        function searchTMDBMovies() { searchTMDB('movie', document.getElementById('tmdbMovieSearch').value.trim(), document.getElementById('movieResultsGrid')); }
+
+        async function fetchSeriesDetails(id) {
+            document.getElementById('fetchingOverlay').classList.add('show');
+            try {
+                resetSeriesForm();
+
+                const existingSnap = await db.ref('webseries').orderByChild('tmdbId').equalTo(parseInt(id)).once('value');
+                if (existingSnap.exists()) {
+                    showToast('Series already in DB! Opening Edit mode.', 'info');
+                    editSeries(Object.keys(existingSnap.val())[0]);
+                    return;
+                }
+
+                const d = await fetchTMDBData('tv', id);
+
+                const sData = [];
+                for (const s of (d.seasons || [])) {
+                    if (s.season_number > 0) {
+                        try {
+                            const sd = await fetchTMDBData(`tv/${id}/season`, s.season_number);
+                            const eps = (sd.episodes || []).map(ep => ({
+                                episodeNumber: ep.episode_number, title: ep.name || `Episode ${ep.episode_number}`,
+                                description: ep.overview || '', thumbnail: ep.still_path ? TMDB_IMG_BASE + 'w300' + ep.still_path : '',
+                                duration: ep.runtime ? ep.runtime + 'm' : '45m'
+                            }));
+                            sData.push({ name: sd.name || s.name, seasonNumber: sd.season_number, episodes: eps });
+                        } catch (err) { console.warn(`Could not fetch season ${s.season_number}`, err); }
+                    }
+                }
+
+                const newSeriesRef = db.ref('webseries').push();
+                const seriesData = {
+                    tmdbId: d.id, title: d.name || '',
+                    poster: d.poster_path ? TMDB_IMG_BASE + 'w342' + d.poster_path : '',
+                    backdrop: d.backdrop_path ? TMDB_IMG_BASE + 'w780' + d.backdrop_path : '',
+                    trailer: (d.videos?.results?.find(v => v.type === 'Trailer' && v.site === 'YouTube') ? `https://www.youtube.com/watch?v=${d.videos.results.find(v => v.type === 'Trailer').key}` : ''),
+                    year: d.first_air_date?.split('-')[0] || '', rating: d.content_ratings?.results?.find(r => r.iso_3166_1 === 'US')?.rating || '16+',
+                    category: d.genres?.[0]?.name || '', storyline: d.overview || '',
+                    cast: d.credits?.cast?.slice(0, 10).map(c => ({ name: c.name, photo: c.profile_path ? TMDB_IMG_BASE + 'w185' + c.profile_path : '' })) || [],
+                    seasons: sData, type: 'webseries', createdAt: Date.now(), updatedAt: Date.now()
+                };
+
+                await newSeriesRef.set(seriesData);
+                editSeries(newSeriesRef.key);
+                document.getElementById('tmdbSeriesResults').style.display = 'none';
+                showToast('Draft Auto-saved!', 'success');
+            } catch (e) {
+                showToast(e.message || 'Error fetching details', 'error');
+            } finally {
+                document.getElementById('fetchingOverlay').classList.remove('show');
+            }
+        }
+
+        function renderSeasons() {
+            const container = document.getElementById('seasonsContainer');
+            container.innerHTML = seasonsData.map((s, sIdx) => `
+                <div class="season-container">
+                    <div class="season-header">
+                        <input type="text" class="form-input" value="${escapeHTML(s.name)}" oninput="seasonsData[${sIdx}].name=this.value" style="flex:1;padding:10px;font-weight:600;">
+                        <button onclick="deleteSeason(${sIdx})" class="btn-secondary" style="background:rgba(229,9,20,0.2);color:var(--deep-red);padding:10px 14px;border-radius:8px;margin-left:10px;"><i class="fas fa-trash"></i></button>
+                    </div>
+                    ${(s.episodes || []).map((ep, eIdx) => `
+                        <div class="episode-row">
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                                <span style="font-size:13px;font-weight:600;">Episode ${ep.episodeNumber}</span>
+                                <button onclick="deleteEpisode(${sIdx},${eIdx})" style="background:none;border:none;color:#ff6b6b;cursor:pointer;"><i class="fas fa-times"></i></button>
+                            </div>
+                            <input type="text" placeholder="Title" value="${escapeHTML(ep.title)}" oninput="seasonsData[${sIdx}].episodes[${eIdx}].title=this.value" class="form-input" style="margin-bottom:8px;">
+                            <input type="text" placeholder="Thumbnail URL" value="${escapeHTML(ep.thumbnail)}" oninput="seasonsData[${sIdx}].episodes[${eIdx}].thumbnail=this.value" class="form-input">
+                        </div>
+                    `).join('')}
+                    <button onclick="addNewEpisode(${sIdx})" class="btn-secondary" style="width:100%;padding:10px;border-radius:8px;font-size:12px;margin-top:8px;"><i class="fas fa-plus"></i> Add Episode</button>
+                </div>
+            `).join('');
+        }
+        function addNewSeason() {
+            const newSeasonNum = seasonsData.length + 1;
+            seasonsData.push({ name: `Season ${newSeasonNum}`, seasonNumber: newSeasonNum, episodes: [{ episodeNumber: 1, title: 'Episode 1', thumbnail: '' }] });
+            renderSeasons();
+        }
+        function deleteSeason(sIdx) { if (confirm('Delete entire season?')) { seasonsData.splice(sIdx, 1); renderSeasons(); } }
+        function addNewEpisode(sIdx) {
+            const eps = seasonsData[sIdx].episodes || [];
+            eps.push({ episodeNumber: eps.length + 1, title: `Episode ${eps.length + 1}`, thumbnail: '' });
+            seasonsData[sIdx].episodes = eps;
+            renderSeasons();
+        }
+        function deleteEpisode(sIdx, eIdx) {
+            if (confirm('Delete episode?')) {
+                seasonsData[sIdx].episodes.splice(eIdx, 1);
+                seasonsData[sIdx].episodes.forEach((ep, i) => ep.episodeNumber = i + 1);
+                renderSeasons();
+            }
+        }
+
+        function saveSeries() {
+            const data = {
+                tmdbId: parseInt(document.getElementById('seriesTmdbId').value) || null,
+                title: document.getElementById('seriesTitle').value.trim(),
+                poster: document.getElementById('seriesPoster').value,
+                backdrop: document.getElementById('seriesBackdrop').value, trailer: document.getElementById('seriesTrailer').value,
+                year: document.getElementById('seriesYear').value, rating: document.getElementById('seriesRating').value,
+                category: document.getElementById('seriesCategory').value, storyline: document.getElementById('seriesStoryline').value,
+                cast: seriesCastData, seasons: seasonsData, type: 'webseries', updatedAt: Date.now()
+            };
+            if (!data.title) return showToast('Title is required', 'error');
+
+            const editId = document.getElementById('seriesEditId').value;
+            const ref = editId ? db.ref(`webseries/${editId}`) : db.ref('webseries').push();
+            data.createdAt = parseInt(document.getElementById('seriesCreatedAt').value) || Date.now();
+
+            ref.set(data).then(() => {
+                showToast(editId ? 'Updated Successfully!' : 'Saved Successfully!', 'success');
+                resetSeriesForm();
+                switchTab(document.querySelector('[data-tab="ws-list"]'), 'ws-list');
+            }).catch(e => showToast(e.message, 'error'));
+        }
+
+        function deleteSeriesData(id) {
+            if (confirm('Delete this series? This is permanent.')) {
+                db.ref(`webseries/${id}`).remove().then(() => showToast('Series deleted', 'success'));
+            }
+        }
+
+        function loadWebseries() {
+            db.ref('webseries').on('value', snap => {
+                const data = snap.val() || {};
+                document.getElementById('totalWebseries').textContent = Object.keys(data).length;
+                const list = document.getElementById('webseriesList');
+                if (Object.keys(data).length === 0) { list.innerHTML = '<p style="color:var(--text-muted);font-size:13px;text-align:center;padding:30px;">No series found</p>'; return; }
+
+                list.innerHTML = Object.entries(data).map(([id, i]) => `
+                    <div class="content-card" style="display:flex;gap:12px;">
+                        <img src="${i.poster}" class="content-card-poster" onerror="this.src='https://via.placeholder.com/80x115/141414/E50914?text=V'">
+                        <div class="content-card-info">
+                            <h4 class="content-card-title">${escapeHTML(i.title)}</h4>
+                            <p style="font-size:11px;color:var(--text-secondary);margin-bottom:8px;">${i.year} • ${i.category}</p>
+                            <div style="display:flex;gap:8px;">
+                                <button onclick="editSeries('${id}')" class="btn-secondary" style="padding:6px 12px;font-size:12px;flex:1;"><i class="fas fa-edit"></i> Edit</button>
+                                <button onclick="deleteSeriesData('${id}')" class="btn-secondary" style="background:rgba(229,9,20,0.2);color:var(--deep-red);padding:6px 12px;font-size:12px;"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                    </div>`).join('');
+                recentItems.webseries = data; renderRecentContent();
+            });
+        }
+
+        function editSeries(id) {
+            db.ref(`webseries/${id}`).once('value', snap => {
+                const d = snap.val(); if (!d) return;
+                showSection('webseries'); switchTab(document.querySelector('[data-tab="ws-add"]'), 'ws-add');
+                document.getElementById('seriesForm').style.display = 'block';
+                document.getElementById('seriesEditId').value = id;
+                Object.keys(d).forEach(key => {
+                    const el = document.getElementById(`series${key.charAt(0).toUpperCase() + key.slice(1)}`);
+                    if (el) el.value = d[key];
+                });
+                document.getElementById('seriesPreview').innerHTML = `<img src="${d.backdrop || d.poster}"><div class="preview-overlay"></div><div class="preview-content"><div class="preview-title">${escapeHTML(d.title)}</div></div>`;
+                seriesCastData = d.cast || []; document.getElementById('seriesCast').innerHTML = seriesCastData.map(c => `<div class="cast-card"><img src="${c.photo || 'https://via.placeholder.com/60/141414/666?text=N'}"><p class="cast-name">${escapeHTML(c.name)}</p></div>`).join('');
+                seasonsData = d.seasons || []; renderSeasons();
+            });
+        }
+        function resetSeriesForm() {
+            document.getElementById('seriesForm').style.display = 'none'; document.getElementById('tmdbSeriesSearch').value = ''; document.getElementById('seriesEditId').value = '';
+            document.getElementById('seriesForm').querySelectorAll('input, select, textarea').forEach(el => el.value = '');
+            seasonsData = []; seriesCastData = []; document.getElementById('seasonsContainer').innerHTML = ''; document.getElementById('seriesPreview').innerHTML = '';
+        }
+
+        // MOVIES
+        async function fetchMovieDetails(id) {
+            document.getElementById('fetchingOverlay').classList.add('show');
+            try {
+                resetMovieForm();
+
+                const existingSnap = await db.ref('movies').orderByChild('tmdbId').equalTo(parseInt(id)).once('value');
+                if (existingSnap.exists()) {
+                    showToast('Movie already in DB! Opening Edit mode.', 'info');
+                    editMovie(Object.keys(existingSnap.val())[0]);
+                    return;
+                }
+
+                const d = await fetchTMDBData('movie', id);
+
+                const newMovieRef = db.ref('movies').push();
+                const movieData = {
+                    tmdbId: d.id, title: d.title || '',
+                    poster: d.poster_path ? TMDB_IMG_BASE + 'w342' + d.poster_path : '',
+                    backdrop: d.backdrop_path ? TMDB_IMG_BASE + 'w780' + d.backdrop_path : '',
+                    trailer: (d.videos?.results?.find(v => v.type === 'Trailer' && v.site === 'YouTube') ? `https://www.youtube.com/watch?v=${d.videos.results.find(v => v.type === 'Trailer').key}` : ''),
+                    year: d.release_date?.split('-')[0] || '',
+                    rating: '16+', duration: `${Math.floor(d.runtime / 60)}h ${d.runtime % 60}m`,
+                    category: d.genres?.[0]?.name || '', storyline: d.overview || '',
+                    cast: d.credits?.cast?.slice(0, 10).map(c => ({ name: c.name, photo: c.profile_path ? TMDB_IMG_BASE + 'w185' + c.profile_path : '' })) || [],
+                    type: 'movie', createdAt: Date.now(), updatedAt: Date.now()
+                };
+
+                await newMovieRef.set(movieData);
+                editMovie(newMovieRef.key);
+                document.getElementById('tmdbMovieResults').style.display = 'none';
+                showToast('Draft Auto-saved!', 'success');
+            } catch (e) {
+                showToast(e.message || 'Error fetching movie', 'error');
+            } finally {
+                document.getElementById('fetchingOverlay').classList.remove('show');
+            }
+        }
+        function saveMovie() {
+            const data = {
+                tmdbId: parseInt(document.getElementById('movieTmdbId').value) || null,
+                title: document.getElementById('movieTitle').value.trim(),
+                poster: document.getElementById('moviePoster').value,
+                backdrop: document.getElementById('movieBackdrop').value, trailer: document.getElementById('movieTrailer').value,
+                year: document.getElementById('movieYear').value, rating: document.getElementById('movieRating').value,
+                category: document.getElementById('movieCategory').value, storyline: document.getElementById('movieStoryline').value,
+                cast: movieCastData, duration: document.getElementById('movieDuration').value, type: 'movie', updatedAt: Date.now()
+            };
+            if (!data.title) return showToast('Title is required', 'error');
+
+            const editId = document.getElementById('movieEditId').value;
+            const ref = editId ? db.ref(`movies/${editId}`) : db.ref('movies').push();
+            data.createdAt = parseInt(document.getElementById('movieCreatedAt').value) || Date.now();
+
+            ref.set(data).then(() => {
+                showToast(editId ? 'Movie Updated!' : 'Movie Saved!', 'success');
+                resetMovieForm();
+                switchTab(document.querySelector('[data-tab="mv-list"]'), 'mv-list');
+            }).catch(e => showToast(e.message, 'error'));
+        }
+        function deleteMovieData(id) {
+            if (confirm('Delete movie?')) db.ref(`movies/${id}`).remove().then(() => showToast('Movie deleted', 'success'));
+        }
+        function loadMovies() {
+            db.ref('movies').on('value', snap => {
+                const data = snap.val() || {};
+                document.getElementById('totalMovies').textContent = Object.keys(data).length;
+                const list = document.getElementById('moviesList');
+                if (Object.keys(data).length === 0) { list.innerHTML = '<p style="color:var(--text-muted);font-size:13px;text-align:center;padding:30px;">No movies found</p>'; return; }
+                list.innerHTML = Object.entries(data).map(([id, i]) => `
+                    <div class="content-card" style="display:flex;gap:12px;">
+                        <img src="${i.poster}" class="content-card-poster" onerror="this.src='https://via.placeholder.com/80x115/141414/E50914?text=V'">
+                        <div class="content-card-info">
+                            <h4 class="content-card-title">${escapeHTML(i.title)}</h4>
+                            <p style="font-size:11px;color:var(--text-secondary);margin-bottom:8px;">${i.year} • ${i.category}</p>
+                            <div style="display:flex;gap:8px;">
+                                <button onclick="editMovie('${id}')" class="btn-secondary" style="padding:6px 12px;font-size:12px;flex:1;"><i class="fas fa-edit"></i> Edit</button>
+                                <button onclick="deleteMovieData('${id}')" class="btn-secondary" style="background:rgba(229,9,20,0.2);color:var(--deep-red);padding:6px 12px;font-size:12px;"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                    </div>`).join('');
+                recentItems.movies = data; renderRecentContent();
+            });
+        }
+        function editMovie(id) {
+            db.ref(`movies/${id}`).once('value', snap => {
+                const d = snap.val(); if (!d) return;
+                showSection('movies'); switchTab(document.querySelector('[data-tab="mv-add"]'), 'mv-add');
+                document.getElementById('movieForm').style.display = 'block';
+                document.getElementById('movieEditId').value = id;
+                Object.keys(d).forEach(key => {
+                    const el = document.getElementById(`movie${key.charAt(0).toUpperCase() + key.slice(1)}`);
+                    if (el) el.value = d[key];
+                });
+                document.getElementById('moviePreview').innerHTML = `<img src="${d.backdrop || d.poster}"><div class="preview-overlay"></div><div class="preview-content"><div class="preview-title">${escapeHTML(d.title)}</div></div>`;
+                movieCastData = d.cast || []; document.getElementById('movieCast').innerHTML = movieCastData.map(c => `<div class="cast-card"><img src="${c.photo || 'https://via.placeholder.com/60/141414/666?text=N'}"><p class="cast-name">${escapeHTML(c.name)}</p></div>`).join('');
+            });
+        }
+        function resetMovieForm() {
+            document.getElementById('movieForm').style.display = 'none'; document.getElementById('tmdbMovieSearch').value = ''; document.getElementById('movieEditId').value = '';
+            document.getElementById('movieForm').querySelectorAll('input, select, textarea').forEach(el => el.value = '');
+            movieCastData = []; document.getElementById('moviePreview').innerHTML = ''; document.getElementById('movieCast').innerHTML = '';
+        }
+
+        // USERS & OTHER
+        function loadUsers() {
+            db.ref('registered_users').on('value', snap => {
+                const users = snap.val() || {};
+                const userArray = Object.values(users);
+                document.getElementById('totalUsers').textContent = userArray.length;
+                const list = document.getElementById('usersList');
+                if (userArray.length === 0) { list.innerHTML = '<p style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px;">No users found</p>'; return; }
+                list.innerHTML = userArray.map(u => `
+                    <div style="background:var(--card-gray);border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:10px;border:1px solid rgba(255,255,255,0.05);">
+                        <div style="width:45px;height:45px;border-radius:50%;background:linear-gradient(135deg,var(--deep-red),var(--deep-red-dark));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;">${(u.name || 'U')[0].toUpperCase()}</div>
+                        <div style="flex:1; min-width:0;">
+                            <p style="font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHTML(u.name || 'Anonymous')}</p>
+                            <p style="font-size:11px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHTML(u.email)}</p>
+                        </div>
+                    </div>`).join('');
+            });
+        }
+
+        async function quickFetch() {
+            const idInput = document.getElementById('quickTmdbId');
+            const id = idInput.value.trim();
+            if (!id) return showToast('Enter TMDB ID', 'error');
+
+            const btn = document.getElementById('quickFetchBtn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; btn.disabled = true;
+
+            try {
+                if (currentFetchType === 'tv') {
+                    await fetchSeriesDetails(id); showSection('webseries');
+                } else {
+                    await fetchMovieDetails(id); showSection('movies');
+                }
+            } finally {
+                btn.innerHTML = '<i class="fas fa-download"></i>'; btn.disabled = false; idInput.value = '';
+            }
+        }
+
+        function refreshData() { showToast('Refreshing data...', 'info'); initializeAdmin(); toggleDropdown(); }
+        function exportData() {
+            db.ref('/').once('value').then(snap => {
+                const data = snap.val();
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = `velqore-backup-${new Date().toISOString().split('T')[0]}.json`;
+                a.click();
+                showToast('Full backup exported!', 'success');
+            });
+            toggleDropdown();
+        }
+        function clearCache() { if (confirm('Clear local data and re-login?')) { localStorage.clear(); location.reload(); } }
+    </script>
+</body>
+
+</html>

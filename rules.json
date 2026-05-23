@@ -1,0 +1,45 @@
+{
+  "rules": {
+    "webseries": {
+      ".read": true,
+      ".write": true,
+      ".indexOn": ["createdAt", "category", "title"]
+    },
+    
+    "movies": {
+      ".read": true,
+      ".write": true,
+      ".indexOn": ["createdAt", "category", "title"]
+    },
+    
+    "categories": {
+      ".read": true,
+      ".write": true
+    },
+    
+    "users": {
+      ".read": true,
+      ".write": true,
+      ".indexOn": ["online", "email"]
+    },
+    
+    "registered_users": {
+      ".read": true,
+      ".write": true,
+      ".indexOn": ["email"]
+    },
+    
+    "comments": {
+      ".read": true,
+      ".write": true,
+      "$contentId": {
+        ".indexOn": ["timestamp", "userId"]
+      }
+    },
+    
+    "admin_credentials": {
+      ".read": true,
+      ".write": true
+    }
+  }
+}
