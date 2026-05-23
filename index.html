@@ -3052,6 +3052,9 @@
             user-select: none;
         }
 
+        /* With data-lenis-prevent, Lenis delegates to native behavior.
+           touch-action: pan-x ensures horizontal swipes scroll the row
+           while vertical swipes pass through to the document for page scroll. */
         .poster-scroll,
         .top10-scroll,
         .category-pills {
@@ -4983,7 +4986,7 @@
                         </div>
                         <div class="poster-row-container">
                             <button class="row-arrow left hidden" id="arrow_left_${uniqueId}" onclick="scrollRow('${uniqueId}', -1)"><span class="material-symbols-outlined">chevron_left</span></button>
-                            <div class="poster-scroll" id="${uniqueId}">${items.map(x => createPosterCard(x)).join('')}</div>
+                            <div class="poster-scroll" id="${uniqueId}" data-lenis-prevent>${items.map(x => createPosterCard(x)).join('')}</div>
                             <button class="row-arrow right hidden" id="arrow_right_${uniqueId}" onclick="scrollRow('${uniqueId}', 1)"><span class="material-symbols-outlined">chevron_right</span></button>
                         </div>
                     </div>`;
@@ -4997,7 +5000,7 @@
                         </div>
                         <div class="poster-row-container">
                             <button class="row-arrow left hidden" id="arrow_left_${uniqueId}" onclick="scrollRow('${uniqueId}', -1)"><span class="material-symbols-outlined">chevron_left</span></button>
-                            <div class="top10-scroll poster-scroll" id="${uniqueId}">${items.map((x, idx) => `
+                            <div class="top10-scroll poster-scroll" id="${uniqueId}" data-lenis-prevent>${items.map((x, idx) => `
                                 <div class="top10-card" onclick="openDetails(getContentById('${x.id}'), '${x.type || (x.seasons ? 'webseries' : 'movie')}')">
                                     <div class="top10-number">${idx + 1}</div>
                                     <div class="poster-card"><img src="${x.poster}" loading="lazy" alt=""></div>
