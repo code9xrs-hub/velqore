@@ -1,302 +1,409 @@
----
-
-# 🎬 Velqore - Netflix Style Streaming Platform
+# 🎬 Velqore — Premium Netflix-Style Streaming Platform
 
 <div align="center">
 
-![Velqore Logo](https://img.shields.io/badge/Velqore-Streaming-E50914?style=for-the-badge&logo=netflix&logoColor=white)
+![Velqore Banner](https://img.shields.io/badge/Velqore-Premium%20Streaming-E50914?style=for-the-badge\&logo=netflix\&logoColor=white)
 ![Version](https://img.shields.io/badge/version-2.0.0-blue?style=for-the-badge)
-![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
-![PWA](https://img.shields.io/badge/PWA-Enabled-5A0FC8?style=for-the-badge)
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+![Firebase](https://img.shields.io/badge/Firebase-Backend-FFCA28?style=for-the-badge\&logo=firebase\&logoColor=black)
+![TMDB](https://img.shields.io/badge/TMDB-API-01D277?style=for-the-badge)
+![PWA](https://img.shields.io/badge/PWA-Ready-5A0FC8?style=for-the-badge)
 
-### 🚀 Unlimited Movies & Web Series Streaming Platform
+### 🚀 Modern OTT Streaming Platform with Netflix-Inspired UI & Powerful Admin Dashboard
 
-[**Live Demo**](https://velqore.vercel.app/) · [**Admin Panel**](https://velqore.vercel.app/admin.html) · [**Documentation**](https://github.com/code9xrs-hub/velqore/blob/main/README.md)
+**Live Demo:** [https://velqore.vercel.app/](https://velqore.vercel.app/)
+**Admin Panel:** [https://velqore.vercel.app/admin.html](https://velqore.vercel.app/admin.html)
+**Documentation:** [https://github.com/code9xrs-hub/velqore](https://github.com/code9xrs-hub/velqore)
 
 </div>
 
 ---
 
-## ✨ Features
+# ✨ Overview
 
-### 🎯 Main App (`index.html`)
-| Feature | Description |
-|---------|-------------|
-| 🎬 **Hero Carousel** | Netflix-style card stack with 3D animations |
-| 🔍 **Search** | Real-time search for movies & series |
-| 📋 **Categories** | Filter content by genre/category |
-| ❤️ **My List** | Save favorites to watch later |
-| 📚 **Watch History** | Track your viewing activity |
-| 🎥 **Embed Player** | Floating video player with auto-hide controls |
-| 🌙 **Themes** | Dark, Midnight, AMOLED, Crimson |
-| 📱 **PWA Ready** | Installable on mobile devices |
-| 🎨 **Responsive** | Mobile-first, desktop-optimized |
+**Velqore** is a fully responsive Netflix-style movie & web series streaming platform built using **HTML, CSS, JavaScript, Firebase, and TMDB API**.
 
-### 🛠️ Admin Panel (`admin.html`)
-| Feature | Description |
-|---------|-------------|
-| 🔐 **Secure Login** | Admin authentication system |
-| 🎬 **TMDB Integration** | Auto-fetch movies & series from TMDB |
-| 📝 **CRUD Operations** | Create, read, update, delete content |
-| 🗂️ **Season Management** | Add seasons & episodes |
-| 🎭 **Cast Management** | Add cast members with photos |
-| 📊 **Dashboard** | Real-time statistics & metrics |
-| 👥 **User Management** | View registered users |
-| 💾 **Data Export** | Full backup export as JSON |
+It includes:
+
+* 🎬 Cinematic Hero Slider
+* 🔥 Dynamic Trending Sections
+* 🎥 Floating Video Player
+* 📱 Progressive Web App (PWA)
+* 🛠️ Powerful Admin Dashboard
+* 🔐 User Authentication
+* ❤️ Watchlist & History
+* 🌙 Multiple Themes
+* ⚡ Smooth Animations & Fast Performance
+
+Designed for both **desktop and mobile devices** with a premium OTT experience.
 
 ---
 
-## 🛠️ Tech Stack
+# 🎯 Core Features
+
+## 🎬 User App Features (`index.html`)
+
+| Feature              | Description                                                          |
+| -------------------- | -------------------------------------------------------------------- |
+| 🎞️ Hero Carousel    | Netflix-style stacked hero slider with blur effects & 3D transitions |
+| 🔍 Live Search       | Real-time movie & series search                                      |
+| 🎭 Categories        | Browse by genres and collections                                     |
+| ❤️ My List           | Save favorite content                                                |
+| 📚 Watch History     | Continue watching anytime                                            |
+| 🎥 Embedded Player   | Floating video player with subtitle support                          |
+| 🌙 Theme System      | Dark, AMOLED, Crimson & Midnight themes                              |
+| 📱 PWA Support       | Installable mobile/desktop app                                       |
+| ⚡ Smooth Scrolling   | Lenis-powered cinematic scrolling                                    |
+| 🔔 Dynamic UI        | Animated cards, hover previews & transitions                         |
+| 🎨 Responsive Layout | Optimized for mobile, tablet & desktop                               |
+
+---
+
+## 🛠️ Admin Panel Features (`admin.html`)
+
+| Feature                     | Description                             |
+| --------------------------- | --------------------------------------- |
+| 🔐 Secure Admin Login       | Protected admin authentication          |
+| 🎬 TMDB Integration         | Import movies/series directly from TMDB |
+| ➕ CRUD Operations           | Add, edit & delete content              |
+| 📂 Category Manager         | Manage genres/categories                |
+| 📺 Season & Episode Control | Full web series management              |
+| 🎭 Cast Management          | Add cast profiles & images              |
+| 👥 User Dashboard           | View registered users                   |
+| 📊 Analytics Dashboard      | Real-time stats & content overview      |
+| 💾 JSON Backup Export       | Export database backups                 |
+| ⚙️ Full Content Control     | Manage featured & trending sections     |
+
+---
+
+# 🛠️ Tech Stack
 
 <div align="center">
 
-| Category | Technologies |
-|----------|--------------|
-| **Frontend** | HTML5, CSS3, Vanilla JavaScript |
-| **Backend** | Firebase Realtime Database |
-| **API** | TMDB API (The Movie Database) |
-| **UI Icons** | Material Symbols (Google Fonts) |
-| **Scroll** | Lenis Smooth Scroll |
-| **PWA** | Service Worker, Web App Manifest |
-| **Deployment** | Firebase Hosting / Netlify / Vercel |
+| Category       | Technology                      |
+| -------------- | ------------------------------- |
+| Frontend       | HTML5, CSS3, Vanilla JavaScript |
+| Backend        | Firebase Realtime Database      |
+| Authentication | Firebase Auth                   |
+| API            | TMDB API                        |
+| UI Icons       | Google Material Symbols         |
+| Animations     | CSS3 + JavaScript               |
+| Scrolling      | Lenis Smooth Scroll             |
+| PWA            | Service Worker + Web Manifest   |
+| Hosting        | Firebase / Vercel / Netlify     |
 
 </div>
 
 ---
 
-## 📦 Installation
+# 📦 Installation Guide
 
-### 1️⃣ Clone Repository
+## 1️⃣ Clone Repository
+
 ```bash
 git clone https://github.com/code9xrs-hub/velqore.git
 cd velqore
 ```
 
-### 2️⃣ Setup Firebase
-Create a Firebase project and add your config to `index.html` `admin.html`:
+---
+
+## 2️⃣ Configure Firebase
+
+Create a Firebase project and add your configuration inside:
+
+* `index.html`
+* `admin.html`
 
 ```javascript
 const firebaseConfig = {
   apiKey: "YOUR_API_KEY",
   authDomain: "YOUR_PROJECT.firebaseapp.com",
   databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-  projectId: "YOUR_PROJECT"
+  projectId: "YOUR_PROJECT",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
 };
+
 firebase.initializeApp(firebaseConfig);
 ```
 
-### 3️⃣ Get TMDB API Key
-1. Sign up at [themoviedb.org](https://www.themoviedb.org)
-2. Request an API key
-3. Update in `admin.html`:
+---
+
+## 3️⃣ Setup TMDB API
+
+1. Create account at:
+   [https://www.themoviedb.org](https://www.themoviedb.org)
+
+2. Generate API Key
+
+3. Add your key in `admin.html`
+
 ```javascript
-const TMDB_API_KEY = 'YOUR_TMDB_API_KEY';
+const TMDB_API_KEY = "YOUR_TMDB_API_KEY";
 ```
 
-### 4️⃣ Apply Firebase Rules
-Go to Firebase Console → Realtime Database → Rules → Paste:
+---
+
+## 4️⃣ Firebase Database Rules
+
+Go to:
+
+Firebase Console → Realtime Database → Rules
+
+Paste:
 
 ```json
 {
   "rules": {
-    "webseries": { ".read": true, ".write": true },
-    "movies": { ".read": true, ".write": true },
-    "categories": { ".read": true, ".write": true },
-    "registered_users": { ".read": true, ".write": true },
-    "admin_credentials": { ".read": true, ".write": true }
+    "movies": {
+      ".read": true,
+      ".write": true
+    },
+    "webseries": {
+      ".read": true,
+      ".write": true
+    },
+    "categories": {
+      ".read": true,
+      ".write": true
+    },
+    "registered_users": {
+      ".read": true,
+      ".write": true
+    },
+    "admin_credentials": {
+      ".read": true,
+      ".write": true
+    }
   }
 }
 ```
 
-### 5️⃣ Run Locally
+---
+
+## 5️⃣ Run Project Locally
+
+### Using VS Code Live Server
+
+Simply open the project and start Live Server.
+
+### Using Python
+
 ```bash
-# Using VS Code Live Server extension
-# Or using Python
-python3 -m http.server 8000
+python -m http.server 8000
+```
+
+Open:
+
+```bash
+http://localhost:8000
 ```
 
 ---
 
-## 🚀 Deployment
+# 🚀 Deployment
 
-### Deploy to Firebase Hosting
+## 🔥 Firebase Hosting
+
 ```bash
 npm install -g firebase-tools
+
 firebase login
+
 firebase init hosting
+
 firebase deploy
 ```
 
-### Deploy to Netlify
-1. Push to GitHub
-2. Connect repository to Netlify
-3. Deploy automatically
-
-**and other hosting platfrom**
 ---
 
-## 🔑 Admin Credentials
+## ▲ Deploy on Vercel
 
-| Field | Value |
-|-------|-------|
-| **Username** | `admin` |
-| **Password** | `admin123` |
-
-*⚠️ Change these in Firebase → `admin_credentials` node after first login*
+1. Push project to GitHub
+2. Import repository in Vercel
+3. Deploy instantly
 
 ---
 
-## 📂 Database Structure
+## 🌐 Deploy on Netlify
 
-```
-/webseries
-  └─ {id}
-      ├─ title: "Stranger Things"
-      ├─ poster: "https://image.tmdb.org/t/p/..."
-      ├─ backdrop: "https://..."
-      ├─ category: "Sci-Fi"
-      ├─ seasons: [{ name: "Season 1", episodes: [...] }]
-      └─ cast: [{ name: "Millie Bobby Brown", photo: "..." }]
+1. Connect GitHub repository
+2. Select project folder
+3. Auto deploy enabled
 
+---
+
+# 🔑 Default Admin Credentials
+
+| Username | Password   |
+| -------- | ---------- |
+| `admin`  | `admin123` |
+
+> ⚠️ Change admin credentials immediately after first login for security.
+
+---
+
+# 📂 Database Structure
+
+```plaintext
 /movies
-  └─ {id}
-      ├─ title: "Inception"
-      ├─ poster: "https://..."
-      ├─ category: "Action"
-      └─ cast: [...]
+   └── movie_id
+         ├── title
+         ├── poster
+         ├── backdrop
+         ├── category
+         ├── description
+         ├── rating
+         ├── cast
+         └── video
+
+/webseries
+   └── series_id
+         ├── title
+         ├── seasons
+         ├── episodes
+         ├── cast
+         └── category
 
 /categories
-  └─ {id}
-      └─ name: "Action"
+   └── category_id
+         └── name
 
 /registered_users
-  └─ {userId}
-      ├─ name: "John Doe"
-      ├─ email: "john@example.com"
-      └─ password: "hashed"
+   └── user_id
+         ├── name
+         ├── email
+         └── password
 ```
 
 ---
 
-## 🎮 Key Features Demo
+# 🎨 UI Highlights
 
-### 🏠 Home Page
-```
-┌─────────────────────────────────────────────────────────────┐
-│  🔥 Trending Now                     │  🔍 Search  │
-│  ┌────────────────────────────────────────────────────┐      │
-│  │  🎬 Hero Card with 3D Stack Animation            │      │
-│  │  Title • Year • Category • Rating                │      │
-│  │  ▶️ Play  │  ℹ️ More Info                        │      │
-│  └────────────────────────────────────────────────────┘      │
-│  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐          │
-│  │ Poster 1 │ │ Poster 2 │ │ Poster 3 │ │ Poster 4 │          │
-│  └─────────┘ └─────────┘ └─────────┘ └─────────┘          │
-└─────────────────────────────────────────────────────────────┘
+## 🎬 Netflix-Style Hero Section
+
+* Cinematic backdrop
+* Card stack slider
+* Glassmorphism overlay
+* Dynamic blur effects
+* Animated CTA buttons
+* Auto content rotation
+
+---
+
+## 📱 Progressive Web App (PWA)
+
+Velqore works like a native app.
+
+### Features
+
+* 📲 Install on Android/Desktop
+* ⚡ Offline support
+* 🧠 Smart caching
+* 🚀 Faster loading
+* 🔔 Push notification ready
+
+---
+
+# 🌙 Theme Modes
+
+| Theme            | Description           |
+| ---------------- | --------------------- |
+| 🔴 Velqore Red   | Classic OTT red theme |
+| ⚫ AMOLED Black   | Pure black OLED mode  |
+| 🔵 Midnight Blue | Cinematic dark blue   |
+| 🔥 Crimson       | Deep red premium look |
+
+---
+
+# 📊 API Endpoints
+
+Base API:
+
+```bash
+https://mirrorbox.dpdns.org/
 ```
 
-### 🛠️ Admin Workflow
-```
-1. Login → 2. Search TMDB → 3. Auto-fetch Data → 4. Save to Firebase
-                           ↓
-                        5. Content appears on Main App
+| Endpoint            | Method | Description          |
+| ------------------- | ------ | -------------------- |
+| `/movies`           | GET    | Fetch all movies     |
+| `/movies/{id}`      | GET    | Fetch single movie   |
+| `/webseries`        | GET    | Fetch all web series |
+| `/webseries/{id}`   | GET    | Fetch single series  |
+| `/categories`       | GET    | Fetch all categories |
+| `/registered_users` | GET    | Fetch all users      |
+
+---
+
+# 🧩 Upcoming Features
+
+* 💳 Subscription System
+* 👑 Premium Membership
+* 🎟️ Rental Movies
+* 🌍 Multi-language Audio
+* 📝 Advanced Subtitle Support
+* 📺 Chromecast Support
+* 🔔 Push Notifications
+* 🤖 AI Recommendations
+* ☁️ Cloud Sync
+
+---
+
+# 🤝 Contributing
+
+```bash
+1. Fork Repository
+2. Create Feature Branch
+3. Commit Changes
+4. Push Changes
+5. Open Pull Request
 ```
 
 ---
 
-## 📱 PWA Installation
+# 📄 License
 
-### On Mobile (Chrome/Android)
-1. Open `index.html` in Chrome
-2. Click **"Add to Home Screen"**
-3. Velqore installs as standalone app
-
-### On Desktop (Chrome)
-1. Click the install icon in address bar
-2. Click **"Install"**
+This project is licensed under the **MIT License**.
 
 ---
 
-## 🎨 Themes
+# 🙏 Credits
+
+| Service      | Usage                |
+| ------------ | -------------------- |
+| TMDB API     | Movies & TV Database |
+| Firebase     | Backend & Hosting    |
+| Google Fonts | Icons & Typography   |
+| Lenis        | Smooth Scrolling     |
+
+---
+
+# 📞 Support & Community
+
+| Platform     | Link                                              |
+| ------------ | ------------------------------------------------- |
+| 📧 Email     | [code9x.rs@gmail.com](mailto:code9x.rs@gmail.com) |
+| 💬 Discord   | [https://discord.gg](https://discord.gg)          |
+| 🐦 Twitter/X | [https://twitter.com](https://twitter.com)        |
+
+---
+
+# ⭐ Support the Project
+
+If you like this project, please give it a ⭐ on GitHub and support development.
 
 <div align="center">
 
-| Theme | Preview |
-|-------|---------|
-| **Velqore Red** | 🔴 Classic Netflix red |
-| **Midnight Blue** | 🔵 Dark blue gradient |
-| **AMOLED Black** | ⚫ Pure black for OLED screens |
-| **Crimson Red** | 🔥 Deep red accent |
+![GitHub stars](https://img.shields.io/github/stars/code9xrs-hub/velqore?style=social)
+![GitHub followers](https://img.shields.io/github/followers/code9xrs-hub?style=social)
+
+### ❤️ Made with passion by code9xrs-hub
 
 </div>
 
 ---
 
-## 📊 API Endpoints
-by- https://mirrorbox.dpdns.org/
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/webseries` | GET | Fetch all web series |
-| `/webseries/{id}` | GET | Fetch single series |
-| `/movies` | GET | Fetch all movies |
-| `/movies/{id}` | GET | Fetch single movie |
-| `/categories` | GET | Fetch all categories |
-| `/registered_users` | GET | Fetch users |
-
----
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing`)
-5. Open a Pull Request
-
----
-
-## 📄 License
-
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 🙏 Credits
-
-- **TMDB API** - Movie & TV data provider
-- **Firebase** - Realtime database & hosting
-- **Google Fonts** - Material Icons & Inter font
-- **Lenis** - Smooth scrolling library
-
----
-
-## 📞 Support
-
-| Channel | Link |
-|---------|------|
-| 📧 Email | code9x.rs@gmail.com |
-| 🐦 Twitter | [@Velqore](https://twitter.com) |
-| 💬 Discord | [Join Server](https://discord.gg) |
-
----
-
-## ⭐ Show Your Support
-
-If you like this project, please give it a ⭐ on GitHub!
-
-<div align="center">
-
-[![Star on GitHub](https://img.shields.io/github/stars/code9xrs-hub/velqore?style=social)](https://github.com/code9xrs-hub/velqore)
-[![Follow on GitHub](https://img.shields.io/github/followers/code9xrs-hub?style=social)](https://github.com/code9xrs-hub)
-
-### Made with ❤️ by [code9xrs-hub]
-
-</div>
-
----
-
-## 🚀 Quick Start One-Liner
+# ⚡ Quick Start
 
 ```bash
 git clone https://github.com/code9xrs-hub/velqore.git && cd velqore && npx serve
@@ -304,16 +411,20 @@ git clone https://github.com/code9xrs-hub/velqore.git && cd velqore && npx serve
 
 ---
 
-## 🔥 Ready to Launch!
+# 🔥 Ready to Launch
 
-✅ **Step 1:** Setup Firebase  
-✅ **Step 2:** Get TMDB API Key  
-✅ **Step 3:** Deploy to your hosting  
-✅ **Step 4:** Start adding content via Admin Panel  
-✅ **Step 5:** Share with the world! 🎉
-
----
-
-**Happy Streaming!** 🎬
+✅ Setup Firebase
+✅ Configure TMDB API
+✅ Deploy to Hosting
+✅ Add Content from Admin Panel
+✅ Launch Your OTT Platform 🚀
 
 ---
+
+<div align="center">
+
+# 🎬 Velqore — Stream Without Limits
+
+### Premium Entertainment Experience for Everyone
+
+</div>
