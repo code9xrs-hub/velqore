@@ -1376,6 +1376,158 @@
             object-position: center 20%;
         }
 
+        /* Dynamic Cinematic Blur Background */
+        .hero-blur-bg {
+            position: absolute;
+            inset: -40px;
+            z-index: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        .hero-blur-bg.active {
+            opacity: 1;
+        }
+
+        .hero-blur-image {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center 20%;
+            filter: blur(60px) saturate(1.8) brightness(0.35);
+            transform: scale(1.2);
+            transition: background-image 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Premium Loading Skeleton */
+        .hero-skeleton {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            padding: 0 clamp(16px, 4%, 4%);
+            gap: clamp(20px, 4vw, 60px);
+            background: linear-gradient(135deg, #0a0a0a 0%, #141414 50%, #1a1a1a 100%);
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        .hero-skeleton.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .hero-skeleton-poster {
+            width: clamp(160px, 22vw, 280px);
+            aspect-ratio: 2/3;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.04) 100%);
+            background-size: 200% 200%;
+            animation: skeletonShimmer 1.8s ease-in-out infinite;
+            flex-shrink: 0;
+            display: none;
+        }
+
+        .hero-skeleton-content {
+            flex: 1;
+            max-width: 520px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .skeleton-line {
+            height: 14px;
+            border-radius: 8px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.04) 100%);
+            background-size: 200% 100%;
+            animation: skeletonShimmer 1.8s ease-in-out infinite;
+            transform-origin: left;
+        }
+
+        .skeleton-title {
+            width: 70%;
+            height: clamp(28px, 4vw, 44px);
+            border-radius: 10px;
+        }
+
+        .skeleton-tags {
+            width: 45%;
+            height: 12px;
+        }
+
+        .skeleton-desc {
+            width: 90%;
+            height: 12px;
+        }
+
+        .skeleton-buttons {
+            width: 60%;
+            height: 44px;
+            border-radius: 6px;
+            margin-top: 8px;
+        }
+
+        @keyframes skeletonShimmer {
+            0% {
+                opacity: 0.5;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.5;
+            }
+        }
+
+        /* Enhanced hero card styles for premium look */
+        .hero-card {
+            border-radius: 0;
+            transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform, opacity, filter;
+        }
+
+        .hero-card.card-active {
+            border-radius: 0;
+        }
+
+        .hero-card.card-next {
+            border-radius: 12px 0 0 12px;
+            overflow: hidden;
+        }
+
+        .hero-card.card-far-next {
+            border-radius: 12px 0 0 12px;
+            overflow: hidden;
+        }
+
+        /* Premium glassmorphism overlay enhancement */
+        .hero-glass-overlay {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.05) 100%);
+            backdrop-filter: blur(2px) saturate(1.3);
+            -webkit-backdrop-filter: blur(2px) saturate(1.3);
+        }
+
+        @media (min-width: 768px) {
+            .hero-skeleton-poster {
+                display: block;
+            }
+
+            .hero-card.card-next {
+                border-radius: 16px 0 0 16px;
+                box-shadow: -12px 0 40px rgba(0, 0, 0, 0.6);
+            }
+
+            .hero-card.card-far-next {
+                border-radius: 16px 0 0 16px;
+            }
+        }
+
         @keyframes heroSlideFadeIn {
             from {
                 opacity: 0;
@@ -3523,6 +3675,10 @@
 
             <!-- HERO BANNER — NETFLIX CARD SWAP -->
             <div class="hero-banner" id="heroBanner">
+                <!-- Dynamic Blur Background -->
+                <div class="hero-blur-bg" id="heroBlurBg">
+                    <div class="hero-blur-image" id="heroBlurImage"></div>
+                </div>
                 <!-- Card Stack (background images) -->
                 <div class="hero-card-stack" id="heroCardStack"></div>
                 <!-- Fallback bg-img (hidden, kept for compatibility) -->
@@ -3532,6 +3688,17 @@
                 <div class="hero-gradient-top"></div>
                 <div class="hero-gradient-side"></div>
                 <div class="hero-gradient-bottom"></div>
+
+                <!-- Premium Loading Skeleton -->
+                <div class="hero-skeleton" id="heroSkeleton">
+                    <div class="hero-skeleton-poster"></div>
+                    <div class="hero-skeleton-content">
+                        <div class="skeleton-line skeleton-title"></div>
+                        <div class="skeleton-line skeleton-tags"></div>
+                        <div class="skeleton-line skeleton-desc"></div>
+                        <div class="skeleton-line skeleton-buttons"></div>
+                    </div>
+                </div>
 
                 <!-- Top quick tags -->
                 <div class="top-tags">
@@ -4538,6 +4705,13 @@
         const db = firebase.database();
 
         // ============================================================
+        //  TMDB CONFIG
+        // ============================================================
+        const TMDB_API_KEY = '2e211dfda888f7cc55ce433d743f9bc3';
+        const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
+        const TMDB_IMG_BASE = 'https://image.tmdb.org/t/p/';
+
+        // ============================================================
         //  GLOBALS
         // ============================================================
         let allWebseries = [],
@@ -5241,18 +5415,106 @@
         }
 
         // ============================================================
-        //  HERO SLIDER — NETFLIX CARD SWAP ANIMATION
+        //  HERO SLIDER — PREMIUM NETFLIX CARD SWAP (TMDB POWERED)
         // ============================================================
         let heroSwipeStartX = 0, heroSwipeEndX = 0, heroIsSwiping = false;
         let heroAutoPlayPaused = false, heroAutoPlayResumeTimer = null;
+        let heroDragOffset = 0;
+        let heroSlideDirection = 1;
+        let heroBlurTimer = null;
 
-        function renderHeroSlider() {
-            // Fetch 10 random trending movies/series dynamically
-            const pool = [...allWebseries, ...allMovies];
-            if (pool.length === 0) return;
-            // Shuffle and take up to 10
-            const shuffled = pool.sort(() => Math.random() - 0.5);
-            const all = shuffled.slice(0, Math.min(10, pool.length));
+        // ─── TMDB GENRE MAP ───────────────────────────────────────────────
+        const TMDB_GENRES = {
+            28: 'Action', 12: 'Adventure', 16: 'Animation', 35: 'Comedy',
+            80: 'Crime', 99: 'Documentary', 18: 'Drama', 10751: 'Family',
+            14: 'Fantasy', 36: 'History', 27: 'Horror', 10402: 'Music',
+            9648: 'Mystery', 10749: 'Romance', 878: 'Sci-Fi', 10770: 'TV Movie',
+            53: 'Thriller', 10752: 'War', 37: 'Western',
+            10759: 'Action & Adventure', 10762: 'Kids', 10763: 'News',
+            10764: 'Reality', 10765: 'Sci-Fi & Fantasy', 10766: 'Soap',
+            10767: 'Talk', 10768: 'War & Politics'
+        };
+
+        function getGenreName(id) { return TMDB_GENRES[id] || null; }
+
+        function getGenresFromIds(ids) {
+            if (!ids || !Array.isArray(ids)) return [];
+            return ids.map(getGenreName).filter(Boolean);
+        }
+
+        function getContentTags(item) {
+            const tags = [];
+            const year = (item.release_date || item.first_air_date || '').slice(0, 4);
+            if (year) tags.push(year);
+            const mediaType = item.media_type === 'movie' ? 'Movie' : (item.media_type === 'tv' ? 'TV' : null);
+            if (mediaType) tags.push(mediaType);
+            const rating = item.vote_average ? item.vote_average.toFixed(1) : null;
+            if (rating) tags.push(rating + ' ★');
+            return tags;
+        }
+
+        function getContentDescription(item) {
+            return item.overview || item.description || item.storyline || 'Discover the best movies and TV shows, streaming now.';
+        }
+
+        // ─── TMDB DATA FETCHING ───────────────────────────────────────────
+        async function fetchTMDBTrending() {
+            const skeleton = document.getElementById('heroSkeleton');
+            const banner = document.getElementById('heroBanner');
+            if (skeleton) skeleton.classList.remove('hidden');
+            try {
+                const [moviesRes, tvRes] = await Promise.all([
+                    fetch(`${TMDB_BASE_URL}/trending/movie/week?api_key=${TMDB_API_KEY}&language=en-US`),
+                    fetch(`${TMDB_BASE_URL}/trending/tv/week?api_key=${TMDB_API_KEY}&language=en-US`)
+                ]);
+                if (!moviesRes.ok || !tvRes.ok) throw new Error('TMDB fetch failed');
+                const moviesData = await moviesRes.json();
+                const tvData = await tvRes.json();
+                const movies = (moviesData.results || []).map(m => ({ ...m, media_type: 'movie' }));
+                const tv = (tvData.results || []).map(t => ({ ...t, media_type: 'tv' }));
+                const combined = [...movies, ...tv];
+                // Shuffle Fisher-Yates
+                for (let i = combined.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [combined[i], combined[j]] = [combined[j], combined[i]];
+                }
+                return combined.slice(0, 10);
+            } catch (e) {
+                console.warn('TMDB fetch failed, using local fallback:', e);
+                const pool = [...allWebseries, ...allMovies];
+                if (pool.length === 0) return [];
+                const shuffled = [...pool].sort(() => Math.random() - 0.5);
+                return shuffled.slice(0, Math.min(10, pool.length)).map(item => ({
+                    id: item.id,
+                    title: item.title,
+                    overview: item.description || item.storyline || item.overview || '',
+                    poster_path: null,
+                    backdrop_path: null,
+                    backdrop: item.backdrop,
+                    poster: item.poster,
+                    release_date: item.year ? item.year + '-01-01' : '',
+                    first_air_date: item.year ? item.year + '-01-01' : '',
+                    vote_average: item.rating || 0,
+                    genre_ids: item.category ? [item.category] : [],
+                    media_type: item.type || (item.seasons ? 'tv' : 'movie'),
+                    original_language: 'en',
+                    _isLocal: true
+                }));
+            } finally {
+                if (skeleton) skeleton.classList.add('hidden');
+            }
+        }
+
+        // ─── RENDER HERO SLIDER ──────────────────────────────────────────
+        async function renderHeroSlider() {
+            const skeleton = document.getElementById('heroSkeleton');
+            if (skeleton) skeleton.classList.remove('hidden');
+
+            const all = await fetchTMDBTrending();
+            if (!all || all.length === 0) {
+                if (skeleton) skeleton.classList.add('hidden');
+                return;
+            }
             currentSlide = 0;
             window.heroContent = all;
 
@@ -5260,44 +5522,67 @@
             const stack = document.getElementById('heroCardStack');
             if (stack) {
                 stack.innerHTML = all.map((item, i) => {
-                    const bgUrl = item.backdrop || item.poster;
+                    const imgUrl = item._isLocal
+                        ? (item.backdrop || item.poster)
+                        : (item.backdrop_path ? `${TMDB_IMG_BASE}w1280${item.backdrop_path}` : `${TMDB_IMG_BASE}w500${item.poster_path}`);
+                    const posterUrl = item._isLocal
+                        ? (item.poster || item.backdrop)
+                        : `${TMDB_IMG_BASE}w500${item.poster_path}`;
                     return `<div class="hero-card ${i === 0 ? 'card-active' : i === 1 ? 'card-next' : i === 2 ? 'card-far-next' : 'card-hidden'}" data-index="${i}">
-                        <img src="${bgUrl}" alt="${item.title}" loading="${i < 3 ? 'eager' : 'lazy'}">
+                        <img src="${imgUrl}" alt="${item.title || item.name}" loading="${i < 3 ? 'eager' : 'lazy'}" decoding="async" data-poster="${posterUrl}">
                     </div>`;
                 }).join('');
             }
 
             // Build slider dots
-            document.getElementById('sliderDots').innerHTML = all.map((_, i) =>
-                `<div class="slider-dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})"></div>`).join('');
+            const dotsContainer = document.getElementById('sliderDots');
+            if (dotsContainer) {
+                dotsContainer.innerHTML = all.map((_, i) =>
+                    `<div class="slider-dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})"></div>`
+                ).join('');
+            }
 
             // Update counter
             const counter = document.getElementById('heroSlideCounter');
             if (counter) {
-                counter.querySelector('.counter-current').textContent = '1';
-                counter.querySelector('.counter-total').textContent = all.length;
+                const curr = counter.querySelector('.counter-current');
+                const total = counter.querySelector('.counter-total');
+                if (curr) curr.textContent = '1';
+                if (total) total.textContent = all.length;
+            }
+
+            // Init blur bg with first item
+            const firstItem = all[0];
+            const firstBg = firstItem._isLocal
+                ? (firstItem.backdrop || firstItem.poster)
+                : (firstItem.backdrop_path ? `${TMDB_IMG_BASE}original${firstItem.backdrop_path}` : `${TMDB_IMG_BASE}original${firstItem.poster_path}`);
+            const blurImage = document.getElementById('heroBlurImage');
+            if (blurImage) {
+                blurImage.style.backgroundImage = `url(${firstBg})`;
+                blurImage.style.opacity = '1';
             }
 
             updateHeroContent(all[0]);
             clearInterval(sliderInterval);
             if (all.length > 1) startHeroAutoPlay();
 
-            // Init swipe support
-            initHeroSwipe();
+            // Init physics-based drag/swipe
+            initHeroPhysicsSwipe();
         }
 
+        // ─── AUTO-PLAY ───────────────────────────────────────────────────
         function startHeroAutoPlay() {
             clearInterval(sliderInterval);
             if (heroAutoPlayPaused) return;
             sliderInterval = setInterval(() => {
-                if (!heroAutoPlayPaused) {
+                if (!heroAutoPlayPaused && window.heroContent && window.heroContent.length > 0) {
                     currentSlide = (currentSlide + 1) % window.heroContent.length;
                     goToSlide(currentSlide);
                 }
-            }, 6000);
+            }, 7000);
         }
 
-        function pauseHeroAutoPlay(resumeAfter = 12000) {
+        function pauseHeroAutoPlay(resumeAfter = 15000) {
             heroAutoPlayPaused = true;
             clearTimeout(heroAutoPlayResumeTimer);
             heroAutoPlayResumeTimer = setTimeout(() => {
@@ -5306,6 +5591,7 @@
             }, resumeAfter);
         }
 
+        // ─── SLIDE NAVIGATION ────────────────────────────────────────────
         function heroSlideNext() {
             if (!window.heroContent || window.heroContent.length === 0) return;
             currentSlide = (currentSlide + 1) % window.heroContent.length;
@@ -5329,9 +5615,7 @@
             const total = all.length;
             const cards = document.querySelectorAll('.hero-card');
             cards.forEach((card, idx) => {
-                // Calculate circular distance from current slide
                 let diff = idx - i;
-                // Normalize to shortest circular distance
                 if (diff > total / 2) diff -= total;
                 if (diff < -total / 2) diff += total;
                 card.classList.remove('card-active', 'card-next', 'card-far-next', 'card-prev', 'card-hidden');
@@ -5347,86 +5631,180 @@
 
             // Update counter
             const counter = document.getElementById('heroSlideCounter');
-            if (counter) counter.querySelector('.counter-current').textContent = i + 1;
+            if (counter) {
+                const curr = counter.querySelector('.counter-current');
+                if (curr) curr.textContent = i + 1;
+            }
+
+            // Crossfade blur background
+            const item = all[i];
+            const bgUrl = item._isLocal
+                ? (item.backdrop || item.poster)
+                : (item.backdrop_path ? `${TMDB_IMG_BASE}original${item.backdrop_path}` : `${TMDB_IMG_BASE}original${item.poster_path}`);
+            const blurImage = document.getElementById('heroBlurImage');
+            if (blurImage) {
+                clearTimeout(heroBlurTimer);
+                blurImage.style.opacity = '0';
+                heroBlurTimer = setTimeout(() => {
+                    blurImage.style.backgroundImage = `url(${bgUrl})`;
+                    blurImage.style.opacity = '1';
+                }, 300);
+            }
+
+            // Preload next slide image
+            const nextIdx = (i + 1) % total;
+            const nextItem = all[nextIdx];
+            if (nextItem) {
+                const nextImgUrl = nextItem._isLocal
+                    ? (nextItem.backdrop || nextItem.poster)
+                    : (nextItem.backdrop_path ? `${TMDB_IMG_BASE}w1280${nextItem.backdrop_path}` : `${TMDB_IMG_BASE}w500${nextItem.poster_path}`);
+                const img = new Image();
+                img.src = nextImgUrl;
+            }
 
             // Animate content swap
-            updateHeroContent(all[i]);
+            updateHeroContent(item);
         }
 
+        // ─── UPDATE HERO CONTENT ─────────────────────────────────────────
         function updateHeroContent(item) {
             const inner = document.getElementById('heroContentInner');
-            // Trigger content swap animation
             if (inner) {
                 inner.style.animation = 'none';
-                inner.offsetHeight; // force reflow
+                void inner.offsetHeight;
                 inner.style.animation = 'heroContentSwap 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards';
             }
 
-            document.getElementById('heroTitleLarge').textContent = item.title;
-            const tags = item.category ? [item.category, item.year, item.type === 'webseries' ? 'Series' : 'Movie'].filter(
-                Boolean) : ['Trending'];
-            document.getElementById('heroMeta').innerHTML = tags.map((g, i) =>
-                `${i > 0 ? '<span class="hero-tag-dot"></span>' : ''}<span>${g}</span>`).join('');
+            const title = item.title || item.name || 'Untitled';
+            const titleEl = document.getElementById('heroTitleLarge');
+            if (titleEl) titleEl.textContent = title;
+
+            // Build genre tags from TMDB genre_ids + custom tags
+            const genreTags = item.genre_ids ? getGenresFromIds(item.genre_ids) : [];
+            const contentTags = getContentTags(item);
+            const allTags = [...genreTags, ...contentTags].filter(Boolean);
+            const metaEl = document.getElementById('heroMeta');
+            if (metaEl) {
+                metaEl.innerHTML = allTags.map((g, idx) =>
+                    `${idx > 0 ? '<span class="hero-tag-dot"></span>' : ''}<span>${g}</span>`
+                ).join('');
+            }
+
             const descEl = document.getElementById('heroDesc');
-            if (descEl) descEl.textContent = item.description || item.storyline || item.overview || 'Discover the best movies and TV shows, streaming now.';
-            // Also update fallback bg-img for compatibility
-            const bgUrl = item.backdrop || item.poster;
-            document.getElementById('heroBg').src = bgUrl;
+            if (descEl) descEl.textContent = getContentDescription(item);
+
+            // Update legacy heroBg for compatibility
+            const bgUrl = item._isLocal
+                ? (item.backdrop || item.poster)
+                : (item.backdrop_path ? `${TMDB_IMG_BASE}w1280${item.backdrop_path}` : `${TMDB_IMG_BASE}w500${item.poster_path}`);
+            const heroBg = document.getElementById('heroBg');
+            if (heroBg) heroBg.src = bgUrl;
+
             window.currentHeroItem = item;
         }
 
-        // Swipe / Touch support for hero slider
-        function initHeroSwipe() {
+        // ─── PHYSICS-BASED DRAG / SWIPE ─────────────────────────────────
+        function initHeroPhysicsSwipe() {
             const banner = document.getElementById('heroBanner');
             if (!banner || banner._swipeInit) return;
             banner._swipeInit = true;
+            let isDragging = false;
+            let startX = 0, currentX = 0;
 
+            function onDragStart(clientX) {
+                isDragging = true;
+                startX = clientX;
+                currentX = clientX;
+                heroDragOffset = 0;
+                pauseHeroAutoPlay();
+                banner.style.cursor = 'grabbing';
+            }
+
+            function onDragMove(clientX) {
+                if (!isDragging) return;
+                currentX = clientX;
+                heroDragOffset = startX - currentX;
+                // Apply resistance at edges for rubber-band feel
+                const total = window.heroContent ? window.heroContent.length : 1;
+                if ((currentSlide === 0 && heroDragOffset < 0) || (currentSlide === total - 1 && heroDragOffset > 0)) {
+                    heroDragOffset *= 0.3;
+                }
+                // Visual feedback: scale active card slightly
+                const activeCard = document.querySelector('.hero-card.card-active');
+                if (activeCard) {
+                    const scale = 1 - Math.min(Math.abs(heroDragOffset) / 800, 0.05);
+                    activeCard.style.transform = `translateX(${-heroDragOffset * 0.15}px) scale(${scale})`;
+                    activeCard.style.transition = 'transform 0.05s linear';
+                }
+            }
+
+            function onDragEnd() {
+                if (!isDragging) return;
+                isDragging = false;
+                banner.style.cursor = '';
+                // Reset card transform
+                const activeCard = document.querySelector('.hero-card.card-active');
+                if (activeCard) {
+                    activeCard.style.transform = '';
+                    activeCard.style.transition = '';
+                }
+                const threshold = 60;
+                if (Math.abs(heroDragOffset) > threshold) {
+                    if (heroDragOffset > 0) heroSlideNext();
+                    else heroSlidePrev();
+                }
+                heroDragOffset = 0;
+            }
+
+            // Touch events
             banner.addEventListener('touchstart', (e) => {
-                heroSwipeStartX = e.touches[0].clientX;
-                heroIsSwiping = true;
+                onDragStart(e.touches[0].clientX);
             }, { passive: true });
 
             banner.addEventListener('touchmove', (e) => {
-                if (!heroIsSwiping) return;
-                heroSwipeEndX = e.touches[0].clientX;
+                onDragMove(e.touches[0].clientX);
             }, { passive: true });
 
             banner.addEventListener('touchend', () => {
-                if (!heroIsSwiping) return;
-                heroIsSwiping = false;
-                const diff = heroSwipeStartX - heroSwipeEndX;
-                if (Math.abs(diff) > 50) {
-                    if (diff > 0) heroSlideNext();
-                    else heroSlidePrev();
-                }
+                onDragEnd();
             }, { passive: true });
 
-            // Mouse drag support for desktop
+            // Mouse events
             banner.addEventListener('mousedown', (e) => {
-                heroSwipeStartX = e.clientX;
-                heroIsSwiping = true;
+                onDragStart(e.clientX);
+                e.preventDefault();
             });
-            banner.addEventListener('mousemove', (e) => {
-                if (!heroIsSwiping) return;
-                heroSwipeEndX = e.clientX;
+
+            document.addEventListener('mousemove', (e) => {
+                onDragMove(e.clientX);
             });
-            banner.addEventListener('mouseup', () => {
-                if (!heroIsSwiping) return;
-                heroIsSwiping = false;
-                const diff = heroSwipeStartX - heroSwipeEndX;
-                if (Math.abs(diff) > 50) {
-                    if (diff > 0) heroSlideNext();
-                    else heroSlidePrev();
-                }
+
+            document.addEventListener('mouseup', () => {
+                onDragEnd();
             });
-            banner.addEventListener('mouseleave', () => { heroIsSwiping = false; });
+
+            banner.addEventListener('mouseenter', () => {
+                if (!isDragging) banner.style.cursor = 'grab';
+            });
+
+            banner.addEventListener('mouseleave', () => {
+                if (!isDragging) banner.style.cursor = '';
+                onDragEnd();
+            });
+
+            // Keyboard nav
+            banner.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight') { heroSlideNext(); e.preventDefault(); }
+                if (e.key === 'ArrowLeft') { heroSlidePrev(); e.preventDefault(); }
+            });
+            banner.setAttribute('tabindex', '0');
         }
 
         function playHeroContent() { if (window.currentHeroItem) playContent(window.currentHeroItem); }
 
         function openHeroDetails() {
             if (window.currentHeroItem) openDetails(window.currentHeroItem, window.currentHeroItem
-                .type || (window.currentHeroItem.seasons ? 'webseries' : 'movie'));
+                .type || window.currentHeroItem.media_type || (window.currentHeroItem.seasons ? 'webseries' : 'movie'));
         }
 
         function createSection(title, items, typeUrl = null) {
